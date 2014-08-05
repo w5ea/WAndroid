@@ -2,7 +2,7 @@ package cn.way.utils;
 
 
 /**
- *ʱ����
+ *时间类
  *@author Wayne 2012-8-22
  */
 /* e.g.
