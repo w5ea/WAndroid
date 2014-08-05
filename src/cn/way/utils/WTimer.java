@@ -21,6 +21,13 @@ package cn.way.utils;
  */
 public abstract class WTimer {
 	private WAsyncTimerTask task;
+	/**
+	 * 启动定时器
+	 * @param timeInterval 执行时间间隔
+	 * @param timeLimit 最大执行时长，如果为null则无限执行，否则到达最大时长则停止
+	 * @param delay 执行延时时长
+	 * @return
+	 */
 	public WTimer schedule(Long timeInterval, Long timeLimit,Long delay){
 		task = new WAsyncTimerTask(timeInterval,timeLimit,delay){
 			@Override
