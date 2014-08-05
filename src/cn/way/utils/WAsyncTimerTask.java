@@ -6,56 +6,58 @@ import java.util.TimerTask;
 import android.os.AsyncTask;
 
 /**
- * ¼ÆÊ±ÈÎÎñ¹¤¾ßÀà
+ * è®¡æ—¶ä»»åŠ¡å·¥å…·ç±»
  * 
  * @author Wayne 2012-8-21
  */
 /* e.g.
-  		final TextView tv = (TextView) findViewById(R.id.editText1);
-		WAsyncTimerTask timer = new WAsyncTimerTask(100l,100l*1000){
-			@Override
-			protected void onProgressUpdate(Long... values) {
-				tv.setText(values[0]+"");
-			}
-		};
-		timer.execute();
- */
+final TextView tv = (TextView) findViewById(R.id.editText1);
+WAsyncTimerTask timer = new WAsyncTimerTask(100l,100l*1000){
+	@Override
+	protected void onProgressUpdate(Long... values) {
+		tv.setText(values[0]+"");
+	}
+};
+timer.execute();
+*/
 public class WAsyncTimerTask extends AsyncTask<Void, Long, Long> {
-	// TODO Í¨¹ı Timer À´×öÊ±¼äµÄ¸üĞÂ ĞÂÔÚÃ¿´Î¸üĞÂÊ±µ÷ÓÃ ITimeGoesByCallback½Ó¿Ú·½·¨£¬(ºÎÊ±Í£Ö¹ÈÎÎñÓÉµ÷ÓÃ·½¾ö¶¨)
-	private Long timeInterval = 1l;// Ê±¼ä±ä»¯¼ä¸ô£¬Ä¬ÈÏÎª1/1000Ãë
-	private Long timeLimit = timeInterval;// ×î´óÊ±³¤ÏŞÖÆ£¬Ä¬ÈÏÎªtimeIntervalµÄÖµ
+	// TODO é€šè¿‡ Timer æ¥åšæ—¶é—´çš„æ›´æ–° æ–°åœ¨æ¯æ¬¡æ›´æ–°æ—¶è°ƒç”¨ ITimeGoesByCallbackæ¥å£æ–¹æ³•ï¼Œ(ä½•æ—¶åœæ­¢ä»»åŠ¡ç”±è°ƒç”¨æ–¹å†³å®š)
+	private Long timeInterval = 1l;// æ—¶é—´å˜åŒ–é—´éš”ï¼Œé»˜è®¤ä¸º1/1000ç§’
+	private Long timeLimit = timeInterval;// æœ€å¤§æ—¶é•¿é™åˆ¶ï¼Œé»˜è®¤ä¸ºtimeIntervalçš„å€¼
 	private Timer timer = new Timer();
 	public long totalTimeLength = 0;
 	public Long pausedTimeLenght;
-	
 
-	public WAsyncTimerTask(Long timeInterval, Long timeLimit,Long delay) {
-		if(timeInterval!=null)this.timeInterval = timeInterval;
+	public WAsyncTimerTask(Long timeInterval, Long timeLimit, Long delay) {
+		if (timeInterval != null)
+			this.timeInterval = timeInterval;
 		this.timeLimit = timeLimit;
-		if(delay!=null)this.pausedTimeLenght = delay;
+		if (delay != null)
+			this.pausedTimeLenght = delay;
 	}
 
-	public void pause(long timeLength){
-		this.pausedTimeLenght+=timeLength;
+	public void pause(long timeLength) {
+		this.pausedTimeLenght += timeLength;
 	}
-	public boolean isPaused(){
-		return this.pausedTimeLenght>0;
+
+	public boolean isPaused() {
+		return this.pausedTimeLenght > 0;
 	}
-	
+
 	@Override
 	protected Long doInBackground(Void... params) {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if(pausedTimeLenght>0){
-					pausedTimeLenght-=timeInterval;
+				if (pausedTimeLenght > 0) {
+					pausedTimeLenght -= timeInterval;
 					return;
 				}
-				if (timeLimit!=null&&totalTimeLength >= timeLimit) {
+				if (timeLimit != null && totalTimeLength >= timeLimit) {
 					timer.cancel();
 					timer = null;
-					// ÔÚTIMERÖĞÎŞ·¨³É¹¦µ÷ÓÃAsyncTaskµÄCANCEL·½·¨
-				}else{
+					// åœ¨TIMERä¸­æ— æ³•æˆåŠŸè°ƒç”¨AsyncTaskçš„CANCELæ–¹æ³•
+				} else {
 					totalTimeLength += timeInterval;
 					publishProgress(totalTimeLength);
 				}
@@ -75,14 +77,14 @@ public class WAsyncTimerTask extends AsyncTask<Void, Long, Long> {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 	}
-	
+
 	@Override
 	protected void onCancelled() {
 		super.onCancelled();
 		timer.cancel();
 		timer = null;
 	}
-	
+
 	public float getTimeInterval() {
 		return timeInterval;
 	}

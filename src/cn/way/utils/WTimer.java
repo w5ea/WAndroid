@@ -2,7 +2,7 @@ package cn.way.utils;
 
 
 /**
- *Ê±¼äÀà
+ *Ê±ï¿½ï¿½ï¿½ï¿½
  *@author Wayne 2012-8-22
  */
 /* e.g.
@@ -22,10 +22,10 @@ package cn.way.utils;
 public abstract class WTimer {
 	private WAsyncTimerTask task;
 	/**
-	 * Æô¶¯¶¨Ê±Æ÷
-	 * @param timeInterval Ö´ĞĞÊ±¼ä¼ä¸ô
-	 * @param timeLimit ×î´óÖ´ĞĞÊ±³¤£¬Èç¹ûÎªnullÔòÎŞÏŞÖ´ĞĞ£¬·ñÔòµ½´ï×î´óÊ±³¤ÔòÍ£Ö¹
-	 * @param delay Ö´ĞĞÑÓÊ±Ê±³¤
+	 * å¯åŠ¨å®šæ—¶å™¨
+	 * @param timeInterval æ‰§è¡Œæ—¶é—´é—´éš”
+	 * @param timeLimit æœ€å¤§æ‰§è¡Œæ—¶é•¿ï¼Œå¦‚æœä¸ºnullåˆ™æ— é™æ‰§è¡Œï¼Œå¦åˆ™åˆ°è¾¾æœ€å¤§æ—¶é•¿åˆ™åœæ­¢
+	 * @param delay æ‰§è¡Œå»¶æ—¶æ—¶é•¿
 	 * @return
 	 */
 	public WTimer schedule(Long timeInterval, Long timeLimit,Long delay){
