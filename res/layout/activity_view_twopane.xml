@@ -8,7 +8,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="cn.way.ViewListActivity" >
+    tools:context="cn.way.wandroid.ViewListActivity" >
 
     <!--
     This layout is a two-pane layout for the Draw
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/view_list"
-        android:name="cn.way.ViewListFragment"
+        android:name="cn.way.wandroid.ViewListFragmenttFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
