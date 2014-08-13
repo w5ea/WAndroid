@@ -29,6 +29,7 @@ public class DummyContent {
         addItem(new DummyItem("2", "Gson"));
         addItem(new DummyItem("3", "Green Dao"));
         addItem(new DummyItem("4", "LifeManager"));
+        addItem(new DummyItem("5", "Bulletin"));
     }
 
     private static void addItem(DummyItem item) {

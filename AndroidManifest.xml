@@ -41,7 +41,8 @@
         </activity>
         <activity android:name="cn.way.wandroid.json.GsonUsageActivity"></activity>
         <activity android:name="cn.way.wandroid.data.greendao.GreenDaoUsage"></activity>
-        <activity android:name=".wandroid.lifemanager.LifeManagerUsage"></activity>
+        <activity android:name="cn.way.wandroid.activities.lifemanager.LifeManagerUsage"></activity>
+        <activity android:name=".wandroid.activities.bulletin.BulletinUsage"></activity>
     </application>
 
 </manifest>

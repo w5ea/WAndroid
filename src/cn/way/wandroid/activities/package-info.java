@@ -5,4 +5,4 @@
  * @author Wayne
  *
  */
-package cn.way.wandroid.lifemanager;
+package cn.way.wandroid.activities;

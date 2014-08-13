@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import cn.way.R;
+import cn.way.wandroid.activities.bulletin.BulletinUsage;
+import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
-import cn.way.wandroid.lifemanager.LifeManagerUsage;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
 
 
@@ -76,6 +77,9 @@ public class ViewListActivity extends FragmentActivity
 		}
     	if (id.equals("4")) {
     		startActivity(new Intent(this, LifeManagerUsage.class));
+    	}
+    	if (id.equals("5")) {
+    		startActivity(new Intent(this, BulletinUsage.class));
     	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by

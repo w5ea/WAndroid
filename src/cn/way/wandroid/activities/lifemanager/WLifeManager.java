@@ -1,4 +1,4 @@
-package cn.way.wandroid.lifemanager;
+package cn.way.wandroid.activities.lifemanager;
 
 import java.util.Date;
 
@@ -213,7 +213,7 @@ public class WLifeManager {
 
 	private void lifeCountChanged() {
 		if (listener != null) {
-			listener.lifeCountChanged(lifeCount);
+			listener.lifeCountChanged(lifeCount,maxLifeCount);
 		}
 	}
 
@@ -315,6 +315,6 @@ public class WLifeManager {
 	public static interface WLifeManagerListener {
 		void lifePlusLeftTimeChanged(int lifePlusLeftTimeSeconds);
 
-		void lifeCountChanged(int lifeCount);
+		void lifeCountChanged(int currentLifeCount,int maxLifeCount);
 	}
 }

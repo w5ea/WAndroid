@@ -1,7 +1,7 @@
-package cn.way.wandroid.lifemanager;
+package cn.way.wandroid.activities.lifemanager;
 
 import cn.way.R;
-import cn.way.wandroid.lifemanager.WLifeManager.WLifeManagerListener;
+import cn.way.wandroid.activities.lifemanager.WLifeManager.WLifeManagerListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -22,7 +22,7 @@ public class LifeManagerUsage extends Activity {
 			}
 			
 			@Override
-			public void lifeCountChanged(int lifeCount) {
+			public void lifeCountChanged(int lifeCount,int maxLifeCount) {
 				int lifePlusLeftTimeSeconds = lm.getLifePlusLeftTimeSeconds();
 				tv.setText(String.format("%02d:%02d:%02d  %d", lifePlusLeftTimeSeconds/60/60,lifePlusLeftTimeSeconds/60%60,lifePlusLeftTimeSeconds%60,lm.getLifeCount()));
 			}
