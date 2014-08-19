@@ -29,14 +29,18 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
-public class WScratchView extends View {
+/**
+ * 已知BUG，在不同分辨率下坐标计算问题
+ * @author Wayne
+ *
+ */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class WScratchView extends View {
 	public static interface ProgressListener{
 		void onProgressChanged(float progress);
 	}
 	class ScratchMarker{
-		private int matrixSize;//��������
-		private int markedSize;//�Ѿ���ǵ�������
+		private int matrixSize;//总坐标数
+		private int markedSize;//已经标记的坐标数
 		private int rowSize,colSize;
 		private boolean[][] matrix;
 		public ScratchMarker(int rowSize,int colSize) {
@@ -131,7 +135,7 @@ public class WScratchView extends View {
 			mPaint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
 			mPaint.setAlpha(0);
 			
-			drawBackgroundText("лл�ݹ�");
+			drawBackgroundText("scratch me");
 		}
 		
 		mCanvas.drawPath(mPath, mPaint);
@@ -156,7 +160,7 @@ public class WScratchView extends View {
 		paint.setStyle(Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(strokeWidth);
 		paint.setStrokeCap(Cap.ROUND);
-		String text = "��һ��";
+		String text = "sorry";
 		int tWidth = (int) paint.measureText(text);
 		int posX = width/2-tWidth/2 ;int posY = height-textSize/2-strokeWidth;
 		mCanvas.drawText(text, posX, posY, paint);

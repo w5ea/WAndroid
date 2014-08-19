@@ -1,10 +1,10 @@
 package cn.way.wandroid.activities.lifemanager;
 
-import cn.way.R;
-import cn.way.wandroid.activities.lifemanager.WLifeManager.WLifeManagerListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+import cn.way.wandoird.R;
+import cn.way.wandroid.activities.lifemanager.WLifeManager.WLifeManagerListener;
 
 public class LifeManagerUsage extends Activity {
 	private WLifeManager lm;

@@ -1,13 +1,11 @@
 package cn.way.wandroid;
 
-import cn.way.R;
-import cn.way.R.id;
-import cn.way.R.layout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import cn.way.wandoird.R;
 
 /**
  * An activity representing a single View detail screen. This

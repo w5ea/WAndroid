@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
-import cn.way.R;
+import cn.way.wandoird.R;
 
 import com.google.gson.Gson;
 

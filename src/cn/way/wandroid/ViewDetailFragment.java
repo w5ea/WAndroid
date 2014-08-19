@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import cn.way.R;
-import cn.way.R.id;
-import cn.way.R.layout;
+import cn.way.wandoird.R;
 import cn.way.wandroid.dummy.DummyContent;
 
 /**

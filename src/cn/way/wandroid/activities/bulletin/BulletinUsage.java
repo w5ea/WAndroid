@@ -2,13 +2,12 @@ package cn.way.wandroid.activities.bulletin;
 
 import java.util.ArrayList;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import cn.way.R;
-import cn.way.wandroid.json.GsonUsageActivity;
+import cn.way.wandoird.R;
 import cn.way.wandroid.views.BulletinBoardFragment;
 
 public class BulletinUsage extends FragmentActivity {
@@ -18,6 +17,8 @@ public class BulletinUsage extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bulletin);
 		bulletin = (BulletinBoardFragment) getSupportFragmentManager().findFragmentById(R.id.bulletin);
+//		bulletin = new BulLETINBOARDFRAGMENT();
+//		GETSUPPORTFRAGMENTManager().beginTransaction().add(R.id.bulletin, bulletin).commit();
 	}
 	@Override
 	protected void onResume() {
@@ -33,8 +34,21 @@ public class BulletinUsage extends FragmentActivity {
 		bulletin.getView().setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(BulletinUsage.this, GsonUsageActivity.class));
+				ArrayList<String> bulletins = new ArrayList<String>();
+				String text = "a : ";
+				for (int i = 0; i < 5; i++) {
+					text += text;
+					bulletins.add((i+1)+text);
+				}
+				bulletin.stopAnimation();
+				bulletin.updateBulletins(bulletins);
+				bulletin.startAnimation();
+//				startActivity(new Intent(BulletinUsage.this, GsonUsageActivity.class));
 			}
 		});
+	}
+	@Override
+	public void onPanelClosed(int featureId, Menu menu) {
+		super.onPanelClosed(featureId, menu);
 	}
 }

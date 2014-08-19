@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.way"
+    package="cn.way.wandoird"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -42,7 +42,9 @@
         <activity android:name="cn.way.wandroid.json.GsonUsageActivity"></activity>
         <activity android:name="cn.way.wandroid.data.greendao.GreenDaoUsage"></activity>
         <activity android:name="cn.way.wandroid.activities.lifemanager.LifeManagerUsage"></activity>
-        <activity android:name=".wandroid.activities.bulletin.BulletinUsage"></activity>
+        <activity android:name="cn.way.wandroid.activities.bulletin.BulletinUsage"></activity>
+        <activity android:name="cn.way.wandroid.graphics.GraphicsUsage"></activity>
+        <activity android:name="cn.way.wandroid.activities.dialog.DialogUsage"></activity>
     </application>
 
 </manifest>

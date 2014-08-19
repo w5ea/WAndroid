@@ -12,7 +12,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
-import cn.way.R;
+import cn.way.wandoird.R;
 
 public class SwitchFragment extends Fragment {
 	private static final String TAG = "MTAB";

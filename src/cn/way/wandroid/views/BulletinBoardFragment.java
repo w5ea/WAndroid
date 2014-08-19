@@ -2,7 +2,6 @@ package cn.way.wandroid.views;
 
 import java.util.ArrayList;
 
-import cn.way.R;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +17,12 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import cn.way.wandoird.R;
 
 public class BulletinBoardFragment extends Fragment {
 	private ViewGroup bulletinView;
 	private TextView bulletinTextView;
-	private static final String kBulletinIndex = "kBulletinIndex";
+//	private static final String kBulletinIndex = "kBulletinIndex";
 	private ArrayList<String> bulletins = new ArrayList<String>();
 	private int bulletinIndex;
 	private boolean isPaused;
@@ -30,6 +30,7 @@ public class BulletinBoardFragment extends Fragment {
 
 	public void updateBulletins(ArrayList<String> bulletins) {
 		this.bulletins.clear();
+		bulletinIndex = -1;
 		this.bulletins.addAll(bulletins);
 	}
 
@@ -49,9 +50,9 @@ public class BulletinBoardFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (savedInstanceState != null) {
-			bulletinIndex = savedInstanceState.getInt(kBulletinIndex);
-		}
+//		if (savedInstanceState != null) {
+//			bulletinIndex = savedInstanceState.getInt(kBulletinIndex);
+//		}
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class BulletinBoardFragment extends Fragment {
 		super.onResume();
 		startAnimation();
 	}
-
+	
 	@Override
 	public void onStop() {
 		super.onStop();
@@ -131,7 +132,8 @@ public class BulletinBoardFragment extends Fragment {
 					if (bulletinIndex + 1 >= bulletins.size()) {
 						bulletinIndex = 0;
 					}
-					String text = bulletins.get(bulletinIndex);
+					String text = " ";
+					if(bulletins.size()>0)text = bulletins.get(bulletinIndex);
 					TextPaint fontPaint = new TextPaint();
 					fontPaint.setTextSize(bulletinTextView.getTextSize());
 					float width = fontPaint.measureText(text);
@@ -176,7 +178,7 @@ public class BulletinBoardFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt(kBulletinIndex, bulletinIndex);
+//		super.onSaveInstanceState(outState);
+//		outState.putInt(kBulletinIndex, bulletinIndex);
 	}
 }

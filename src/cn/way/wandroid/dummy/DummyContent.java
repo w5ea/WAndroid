@@ -30,6 +30,8 @@ public class DummyContent {
         addItem(new DummyItem("3", "Green Dao"));
         addItem(new DummyItem("4", "LifeManager"));
         addItem(new DummyItem("5", "Bulletin"));
+        addItem(new DummyItem("6", "Graphics"));
+        addItem(new DummyItem("7", "Dialog"));
     }
 
     private static void addItem(DummyItem item) {

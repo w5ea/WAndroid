@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import cn.way.R;
+import cn.way.wandoird.R;
 import cn.way.wandroid.data.gen.DaoMaster;
 import cn.way.wandroid.data.gen.DaoMaster.DevOpenHelper;
 import cn.way.wandroid.data.gen.DaoSession;
