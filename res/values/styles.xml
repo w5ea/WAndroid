@@ -1,6 +1,6 @@
-<resources>
-
-    <!--
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+	<!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
@@ -32,6 +32,11 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item><!--dim半透明效果-->
+    </style>
+
+    <style name="PhotoGridLayout">
+        <item name="android:drawSelectorOnTop">true</item>
+        <item name="android:listSelector">@drawable/photogrid_list_selector</item>
     </style>
 
 </resources>

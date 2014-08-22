@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     android:background="#f55">
-
+    
     <fragment android:id="@+id/bulletin"
         android:name="cn.way.wandroid.views.BulletinBoardFragment"
-        android:layout_width="match_parent" android:layout_height="30dp"/>
+        android:layout_width="match_parent" android:layout_height="30dp" 
+        android:layout_marginLeft="40dp"/>
 
 </LinearLayout>

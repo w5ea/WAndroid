@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   Copyright (C) 2012 The Android Open Source Project
 
@@ -15,12 +14,20 @@
   limitations under the License.
 -->
 
-<resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="clear_cache_menu">Clear Caches</string>
-    <string name="clear_cache_complete_toast">Caches have been cleared</string>
-    <string name="imageview_description">Image Thumbnail</string>
-    <string name="no_network_connection_toast">No network connection found</string>
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/grid_state_pressed" />
+        </shape>
+    </item>
 
-    <string name="tag_click">CLICK TO REFRESH</string>
-</resources>
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="@color/grid_state_focused" />
+        </shape>
+    </item>
+
+    <item android:drawable="@android:color/transparent" />
+
+</selector>

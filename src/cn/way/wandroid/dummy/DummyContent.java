@@ -32,6 +32,8 @@ public class DummyContent {
         addItem(new DummyItem("5", "Bulletin"));
         addItem(new DummyItem("6", "Graphics"));
         addItem(new DummyItem("7", "Dialog"));
+        addItem(new DummyItem("8", "PullRefresh"));
+        addItem(new DummyItem("9", "ImageLoader"));
     }
 
     private static void addItem(DummyItem item) {

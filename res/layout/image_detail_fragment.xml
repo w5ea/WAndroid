@@ -15,12 +15,20 @@
   limitations under the License.
 -->
 
-<resources>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <string name="clear_cache_menu">Clear Caches</string>
-    <string name="clear_cache_complete_toast">Caches have been cleared</string>
-    <string name="imageview_description">Image Thumbnail</string>
-    <string name="no_network_connection_toast">No network connection found</string>
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
-    <string name="tag_click">CLICK TO REFRESH</string>
-</resources>
+    <cn.way.wandroid.imageloader.RecyclingImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/imageview_description" />
+
+</FrameLayout>

@@ -17,10 +17,7 @@
 
 <resources>
 
-    <string name="clear_cache_menu">Clear Caches</string>
-    <string name="clear_cache_complete_toast">Caches have been cleared</string>
-    <string name="imageview_description">Image Thumbnail</string>
-    <string name="no_network_connection_toast">No network connection found</string>
+    <color name="grid_state_pressed">#1Affffff</color>
+    <color name="grid_state_focused">#80000000</color>
 
-    <string name="tag_click">CLICK TO REFRESH</string>
 </resources>

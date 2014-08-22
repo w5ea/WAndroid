@@ -9,8 +9,11 @@ import cn.way.wandroid.activities.dialog.DialogUsage;
 import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
+import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity;
+import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
+import cn.way.wandroid.pullrefresh.PullToRefreshUsage;
 
 
 /**
@@ -88,6 +91,12 @@ public class ViewListActivity extends FragmentActivity
     	}
     	if (id.equals("7")) {
     		startActivity(new Intent(this, DialogUsage.class));
+    	}
+    	if (id.equals("8")) {
+    		startActivity(new Intent(this, PullToRefreshUsage.class));
+    	}
+    	if (id.equals("9")) {
+    		startActivity(new Intent(this, ImageLoaderUsage.class));
     	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by
