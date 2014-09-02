@@ -382,7 +382,6 @@ public abstract class ImageWorker {
      * @param imageView
      * @param drawable
      */
-    @SuppressWarnings("deprecation")
 	private void setImageDrawable(ImageView imageView, Drawable drawable) {
         if (mFadeInBitmap) {
             // Transition drawable with a transparent drawable and the final drawable
@@ -392,7 +391,7 @@ public abstract class ImageWorker {
                             drawable
                     });
             // Set background to loading bitmap
-            imageView.setBackgroundDrawable(
+            imageView.setImageDrawable(
                     new BitmapDrawable(mResources, mLoadingBitmap));
 
             imageView.setImageDrawable(td);

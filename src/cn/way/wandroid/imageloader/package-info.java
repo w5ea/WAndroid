@@ -1,7 +1,7 @@
 /**
  * 
  */
-/**
+/**setBackgroundImage ---> setImageBitmap
  * @author Wayne
  *
  */
