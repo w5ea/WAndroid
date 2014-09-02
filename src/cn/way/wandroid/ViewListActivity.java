@@ -3,13 +3,14 @@ package cn.way.wandroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 import cn.way.wandoird.R;
 import cn.way.wandroid.activities.bulletin.BulletinUsage;
 import cn.way.wandroid.activities.dialog.DialogUsage;
 import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
+import cn.way.wandroid.activities.tabhost.TabHostActivity;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
-import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
@@ -98,6 +99,9 @@ public class ViewListActivity extends FragmentActivity
     	if (id.equals("9")) {
     		startActivity(new Intent(this, ImageLoaderUsage.class));
     	}
+    	if (id.equals("10")) {
+    		startActivity(new Intent(this, TabHostActivity.class));
+    	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by
 //            // adding or replacing the detail fragment using a
@@ -118,4 +122,20 @@ public class ViewListActivity extends FragmentActivity
 //            startActivity(detailIntent);
 //        }
     }
+    private long lastExitTime = -1;
+	@Override
+	public void finish() {
+		if (lastExitTime==-1) {
+			lastExitTime = System.currentTimeMillis();
+			Toast.makeText(this, "再按一次返回键退出应用", Toast.LENGTH_SHORT).show();
+		}else{
+			long currentExitTime = System.currentTimeMillis();
+			if (currentExitTime-lastExitTime<2000) {
+				super.finish();
+			}else{
+				lastExitTime = -1;
+				finish();
+			}
+		}
+	}
 }

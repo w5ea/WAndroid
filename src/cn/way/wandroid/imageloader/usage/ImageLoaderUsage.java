@@ -10,15 +10,18 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 import cn.way.wandoird.R;
-import cn.way.wandroid.imageloader.ImageCache;
-import cn.way.wandroid.imageloader.ImageFetcher;
+import cn.way.wandroid.imageloader.ImageLoader;
+import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity;
+import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -30,20 +33,20 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class ImageLoaderUsage extends FragmentActivity {
 	private PullToRefreshListView pullRefreshListView;
 	private JSONArray jArray = new JSONArray();
-	private ImageFetcher mImageFetcher;
+	private ImageLoader imageLoader;
 	private ArrayAdapter<JSONArray> adapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_imageloader_usage);
 		
-		ImageCache.ImageCacheParams cacheParams =
-                new ImageCache.ImageCacheParams(this, "temp");
-        cacheParams.setMemCacheSizePercent(0.25f);
-        mImageFetcher = new ImageFetcher(this, getResources().getDimensionPixelSize(R.dimen.list_image_thumbnail_size)*4);
-        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
-        mImageFetcher.addImageCache(getSupportFragmentManager(), cacheParams);
+		int width = (int) (getResources().getDimensionPixelSize(R.dimen.list_image_thumbnail_size)*getResources().getDisplayMetrics().density*2);
+//		int height = (int) (getResources().getDimensionPixelSize(R.dimen.list_image_thumbnail_size)*getResources().getDisplayMetrics().density*2);
+        imageLoader = new ImageLoader();
+        imageLoader.init(this,width);
+        imageLoader.setLoadingImage(R.drawable.empty_photo);
 		
+        Toast.makeText(this, "dip="+getResources().getDisplayMetrics().density, Toast.LENGTH_LONG).show();
 		pullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_listview);
 		pullRefreshListView.setMode(Mode.BOTH);
 		pullRefreshListView.setScrollingWhileRefreshingEnabled(false);
@@ -51,7 +54,7 @@ public class ImageLoaderUsage extends FragmentActivity {
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 				loadData(true);
-				mImageFetcher.clearCache();
+				imageLoader.clearCache();
 			}
 
 			@Override
@@ -59,6 +62,25 @@ public class ImageLoaderUsage extends FragmentActivity {
 				loadData(false);
 			}
 		});
+		pullRefreshListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                // Pause fetcher to ensure smoother scrolling when flinging
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    // Before Honeycomb pause image loading on scroll to help with performance
+                    if (!Utils.hasHoneycomb()) {
+                        imageLoader.setPauseWork(true);
+                    }
+                } else {
+                    imageLoader.setPauseWork(false);
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                    int visibleItemCount, int totalItemCount) {
+            }
+        });
 		
 		adapter = new ArrayAdapter<JSONArray>(this, 0){
 			@Override
@@ -81,7 +103,7 @@ public class ImageLoaderUsage extends FragmentActivity {
 					String urlStr = jArray.getJSONObject(position)
 							.getString("artworkUrl512");
 //							.getString("artworkUrl60");
-					mImageFetcher.loadImage(urlStr, holder.profileIV);
+					imageLoader.loadImage(urlStr, holder.profileIV);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -99,40 +121,33 @@ public class ImageLoaderUsage extends FragmentActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final Intent i = new Intent(ImageLoaderUsage.this, ImageDetailActivity.class);
-		        i.putExtra(ImageDetailActivity.EXTRA_IMAGE, (int) id);
-		        startActivity(i);
+				if (position==1) {
+					final Intent i = new Intent(ImageLoaderUsage.this, ImageGridActivity.class);
+					startActivity(i);
+				}else{
+					final Intent i = new Intent(ImageLoaderUsage.this, ImageDetailActivity.class);
+					i.putExtra(ImageDetailActivity.EXTRA_IMAGE, (int) id);
+					startActivity(i);
+				}
 			}
 		});
 	}
 	
-	
 	@Override
     public void onResume() {
         super.onResume();
-        mImageFetcher.setExitTasksEarly(false);
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mImageFetcher.setPauseWork(false);
-        mImageFetcher.setExitTasksEarly(true);
-        mImageFetcher.flushCache();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mImageFetcher.closeCache();
-    }
-	
-	private void loadData(boolean refresh){
+    static final int PAGE_SIZE = 100;
+	private void loadData(final boolean refresh){
+		
+		int pageIndex = 0;
 		if (refresh) {
-			jArray = null;
-			jArray = new JSONArray();
+		}else{
+			pageIndex = jArray.length()/PAGE_SIZE;
 		}
+		Toast.makeText(this, "pageIndex="+pageIndex, Toast.LENGTH_LONG).show();
 		AsyncHttpClient client = new AsyncHttpClient();
 		String path = "https://itunes.apple.com/search?term=game&country=cn&entity=software&limit=100";
 		client.get(path, new JsonHttpResponseHandler(){
@@ -144,6 +159,10 @@ public class ImageLoaderUsage extends FragmentActivity {
 			public void onSuccess(int statusCode, Header[] headers,
 					JSONObject response) {
 				try {
+					if (refresh) {
+						jArray = null;
+						jArray = new JSONArray();
+					}
 					JSONArray array = response.getJSONArray("results");
 					for (int i = 0; i < array.length(); i++) {
 						jArray.put(array.getJSONObject(i));

@@ -24,7 +24,6 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -227,12 +226,12 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             mImageViewLayoutParams = new GridView.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             // Calculate ActionBar height
-            TypedValue tv = new TypedValue();
-            if (context.getTheme().resolveAttribute(
-                    android.R.attr.actionBarSize, tv, true)) {
-                mActionBarHeight = TypedValue.complexToDimensionPixelSize(
-                        tv.data, context.getResources().getDisplayMetrics());
-            }
+//            TypedValue tv = new TypedValue();
+//            if (context.getTheme().resolveAttribute(
+//                    android.R.attr.actionBarSize, tv, true)) {
+//                mActionBarHeight = TypedValue.complexToDimensionPixelSize(
+//                        tv.data, context.getResources().getDisplayMetrics());
+//            }
         }
 
         @Override
