@@ -244,7 +244,7 @@ public class ImageCache {
                 // that it has been added into the memory cache
                 ((RecyclingBitmapDrawable) value).setIsCached(true);
             }
-            mMemoryCache.put(data, value);
+            if(mMemoryCache.get(data)==null)mMemoryCache.put(data, value);
         }
 
         synchronized (mDiskCacheLock) {
