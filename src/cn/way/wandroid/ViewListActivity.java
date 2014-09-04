@@ -9,6 +9,7 @@ import cn.way.wandroid.activities.bulletin.BulletinUsage;
 import cn.way.wandroid.activities.dialog.DialogUsage;
 import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
 import cn.way.wandroid.activities.tabhost.TabHostActivity;
+import cn.way.wandroid.activities.views.ViewsActivity;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
@@ -101,6 +102,9 @@ public class ViewListActivity extends FragmentActivity
     	}
     	if (id.equals("10")) {
     		startActivity(new Intent(this, TabHostActivity.class));
+    	}
+    	if (id.equals("11")) {
+    		startActivity(new Intent(this, ViewsActivity.class));
     	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by

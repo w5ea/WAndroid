@@ -35,6 +35,7 @@ public class DummyContent {
         addItem(new DummyItem("8", "PullRefresh"));
         addItem(new DummyItem("9", "ImageLoader"));
         addItem(new DummyItem("10", "FragmentTabBar"));
+        addItem(new DummyItem("11", "Views"));
     }
 
     private static void addItem(DummyItem item) {

@@ -50,6 +50,7 @@
         <activity android:name="cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity"></activity>
         <activity android:name="cn.way.wandroid.imageloader.usage.ImageLoaderUsage"></activity>
         <activity android:name="cn.way.wandroid.activities.tabhost.TabHostActivity"></activity>
+        <activity android:name="cn.way.wandroid.activities.views.ViewsActivity"></activity>
     </application>
 
 </manifest>
