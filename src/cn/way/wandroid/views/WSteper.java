@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import cn.way.wandroid.utils.WTimer;
 
@@ -42,6 +43,21 @@ public class WSteper extends FrameLayout {
 	
     private ValueChangeListener valueChangeListener;
     
+    private OnTouchListener onTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				WSteper.this.touchDownAction(v);
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+				WSteper.this.touchUpAction(v);
+				break;
+			}
+			return true;
+		}
+	};
     @Override
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
@@ -70,23 +86,10 @@ public class WSteper extends FrameLayout {
 	    
 	    setMinusButton(new ImageView(getContext()));
 	    getMinusButton().setLayoutParams(new FrameLayout.LayoutParams(getWidth()/3, getHeight(),Gravity.LEFT|Gravity.CENTER_VERTICAL));
+	    getMinusButton().setScaleType(ScaleType.CENTER);
 	    addView(getMinusButton());
 //	    getMinusButton().setBackgroundColor(Color.GREEN);
-	    getMinusButton().setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					WSteper.this.touchDownAction(getMinusButton());
-					break;
-				case MotionEvent.ACTION_UP:
-				case MotionEvent.ACTION_CANCEL:
-					WSteper.this.touchUpAction(getMinusButton());
-					break;
-				}
-				return true;
-			}
-		});
+	    getMinusButton().setOnTouchListener(onTouchListener);
 	    
 	    setValueLabel(new TextView(getContext()));
 	    getValueLabel().setLayoutParams(new FrameLayout.LayoutParams(getWidth()/3, getHeight(),Gravity.CENTER));
@@ -99,22 +102,9 @@ public class WSteper extends FrameLayout {
 	    
 	    setPlusButton(new ImageView(getContext()));
 	    getPlusButton().setLayoutParams(new FrameLayout.LayoutParams(getWidth()/3, getHeight(),Gravity.RIGHT|Gravity.CENTER_VERTICAL));
+	    getPlusButton().setScaleType(ScaleType.CENTER);
 	    addView(getPlusButton());
-	    getPlusButton().setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					WSteper.this.touchDownAction(getPlusButton());
-					break;
-				case MotionEvent.ACTION_UP:
-				case MotionEvent.ACTION_CANCEL:
-					WSteper.this.touchUpAction(getPlusButton());
-					break;
-				}
-				return true;
-			}
-		});
+	    getPlusButton().setOnTouchListener(onTouchListener);
 //	    getPlusButton().setBackgroundColor(Color.BLUE);
 	    updateView();
 	}
