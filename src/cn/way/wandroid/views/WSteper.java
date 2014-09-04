@@ -49,10 +49,14 @@ public class WSteper extends FrameLayout {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				WSteper.this.touchDownAction(v);
+				v.setSelected(true);
+				v.setPressed(true);
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
 				WSteper.this.touchUpAction(v);
+				v.setSelected(false);
+				v.setPressed(false);
 				break;
 			}
 			return true;
@@ -60,10 +64,12 @@ public class WSteper extends FrameLayout {
 	};
     @Override
 	protected void onDetachedFromWindow() {
-		super.onDetachedFromWindow();
+    	setValue(0);
 		if (timer!=null) {
 			timer.cancel();
+			timer = null;
 		}
+		super.onDetachedFromWindow();
 	}
     
 	public WSteper(Context context) {
@@ -71,18 +77,23 @@ public class WSteper extends FrameLayout {
 	}
 	public WSteper(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		setupView();
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right,
 			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
-		if(getMinusButton()==null)setupView();//TODO why this method called twice
+		//TODO why this method called twice
+		getMinusButton().getLayoutParams().width = getWidth()/3;
+		getMinusButton().getLayoutParams().height = getHeight();
+		getValueLabel().getLayoutParams().width = getWidth()/3;
+		getValueLabel().getLayoutParams().height = getHeight();
+		getPlusButton().getLayoutParams().width = getWidth()/3;
+		getPlusButton().getLayoutParams().height = getHeight();
 	}
 	
 	private void setupView(){
-		stepValue = 1;
-	    maximumValue = 99;
 	    
 	    setMinusButton(new ImageView(getContext()));
 	    getMinusButton().setLayoutParams(new FrameLayout.LayoutParams(getWidth()/3, getHeight(),Gravity.LEFT|Gravity.CENTER_VERTICAL));
@@ -106,7 +117,10 @@ public class WSteper extends FrameLayout {
 	    addView(getPlusButton());
 	    getPlusButton().setOnTouchListener(onTouchListener);
 //	    getPlusButton().setBackgroundColor(Color.BLUE);
-	    updateView();
+	    
+	    setStepValue(1);
+		setMinimumValue(1);
+	    setMaximumValue(99);
 	}
 	
 	private void updateView(){
