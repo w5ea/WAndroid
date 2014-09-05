@@ -1,5 +1,6 @@
 package cn.way.wandroid.views;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,9 +13,9 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 
-public class SwitchFragment extends Fragment {
+@SuppressLint("NewApi") public class SwitchFragment extends Fragment {
 	private static final String TAG = "MTAB";
 	private View switchView ;
 	private float originalSwitchY;
@@ -29,7 +30,7 @@ public class SwitchFragment extends Fragment {
 	
 	private float lastY;
 	private final float SwitchMaxY = 0;
-	@Override
+	@SuppressLint("NewApi") @Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		

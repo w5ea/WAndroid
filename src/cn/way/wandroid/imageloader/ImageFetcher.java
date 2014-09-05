@@ -33,8 +33,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
-import cn.way.wandoird.BuildConfig;
-import cn.way.wandoird.R;
+import cn.way.wandroid.BuildConfig;
+import cn.way.wandroid.R;
 
 /**
  * A simple subclass of {@link ImageResizer} that fetches and resizes images fetched from a URL.

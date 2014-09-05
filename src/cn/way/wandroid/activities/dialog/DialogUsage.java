@@ -1,6 +1,6 @@
 package cn.way.wandroid.activities.dialog;
 
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -41,7 +41,7 @@ public class DialogUsage extends ListActivity {
 	}
 	
 	private void showDialogWithCoustomStyle(){
-		View dialogContentView = getLayoutInflater().inflate(cn.way.wandoird.R.layout.dialog_1, null);
+		View dialogContentView = getLayoutInflater().inflate(R.layout.dialog_1, null);
 		Dialog dialog = new Dialog(this,R.style.DialogNoTitleNoFrameClearBg);
 //		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);//不显示标题
 //		dialog.getWindow().getAttributes().dimAmount = 0.0f;//透明度0为透明1为不透明
@@ -64,7 +64,7 @@ public class DialogUsage extends ListActivity {
 		dialog.show();
 	}
 	private void showAlertDialogWithContentView(){
-		View dialogContentView = getLayoutInflater().inflate(cn.way.wandoird.R.layout.dialog_1, null);
+		View dialogContentView = getLayoutInflater().inflate(R.layout.dialog_1, null);
 		Builder builder = new Builder(this)
 		.setView(dialogContentView)
 		.setCancelable(false)

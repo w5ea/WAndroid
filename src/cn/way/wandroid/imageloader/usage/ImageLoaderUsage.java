@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.ImageLoader;
 import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity;

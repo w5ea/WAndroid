@@ -3,12 +3,12 @@ package cn.way.wandroid.data.greendao;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import cn.way.wandoird.R;
+import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.R;
 import cn.way.wandroid.data.gen.DaoMaster;
 import cn.way.wandroid.data.gen.DaoMaster.DevOpenHelper;
 import cn.way.wandroid.data.gen.DaoSession;
@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 import de.greenrobot.dao.query.QueryBuilder;
 
-public class GreenDaoUsage extends Activity {
+public class GreenDaoUsage extends BaseActivity {
 	DaoSession daoSession;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

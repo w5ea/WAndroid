@@ -3,14 +3,14 @@ package cn.way.wandroid.activities.bulletin;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import cn.way.wandoird.R;
+import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.R;
 import cn.way.wandroid.views.BulletinBoardFragment;
 
-public class BulletinUsage extends FragmentActivity {
+public class BulletinUsage extends BaseActivity {
 	BulletinBoardFragment bulletin;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

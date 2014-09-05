@@ -1,11 +1,11 @@
 package cn.way.wandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import cn.way.wandoird.R;
+import cn.way.wandroid.imageloader.Utils;
 
 /**
  * An activity representing a single View detail screen. This
@@ -16,15 +16,15 @@ import cn.way.wandoird.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ViewDetailFragment}.
  */
-public class ViewDetailActivity extends FragmentActivity {
+public class ViewDetailActivity extends BaseActivity {
 
-    @Override
+    @SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_detail);
 
         // Show the Up button in the action bar.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if(Utils.hasHoneycomb())getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

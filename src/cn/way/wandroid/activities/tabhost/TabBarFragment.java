@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 
 public class TabBarFragment extends Fragment{
 	private FragmentTabHost tabHost;

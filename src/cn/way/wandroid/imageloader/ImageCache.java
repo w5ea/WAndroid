@@ -45,7 +45,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
-import cn.way.wandoird.BuildConfig;
+import cn.way.wandroid.BuildConfig;
 
 /**
  * This class handles disk and memory caching of bitmaps in conjunction with the

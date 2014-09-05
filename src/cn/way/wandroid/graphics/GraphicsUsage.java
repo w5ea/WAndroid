@@ -1,12 +1,12 @@
 package cn.way.wandroid.graphics;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import cn.way.wandoird.R;
+import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.R;
 
-public class GraphicsUsage extends Activity {
+public class GraphicsUsage extends BaseActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

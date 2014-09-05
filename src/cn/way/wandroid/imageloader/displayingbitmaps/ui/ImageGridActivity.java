@@ -17,15 +17,15 @@
 package cn.way.wandroid.imageloader.displayingbitmaps.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import cn.way.wandoird.BuildConfig;
+import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BuildConfig;
 import cn.way.wandroid.imageloader.Utils;
 
 /**
  * Simple FragmentActivity to hold the main {@link ImageGridFragment} and not much else.
  */
-public class ImageGridActivity extends FragmentActivity {
+public class ImageGridActivity extends BaseActivity {
     private static final String TAG = "ImageGridActivity";
 
     @Override

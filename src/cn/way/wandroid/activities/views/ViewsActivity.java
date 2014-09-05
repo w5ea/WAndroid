@@ -1,8 +1,8 @@
 package cn.way.wandroid.activities.views;
 
-import cn.way.wandoird.R;
 import android.app.Activity;
 import android.os.Bundle;
+import cn.way.wandroid.R;
 
 public class ViewsActivity extends Activity {
 	@Override

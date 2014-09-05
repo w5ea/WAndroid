@@ -3,7 +3,7 @@ package cn.way.wandroid.activities.tabhost;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridFragment;
 
 public class TabHostActivity extends FragmentActivity {

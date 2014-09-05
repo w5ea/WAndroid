@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <resources>
-     <string name="app_name">WAndroid</string>
+
+    <string name="app_name">WAndroid</string>
     <string name="title_view_detail">View Detail</string>
     <string name="intro_message">
-        <![CDATA[
+<![CDATA[
         
             
             This is a sample application for the Android Training class
@@ -19,4 +18,5 @@
         
         ]]>
     </string>
+
 </resources>

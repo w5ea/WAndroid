@@ -22,7 +22,6 @@ import android.app.ActionBar;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -34,14 +33,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
-import cn.way.wandoird.BuildConfig;
-import cn.way.wandoird.R;
+import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BuildConfig;
+import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.ImageCache;
 import cn.way.wandroid.imageloader.ImageFetcher;
 import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.provider.Images;
 
-public class ImageDetailActivity extends FragmentActivity implements OnClickListener {
+public class ImageDetailActivity extends BaseActivity implements OnClickListener {
     private static final String IMAGE_CACHE_DIR = "images";
     public static final String EXTRA_IMAGE = "extra_image";
 

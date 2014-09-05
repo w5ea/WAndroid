@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import cn.way.wandroid.BaseActivity;
 import cn.way.wandroid.utils.FileUtil;
 
-public class ZipUsageActivity extends Activity {
+public class ZipUsageActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 import cn.way.wandroid.utils.WTimer;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;

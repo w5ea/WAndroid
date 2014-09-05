@@ -2,14 +2,14 @@ package cn.way.wandroid.json;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
-import cn.way.wandoird.R;
+import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.R;
 
 import com.google.gson.Gson;
 
-public class GsonUsageActivity extends Activity {
+public class GsonUsageActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

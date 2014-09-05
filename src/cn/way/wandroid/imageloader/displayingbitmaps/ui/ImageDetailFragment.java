@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import cn.way.wandoird.R;
+import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.ImageFetcher;
 import cn.way.wandroid.imageloader.ImageWorker;
 import cn.way.wandroid.imageloader.Utils;
