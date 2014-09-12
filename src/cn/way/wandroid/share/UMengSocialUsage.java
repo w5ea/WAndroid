@@ -18,7 +18,7 @@ public class UMengSocialUsage extends BaseActivity {
 	}
 	
 	public void shareAction(View view){
-		shareManager.share("wwwww",new UMImage(this, R.drawable.ic_launcher),new SnsPostListener() {
+		shareManager.shareToWeixin("wwwww",new UMImage(this, R.drawable.ic_launcher),new SnsPostListener() {
 			@Override
 			public void onStart() {
 				
@@ -36,5 +36,24 @@ public class UMengSocialUsage extends BaseActivity {
 				}
 			}
 		});
+		
+//		shareManager.share("wwwww",new UMImage(this, R.drawable.ic_launcher),new SnsPostListener() {
+//			@Override
+//			public void onStart() {
+//				
+//			}
+//			@Override
+//			public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
+//				//分享结束，eCode==200代表分享成功，非200代表分享失败
+//				if (eCode==200) {
+//					
+//				}else{
+//					
+//				}
+//				if(platform == SHARE_MEDIA.TENCENT){
+//					
+//				}
+//			}
+//		});
 	}
 }

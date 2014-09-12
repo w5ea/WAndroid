@@ -37,6 +37,7 @@ public class DummyContent {
         addItem(new DummyItem("10", "FragmentTabBar"));
         addItem(new DummyItem("11", "Views"));
         addItem(new DummyItem("12", "友盟社会化组件"));
+        addItem(new DummyItem("13", "ViewPager"));
     }
 
     private static void addItem(DummyItem item) {

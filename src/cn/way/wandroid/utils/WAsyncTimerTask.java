@@ -81,8 +81,10 @@ public class WAsyncTimerTask extends AsyncTask<Void, Long, Long> {
 	@Override
 	protected void onCancelled() {
 		super.onCancelled();
-		timer.cancel();
-		timer = null;
+		if (timer!=null) {
+			timer.cancel();
+			timer = null;
+		}
 	}
 
 	public float getTimeInterval() {

@@ -20,11 +20,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
-        <meta-data android:value="54080458fd98c5cca3008e39" android:name="UMENG_APPKEY"></meta-data>
-		<meta-data android:value="GooglePlay" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="54080458fd98c5cca3008e39" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="GooglePlay" />
         <!-- ###################注册SDK使用的Activity###################### -->
-        <!--分享编辑页-->
+        <!-- 分享编辑页 -->
         <activity
             android:name="com.umeng.socialize.view.ShareActivity"
             android:configChanges="orientation|keyboard"
@@ -44,20 +48,26 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID-->
-                <data android:scheme="tencent100424468" /> 
+                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
+                <data android:scheme="tencent100424468" />
             </intent-filter>
         </activity>
-        <activity android:name="com.tencent.connect.common.AssistActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait">
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-		
-		
-		
-		
-		
-		
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        
+        
+        
+        
+        
         <activity
             android:name="cn.way.wandroid.ViewListActivity"
             android:label="@string/app_name" >
@@ -68,7 +78,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name= "cn.way.wandroid.ViewDetailActivity"
+            android:name="cn.way.wandroid.ViewDetailActivity"
             android:label="@string/title_view_detail"
             android:parentActivityName="cn.way.wandroid.ViewListActivity" >
             <meta-data
@@ -77,19 +87,34 @@
         </activity>
         <activity android:name="cn.way.wandroid.net.AsynchronousHttpClientUsage" >
         </activity>
-        <activity android:name="cn.way.wandroid.json.GsonUsageActivity"></activity>
-        <activity android:name="cn.way.wandroid.data.greendao.GreenDaoUsage"></activity>
-        <activity android:name="cn.way.wandroid.activities.lifemanager.LifeManagerUsage"></activity>
-        <activity android:name="cn.way.wandroid.activities.bulletin.BulletinUsage"></activity>
-        <activity android:name="cn.way.wandroid.graphics.GraphicsUsage"></activity>
-        <activity android:name="cn.way.wandroid.activities.dialog.DialogUsage"></activity>
-        <activity android:name="cn.way.wandroid.pullrefresh.PullToRefreshUsage"></activity>
-        <activity android:name="cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity"></activity>
-        <activity android:name="cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity"></activity>
-        <activity android:name="cn.way.wandroid.imageloader.usage.ImageLoaderUsage"></activity>
-        <activity android:name="cn.way.wandroid.activities.tabhost.TabHostActivity"></activity>
-        <activity android:name="cn.way.wandroid.activities.views.ViewsActivity"></activity>
-        <activity android:name="cn.way.wandroid.share.UMengSocialUsage"></activity>
+        <activity android:name="cn.way.wandroid.json.GsonUsageActivity" >
+        </activity>
+        <activity android:name="cn.way.wandroid.data.greendao.GreenDaoUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.activities.lifemanager.LifeManagerUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.activities.bulletin.BulletinUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.graphics.GraphicsUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.activities.dialog.DialogUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.pullrefresh.PullToRefreshUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity" >
+        </activity>
+        <activity android:name="cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity" >
+        </activity>
+        <activity android:name="cn.way.wandroid.imageloader.usage.ImageLoaderUsage" >
+        </activity>
+        <activity android:name="cn.way.wandroid.activities.tabhost.TabHostActivity" >
+        </activity>
+        <activity android:name="cn.way.wandroid.activities.views.ViewsActivity" >
+        </activity>
+        <activity android:name="cn.way.wandroid.share.UMengSocialUsage" >
+        </activity>
+        <activity android:name=".activities.viewpager.ViewPagerUsage"></activity>
+        <activity android:name=".imageloader.displayingbitmaps.ui.ImageDetailActivity2"></activity>
     </application>
 
 </manifest>

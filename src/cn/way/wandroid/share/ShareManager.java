@@ -14,49 +14,72 @@ import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 public class ShareManager {
+	private final String APP_ID_WEIXIN = "899529458";
+	private final String SECRET_WEIXIN = "wx6f572cc5aefebf74";
+	private final String APP_ID_QZONE = "101121084";
+	private final String SECRET_QZONE = "509d95d066aa65afb629c655d630f10d";
+	private final String CALL_BACK_URL_SINA = "http://sns.whalecloud.com/sina2/callback";
 	private Activity activity;
 	final UMSocialService controller = UMServiceFactory.getUMSocialService("com.umeng.share");
 	
 	public ShareManager(Activity activity) {
 		setActivity(activity);
-		// 是否缓存图片
-		controller.getConfig().setCacheValidStatus(false);
-		// 添加微信平台
-		UMWXHandler wxHandler = new UMWXHandler(getActivity(),"xxx","xxx");
-		// 支持微信朋友圈
-		wxHandler.setToCircle(true);
-//		wxHandler.addToSocialSDK();
-		controller.getConfig().setSsoHandler(wxHandler);
-		// 新浪微博SSO
-		controller.getConfig().setSsoHandler(new SinaSsoHandler());
-		controller.getConfig().setSinaCallbackUrl("http://wandroid.qiniudn.com");
-		// 腾讯微博SSO
-		controller.getConfig().setSsoHandler(new TencentWBSsoHandler());
-		// QQ空间SSO
-		controller.getConfig().setSsoHandler(new QZoneSsoHandler(getActivity(), "xxx", "xxx"));
+		
 		getController().getConfig().setPlatforms(
 				SHARE_MEDIA.WEIXIN_CIRCLE,
 				SHARE_MEDIA.SINA,
 				SHARE_MEDIA.TENCENT, 
-				SHARE_MEDIA.QZONE);
+				SHARE_MEDIA.QZONE,
+				SHARE_MEDIA.WEIXIN);
+//		getController().getConfig().removePlatform(SHARE_MEDIA.WEIXIN);
 		// 分享面板中的平台将按照如下顺序进行排序
 //		getController().getConfig().setPlatformOrder(
 //				SHARE_MEDIA.WEIXIN_CIRCLE,
 //				SHARE_MEDIA.SINA,
 //				SHARE_MEDIA.TENCENT, 
 //				SHARE_MEDIA.QZONE);
+		
+		// 是否缓存图片
+//		controller.getConfig().setCacheValidStatus(false);
+		// 添加微信平台
+		UMWXHandler wxHandler = new UMWXHandler(getActivity(),APP_ID_WEIXIN,SECRET_WEIXIN);
+		wxHandler.addToSocialSDK();
+		// 支持微信朋友圈
+		UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(),APP_ID_WEIXIN,SECRET_WEIXIN);
+		// 支持微信朋友圈
+		wxCircleHandler.setToCircle(true);
+		wxCircleHandler.addToSocialSDK();
+		
+		// 新浪微博SSO
+		controller.getConfig().setSsoHandler(new SinaSsoHandler());
+		controller.getConfig().setSinaCallbackUrl(CALL_BACK_URL_SINA);
+		// 腾讯微博SSO
+		controller.getConfig().setSsoHandler(new TencentWBSsoHandler());
+		// QQ空间SSO
+		controller.getConfig().setSsoHandler(new QZoneSsoHandler(getActivity(), APP_ID_QZONE, SECRET_QZONE));
 	}
+	
 	public UMSocialService getController() {
 		return controller;
 	}
+	
+	private void setData(String text,UMImage image){
+		controller.setShareContent(text);
+		controller.setShareImage(image);
+	}
+	
+	private void shareByPlatform(SHARE_MEDIA platform,SnsPostListener listener){
+		controller.postShare(getActivity(), platform, listener);
+	}
+	
+	public void shareToWeixin(String text,UMImage image,SnsPostListener listener){
+		setData(text, image);
+		shareByPlatform(SHARE_MEDIA.WEIXIN, listener);
+	}
+	
 	public void share(String text,UMImage image,SnsPostListener listener){
 		
-		if (text!=null) {
-			controller.setShareContent(text);
-		}
-		if (image!=null) {
-			controller.setShareImage(image);
-		}
+		setData(text, image);
 		
 		// 设置分享内容
 //		controller.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能，http://www.umeng.com/social");

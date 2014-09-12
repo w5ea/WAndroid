@@ -3,11 +3,13 @@ package cn.way.wandroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 import cn.way.wandroid.activities.bulletin.BulletinUsage;
 import cn.way.wandroid.activities.dialog.DialogUsage;
 import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
 import cn.way.wandroid.activities.tabhost.TabHostActivity;
+import cn.way.wandroid.activities.viewpager.ViewPagerUsage;
 import cn.way.wandroid.activities.views.ViewsActivity;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
@@ -16,6 +18,7 @@ import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
 import cn.way.wandroid.pullrefresh.PullToRefreshUsage;
 import cn.way.wandroid.share.UMengSocialUsage;
+import cn.way.wandroid.utils.PageNavigateManager;
 
 
 /**
@@ -71,6 +74,8 @@ public class ViewListActivity extends FragmentActivity
      */
     @Override
     public void onItemSelected(String id) {
+    	Log.d("test", PageNavigateManager.tag.toString());
+    	PageNavigateManager.clearTag();
     	if (id.equals("1")) {
 			Intent intent = new Intent(this, AsynchronousHttpClientUsage.class);
 			startActivity(intent);
@@ -108,6 +113,9 @@ public class ViewListActivity extends FragmentActivity
     	}
     	if (id.equals("12")) {
     		startActivity(new Intent(this, UMengSocialUsage.class));
+    	}
+    	if (id.equals("13")) {
+    		startActivity(new Intent(this, ViewPagerUsage.class));
     	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by
