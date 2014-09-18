@@ -3,8 +3,11 @@ package cn.way.wandroid.graphics;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 import cn.way.wandroid.BaseActivity;
 import cn.way.wandroid.R;
+import cn.way.wandroid.graphics.GuideDialog.ContentView;
+import cn.way.wandroid.utils.AppGuider;
 
 public class GraphicsUsage extends BaseActivity {
 	
@@ -35,5 +38,48 @@ public class GraphicsUsage extends BaseActivity {
 				view.setProgress(newProgress);
 			}
 		});
+		
+		if (AppGuider.beginGuide(this)) {
+			final GuideDialog dialog = new GuideDialog(this,ContentView.ContentViewCover);
+			dialog.setOnClickTargetListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(GraphicsUsage.this, "www", Toast.LENGTH_SHORT).show();
+					dialog.dismiss();
+				}
+			});
+			dialog.show();
+		}
+		
+		
+//		final TagCoverView tagView = new TagCoverView(this);
+//		tagView.setClickable(true);//设置来阻止下层视图接受事件
+//		
+//		float density = getResources().getDisplayMetrics().density;
+//		float rectSize = 200*density;
+//		float posX = 0*density;
+//		float posY = 100*density;
+//		tagView.setTagRect(new Rect((int)posX, (int)posY, (int)rectSize, (int)rectSize),true);
+//		tagView.show(this);
+		
+		
+//		View targetView = new View(this);
+////		targetView.setBackgroundColor(Color.argb(100, 0, 255, 0));
+//		FrameLayout.LayoutParams params1 = new FrameLayout.LayoutParams((int)rectSize, (int)rectSize);
+//		params1.leftMargin = (int) posssX;
+//		params1.topMargin = (int) posY;
+//		targetView.setLayoutParams(params1);
+//		
+//		tagView.addView(targetView);
+		
+		
+//		tagView.setOnClickTargetListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Toast.makeText(GraphicsUsage.this, "www", Toast.LENGTH_SHORT).show();
+//				tagView.dismiss(GraphicsUsage.this);
+//			}
+//		});
 	}
+	
 }

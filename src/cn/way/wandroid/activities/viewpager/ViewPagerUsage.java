@@ -48,7 +48,7 @@ public class ViewPagerUsage extends FragmentActivity {
 		for (int i = 0; i < 5; i++) {
 //			fragments.add(new SimpleFragment().setTitle(""+i));
 			
-			fragments.add(FocusImageFragment.newInstance(getImageLoader(), "http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds"));
+			fragments.add(FocusImageFragment.newInstance(R.layout.image_detail_fragment,getImageLoader(), "http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds",null));
 			
 //			imageUrls.add("http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds");
 			
@@ -84,7 +84,10 @@ public class ViewPagerUsage extends FragmentActivity {
 //				imageUrls.remove(0);
 //				imageUrls.remove(0);
 //				imageUrls.remove(0);
-				fragments.remove(0);
+				fragments.clear();
+				for (int i = 0; i < 3; i++) {
+					fragments.add(FocusImageFragment.newInstance(R.layout.image_detail_fragment,getImageLoader(), "http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds",null));
+				}
 //				fragments.remove(0);
 //				fragments.remove(0);
 				pager.getAdapter().notifyDataSetChanged();

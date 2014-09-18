@@ -3,6 +3,7 @@ package cn.way.wandroid.views;
 import java.util.ArrayList;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextPaint;
@@ -75,7 +76,7 @@ public class BulletinBoardFragment extends Fragment {
 					LayoutParams.WRAP_CONTENT);
 			bulletinTextView.setLayoutParams(lp);
 			bulletinTextView.setTextColor(Color.WHITE);
-			bulletinTextView.setTextSize(getResources().getDimension(R.dimen.bulletin_text));
+			bulletinTextView.setTextSize(14);
 			bulletinView.addView(bulletinTextView);
 		}
 		return bulletinView;
@@ -93,7 +94,7 @@ public class BulletinBoardFragment extends Fragment {
 		stopAnimation();
 	}
 
-	private static final long SPEED = 85;
+	private static final long SPEED = 55;
 
 	private void doAnimationForView(final View targetView) {
 		final float viewWidth = targetView.getWidth();
@@ -106,7 +107,8 @@ public class BulletinBoardFragment extends Fragment {
 		targetView.setLayoutParams(lp);
 		TranslateAnimation leaveAnimation = new TranslateAnimation(startX,
 				-viewWidth, targetView.getTop(), targetView.getTop());
-		leaveAnimation.setDuration((long) (viewWidth / SPEED * 1000));
+		float density = getResources().getDisplayMetrics().density;
+		leaveAnimation.setDuration((long) (viewWidth / (SPEED* density) * 1000 ));
 		leaveAnimation.setStartOffset(3000);
 		leaveAnimation.setInterpolator(new LinearInterpolator());
 		leaveAnimation.setAnimationListener(new AnimationListener() {
@@ -135,9 +137,11 @@ public class BulletinBoardFragment extends Fragment {
 					String text = " ";
 					if(bulletins.size()>0)text = bulletins.get(bulletinIndex);
 					TextPaint fontPaint = new TextPaint();
+					fontPaint.setTypeface(Typeface.DEFAULT_BOLD);// why width less
 					fontPaint.setTextSize(bulletinTextView.getTextSize());
 					float width = fontPaint.measureText(text);
 					lp.width = (int) Math.ceil(width);
+					lp.height = LayoutParams.MATCH_PARENT;
 					bulletinTextView.setLayoutParams(lp);
 					bulletinTextView.setText(text);
 					TranslateAnimation turnOutAnimation = new TranslateAnimation(

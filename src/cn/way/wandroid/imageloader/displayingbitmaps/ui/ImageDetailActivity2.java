@@ -206,7 +206,7 @@ public class ImageDetailActivity2 extends BaseActivity implements OnClickListene
 
         @Override
         public Fragment getItem(int position) {
-            return FocusImageFragment.newInstance(loader,Images.imageUrls[position]);
+            return FocusImageFragment.newInstance(R.layout.image_detail_fragment,loader,Images.imageUrls[position],null);
         }
     }
     

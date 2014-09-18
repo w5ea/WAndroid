@@ -36,7 +36,7 @@ public class WLifeManager {
 				lifePlusLeftTimeSeconds = (int) totalLeftTimeSeconds;
 			}
 		} else {
-			lifeCount = maxLifeCount;
+			lifeCount = readLifeCount();
 			lifePlusLeftTimeSeconds = 0;
 		}
 		startTimer();
@@ -149,6 +149,7 @@ public class WLifeManager {
 		// 如果生命数大于可恢复生命最大值，则不需要恢复生命
 		if (lifeCount >= maxLifeCount) {
 			totalLeftTimeSeconds = 0;
+			persistLifeCount(lifeCount);
 		} else {
 			totalLeftTimeSeconds = (maxLifeCount - lifeCount - 1)
 					* lifePlusTimeInterval + lifePlueLeftTimeSeconds;
@@ -215,6 +216,9 @@ public class WLifeManager {
 		if (listener != null) {
 			listener.lifeCountChanged(lifeCount,maxLifeCount);
 		}
+		if(isLifeFull()){
+			persistLifeCount(lifeCount);
+		}
 	}
 
 	private int lifeCountWithTotalLeftTimeSeconds(long totalLeftTimeSeconds) {
@@ -227,8 +231,8 @@ public class WLifeManager {
 		int lifePlusTimeInterval = readLifePlusTimeInterval();
 		int weakLifeCount = 1;
 		if (totalLeftTimeSeconds > lifePlusTimeInterval) {
-			weakLifeCount = (int) Math.floor(totalLeftTimeSeconds
-					/ lifePlusTimeInterval);
+			weakLifeCount = (int) Math.ceil(totalLeftTimeSeconds
+					/ (float)lifePlusTimeInterval);
 		}
 		return maxLifeCount - weakLifeCount;
 	}
@@ -259,6 +263,16 @@ public class WLifeManager {
 	private void persistMaxLifeCount(int maxLifeCount) {
 		getSp().edit().putInt(KEY_MAX_LIFE_COUNT, maxLifeCount).commit();
 	}
+	
+	private static String KEY__LIFE_COUNT = "KEY__LIFE_COUNT";
+	
+	private int readLifeCount() {
+		return getSp().getInt(KEY__LIFE_COUNT, 10);
+	}
+	
+	private void persistLifeCount(int lifeCount) {
+		getSp().edit().putInt(KEY_MAX_LIFE_COUNT, lifeCount).commit();
+	}
 
 	private static String KEY_LIFEPLUSTIMEINTERVAL = "KEY_LIFEPLUSTIMEINTERVAL";
 
@@ -273,6 +287,10 @@ public class WLifeManager {
 
 	private static String KEY_FINISH_DATE_TIMEINTERVAL_SINCE_1970 = "KEY_FINISH_DATE";
 
+	/**
+	 * 在同步时调用一次来记录结束时间，并通过这个结束时间来取得剩余总时间
+	 * @param timeIntervalSince1970
+	 */
 	private void persistFinishDateWithTimeIntervalSince1970(
 			long timeIntervalSince1970) {
 		getSp().edit()

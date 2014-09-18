@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class PageIndicator extends LinearLayout {
 	
-	private int numberOfPages = 1+9;
+	private int numberOfPages = 1;
 	private int currentPageIndex;
 	private int resourceId;
 	private int dotWidth;
@@ -66,7 +65,6 @@ public class PageIndicator extends LinearLayout {
 			dotHeight = this.dotHeight;
 		}
 		int weight = 1;
-		Log.d("test", dotWidth+"==="+dotHeight);
 		for (int i = 0; i < getNumberOfPages(); i++) {
 			ImageView iv = new ImageView(getContext());
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dotWidth, dotHeight, weight);

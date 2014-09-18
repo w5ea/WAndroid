@@ -15,7 +15,7 @@ public class AnnularProgressView extends View {
 	private Paint paint = null;
 	private float strokeWidth = 20;
 	private float progress = 1;
-	RectF rect;
+	private RectF rect;
 
 	public AnnularProgressView(Context context) {
 		super(context);
@@ -27,6 +27,7 @@ public class AnnularProgressView extends View {
 	}
 	public AnnularProgressView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		strokeWidth = strokeWidth*getResources().getDisplayMetrics().density;
 		rect = new RectF(strokeWidth/2,strokeWidth/2,getWidth()-strokeWidth/2,getHeight()-strokeWidth/2);
 	}
 	@Override
@@ -56,7 +57,7 @@ public class AnnularProgressView extends View {
 	
 	public void setStrokeWidth(float width){
 		if (width>0) {
-			this.strokeWidth = width;
+			this.strokeWidth = width*getResources().getDisplayMetrics().density;
 			rect = new RectF(strokeWidth/2,strokeWidth/2,getWidth()-strokeWidth/2,getHeight()-strokeWidth/2);
 			getPaint().setStrokeWidth(width);
 		}
