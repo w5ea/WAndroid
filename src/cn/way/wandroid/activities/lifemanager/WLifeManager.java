@@ -271,7 +271,7 @@ public class WLifeManager {
 	}
 	
 	private void persistLifeCount(int lifeCount) {
-		getSp().edit().putInt(KEY_MAX_LIFE_COUNT, lifeCount).commit();
+		getSp().edit().putInt(KEY__LIFE_COUNT, lifeCount).commit();
 	}
 
 	private static String KEY_LIFEPLUSTIMEINTERVAL = "KEY_LIFEPLUSTIMEINTERVAL";
