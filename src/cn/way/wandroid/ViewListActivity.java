@@ -11,6 +11,8 @@ import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
 import cn.way.wandroid.activities.tabhost.TabHostActivity;
 import cn.way.wandroid.activities.viewpager.ViewPagerUsage;
 import cn.way.wandroid.activities.views.ViewsActivity;
+import cn.way.wandroid.animation.AnimationUsage;
+import cn.way.wandroid.applation.ApplationInfoUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
@@ -18,7 +20,10 @@ import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
 import cn.way.wandroid.pullrefresh.PullToRefreshUsage;
 import cn.way.wandroid.share.UMengSocialUsage;
+import cn.way.wandroid.text.TextUseage;
 import cn.way.wandroid.utils.PageNavigateManager;
+
+import com.umeng.update.UmengUpdateAgent;
 
 
 /**
@@ -50,7 +55,9 @@ public class ViewListActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_list);
-
+//        UpdateConfig.setDebug(true);
+        UmengUpdateAgent.update(this);
+//        UpdateConfig.setDeltaUpdate(false);
 //        if (findViewById(R.id.view_detail_container) != null) {
 //            // The detail container view will be present only in the
 //            // large-screen layouts (res/values-large and
@@ -116,6 +123,15 @@ public class ViewListActivity extends FragmentActivity
     	}
     	if (id.equals("13")) {
     		startActivity(new Intent(this, ViewPagerUsage.class));
+    	}
+    	if (id.equals("14")) {
+    		startActivity(new Intent(this, AnimationUsage.class));
+    	}
+    	if (id.equals("15")) {
+    		startActivity(new Intent(this, TextUseage.class));
+    	}
+    	if (id.equals("16")) {
+    		startActivity(new Intent(this, ApplationInfoUsage.class));
     	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by

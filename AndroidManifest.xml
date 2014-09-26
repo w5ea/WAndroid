@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.way.wandroid"
     android:versionCode="1"
-    android:versionName="1.0.0" >
+    android:versionName="1.0.1" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -63,8 +63,15 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        
-        
+<!--         umeng update -->
+        <service
+		    android:name="com.umeng.update.net.DownloadingService"
+		    android:process=":DownloadingService" >
+		</service>
+		<activity 
+		    android:name="com.umeng.update.UpdateDialogActivity"
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+		</activity>
         
         
         
@@ -115,6 +122,9 @@
         </activity>
         <activity android:name=".activities.viewpager.ViewPagerUsage"></activity>
         <activity android:name=".imageloader.displayingbitmaps.ui.ImageDetailActivity2"></activity>
+        <activity android:name=".animation.AnimationUsage"></activity>
+        <activity android:name=".text.TextUseage"></activity>
+        <activity android:name=".applation.ApplationInfoUsage"></activity>
     </application>
 
 </manifest>

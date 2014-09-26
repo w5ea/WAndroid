@@ -38,6 +38,9 @@ public class DummyContent {
         addItem(new DummyItem("11", "Views"));
         addItem(new DummyItem("12", "友盟社会化组件"));
         addItem(new DummyItem("13", "ViewPager"));
+        addItem(new DummyItem("14", "Anmiation"));
+        addItem(new DummyItem("15", "Text"));
+        addItem(new DummyItem("16", "Applation"));
     }
 
     private static void addItem(DummyItem item) {

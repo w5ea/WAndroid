@@ -1,13 +1,12 @@
 package cn.way.wandroid;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import cn.way.wandroid.share.ShareManager;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.sso.UMSsoHandler;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 public class BaseActivity extends FragmentActivity {
 	protected ShareManager shareManager;

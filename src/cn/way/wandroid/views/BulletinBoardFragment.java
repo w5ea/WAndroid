@@ -18,7 +18,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import cn.way.wandroid.R;
 
 public class BulletinBoardFragment extends Fragment {
 	private ViewGroup bulletinView;
