@@ -28,18 +28,28 @@ public class ImageLoader extends Fragment {
 
 	public void init(FragmentActivity activity, int imageWidth, int imageHeight) {
 		// this.activity = activity;
-		if (imageHeight == -1) {
-			imageFetcher = new ImageFetcher(activity, imageWidth);
-		} else {
-			imageFetcher = new ImageFetcher(activity, imageWidth, imageHeight);
+		try {
+			if(activity!=null){
+				if (imageHeight == -1) {
+					imageFetcher = new ImageFetcher(activity, imageWidth);
+				} else {
+					imageFetcher = new ImageFetcher(activity, imageWidth, imageHeight);
+				}
+				addDefaultCache(activity, imageFetcher);
+				appendToParentActivity(activity);
+			}
+		} catch (Exception e) {
 		}
-		addDefaultCache(activity, imageFetcher);
-		appendToParentActivity(activity);
 	}
 
 	private void appendToParentActivity(FragmentActivity activity) {
-		activity.getSupportFragmentManager().beginTransaction().add(this, null)
-				.commit();
+		if(activity!=null){
+			try {
+				activity.getSupportFragmentManager().beginTransaction()
+						.add(this, this.toString()).commit();
+			} catch (Exception e) {
+			}
+		}
 	}
 
 	private void addDefaultCache(FragmentActivity activity,
@@ -73,38 +83,40 @@ public class ImageLoader extends Fragment {
 	 * @param pauseWork
 	 */
 	public void setPauseWork(boolean pauseWork) {
-		imageFetcher.setPauseWork(pauseWork);
+		if(imageFetcher!=null)imageFetcher.setPauseWork(pauseWork);
 	}
 
 	public void setLoadingImage(int resId) {
-		imageFetcher.setLoadingImage(resId);
+		if(imageFetcher!=null)imageFetcher.setLoadingImage(resId);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		imageFetcher.setExitTasksEarly(false);
+		if(imageFetcher!=null)imageFetcher.setExitTasksEarly(false);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		imageFetcher.setPauseWork(false);
-		imageFetcher.setExitTasksEarly(true);
-		imageFetcher.flushCache();
+		if(imageFetcher!=null){
+			imageFetcher.setPauseWork(false);
+			imageFetcher.setExitTasksEarly(true);
+			imageFetcher.flushCache();
+		}
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		imageFetcher.closeCache();
+		if(imageFetcher!=null)imageFetcher.closeCache();
 	}
 
 	public void clearCache() {
-		imageFetcher.clearCache();
+		if(imageFetcher!=null)imageFetcher.clearCache();
 	}
 
 	public void loadImage(String urlStr, ImageView imageView) {
-		imageFetcher.loadImage(urlStr, imageView);
+		if(imageFetcher!=null)imageFetcher.loadImage(urlStr, imageView);
 	}
 }

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.widget.TextView;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 
 import com.google.gson.Gson;
 
-public class GsonUsageActivity extends BaseActivity {
+public class GsonUsageActivity extends BaseFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

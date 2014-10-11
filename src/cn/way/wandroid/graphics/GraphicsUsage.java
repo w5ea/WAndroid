@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.graphics.GuideDialog.ContentView;
 import cn.way.wandroid.utils.AppGuider;
 
-public class GraphicsUsage extends BaseActivity {
+public class GraphicsUsage extends BaseFragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

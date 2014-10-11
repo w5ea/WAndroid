@@ -8,7 +8,7 @@ import cn.way.wandroid.share.ShareManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.sso.UMSsoHandler;
 
-public class BaseActivity extends FragmentActivity {
+public class BaseFragmentActivity extends FragmentActivity {
 	protected ShareManager shareManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

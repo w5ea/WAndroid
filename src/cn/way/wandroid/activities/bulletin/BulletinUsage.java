@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.views.BulletinBoardFragment;
 
-public class BulletinUsage extends BaseActivity {
+public class BulletinUsage extends BaseFragmentActivity {
 	BulletinBoardFragment bulletin;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

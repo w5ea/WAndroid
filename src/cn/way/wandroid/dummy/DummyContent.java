@@ -41,6 +41,7 @@ public class DummyContent {
         addItem(new DummyItem("14", "Anmiation"));
         addItem(new DummyItem("15", "Text"));
         addItem(new DummyItem("16", "Applation"));
+        addItem(new DummyItem("17", "ResideMenu"));
     }
 
     private static void addItem(DummyItem item) {

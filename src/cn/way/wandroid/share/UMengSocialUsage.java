@@ -2,7 +2,7 @@ package cn.way.wandroid.share;
 
 import android.os.Bundle;
 import android.view.View;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -10,7 +10,7 @@ import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
 import com.umeng.socialize.media.UMImage;
 
-public class UMengSocialUsage extends BaseActivity {
+public class UMengSocialUsage extends BaseFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -33,7 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.BuildConfig;
 import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.ImageCache;
@@ -42,7 +42,7 @@ import cn.way.wandroid.imageloader.ImageLoader;
 import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.provider.Images;
 
-public class ImageDetailActivity2 extends BaseActivity implements OnClickListener {
+public class ImageDetailActivity2 extends BaseFragmentActivity implements OnClickListener {
     private static final String IMAGE_CACHE_DIR = "images";
     public static final String EXTRA_IMAGE = "extra_image";
 

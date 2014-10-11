@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.data.gen.DaoMaster;
 import cn.way.wandroid.data.gen.DaoMaster.DevOpenHelper;
@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 import de.greenrobot.dao.query.QueryBuilder;
 
-public class GreenDaoUsage extends BaseActivity {
+public class GreenDaoUsage extends BaseFragmentActivity {
 	DaoSession daoSession;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

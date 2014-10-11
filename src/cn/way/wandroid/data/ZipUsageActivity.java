@@ -6,10 +6,10 @@ import java.io.InputStream;
 
 import android.os.Bundle;
 import android.util.Log;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.utils.FileUtil;
 
-public class ZipUsageActivity extends BaseActivity {
+public class ZipUsageActivity extends BaseFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

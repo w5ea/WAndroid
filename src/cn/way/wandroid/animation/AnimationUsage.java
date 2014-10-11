@@ -13,50 +13,50 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.animation.nineold.FlakeView;
 import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.utils.WTimer;
 
-public class AnimationUsage extends BaseActivity {
+public class AnimationUsage extends BaseFragmentActivity {
 	private WTimer timer ;
 	private ArrayList<View> views = new ArrayList<View>();
-	FlakeView flakeView;
+//	FlakeView flakeView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ViewGroup viewGroup = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_animation_usage, null);
 		setContentView(viewGroup);
 		
-		flakeView = new FlakeView(this);
+//		flakeView = new FlakeView(this);
 //		flakeView.setLayoutParams(new LayoutParams(500, 500));
-		viewGroup.addView(flakeView);
-		flakeView.setShowFps(true);
-		flakeView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @SuppressWarnings("deprecation")
-					@TargetApi(VERSION_CODES.JELLY_BEAN)
-                    @Override
-                    public void onGlobalLayout() {
-                        if (Utils.hasJellyBean()) {
-                        	flakeView.getViewTreeObserver()
-                                    .removeOnGlobalLayoutListener(this);
-                        } else {
-                        	flakeView.getViewTreeObserver()
-                                    .removeGlobalOnLayoutListener(this);
-                        }
-                            
-                    }
-                });
-		viewGroup.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				flakeView.addFlakes(32, R.drawable.ic_launcher);
-				flakeView.addFlakes(32, R.drawable.empty_photo);
-			}
-		});
-		flakeView.start();
+//		viewGroup.addView(flakeView);
+//		flakeView.setShowFps(true);
+//		flakeView.getViewTreeObserver().addOnGlobalLayoutListener(
+//                new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @SuppressWarnings("deprecation")
+//					@TargetApi(VERSION_CODES.JELLY_BEAN)
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        if (Utils.hasJellyBean()) {
+//                        	flakeView.getViewTreeObserver()
+//                                    .removeOnGlobalLayoutListener(this);
+//                        } else {
+//                        	flakeView.getViewTreeObserver()
+//                                    .removeGlobalOnLayoutListener(this);
+//                        }
+//                            
+//                    }
+//                });
+//		viewGroup.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				flakeView.addFlakes(32, R.drawable.ic_launcher);
+//				flakeView.addFlakes(32, R.drawable.empty_photo);
+//			}
+//		});
+//		flakeView.start();
 //		View iv1 =  findViewById(R.id.imageView1);
 //		iv1.setVisibility(View.INVISIBLE);
 //		views.add(iv1);
@@ -128,18 +128,18 @@ public class AnimationUsage extends BaseActivity {
 	@Override
     protected void onPause() {
         super.onPause();
-        flakeView.pause();
+//        flakeView.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        flakeView.resume();
+//        flakeView.resume();
     }
     
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-    	flakeView.cancel();
+//    	flakeView.cancel();
     }
 }

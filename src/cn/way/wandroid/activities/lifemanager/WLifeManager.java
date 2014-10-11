@@ -142,17 +142,18 @@ public class WLifeManager {
 	// ----------------------------------------------
 	/**同步数据到本地*/
 	private void sync(int maxLifeCount, int lifeCount,
-			int lifePlusTimeInterval, int lifePlueLeftTimeSeconds) {
+			int lifePlusTimeInterval, int lifePlusLeftTimeSeconds) {
 		// 保存最大可恢复生命数，和恢复时间间隔
 		persistMaxLifeCount(maxLifeCount);
 		persistLifePlusTimeInterval(lifePlusTimeInterval);
 		// 如果生命数大于可恢复生命最大值，则不需要恢复生命
 		if (lifeCount >= maxLifeCount) {
 			totalLeftTimeSeconds = 0;
+			lifePlusLeftTimeSeconds = 0;
 			persistLifeCount(lifeCount);
 		} else {
 			totalLeftTimeSeconds = (maxLifeCount - lifeCount - 1)
-					* lifePlusTimeInterval + lifePlueLeftTimeSeconds;
+					* lifePlusTimeInterval + lifePlusLeftTimeSeconds;
 		}
 		// 保存结束日期通过前面计算得到的总剩余时间
 		persistFinishDateWithTimeIntervalSince1970(new Date().getTime() / 1000
@@ -161,7 +162,9 @@ public class WLifeManager {
 		this.maxLifeCount = maxLifeCount;
 		this.lifePlusTimeInterval = lifePlusTimeInterval;
 		this.lifeCount = lifeCount;
-		this.lifePlusLeftTimeSeconds = lifePlueLeftTimeSeconds;
+		this.lifePlusLeftTimeSeconds = lifePlusLeftTimeSeconds;
+		lifeCountChanged();
+		lifePlusLeftTimeChanged();
 	}
 
 	private void startTimer() {

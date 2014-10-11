@@ -10,10 +10,10 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.URLSpan;
 import android.widget.TextView;
-import cn.way.wandroid.BaseActivity;
+import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 
-public class TextUseage extends BaseActivity {
+public class TextUseage extends BaseFragmentActivity {
 //	ParcelableSpan
 	//TODO: using span to set special words with be different in line 
 	@Override

@@ -16,7 +16,7 @@ import cn.way.wandroid.imageloader.Utils;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ViewDetailFragment}.
  */
-public class ViewDetailActivity extends BaseActivity {
+public class ViewDetailActivity extends BaseFragmentActivity {
 
     @SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
