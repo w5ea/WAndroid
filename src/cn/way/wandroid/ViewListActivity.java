@@ -20,6 +20,7 @@ import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
 import cn.way.wandroid.pullrefresh.PullToRefreshUsage;
 import cn.way.wandroid.share.UMengSocialUsage;
+import cn.way.wandroid.slidingmenu.usage.SlidingMenuUsage;
 import cn.way.wandroid.text.TextUseage;
 import cn.way.wandroid.utils.PageNavigateManager;
 
@@ -132,6 +133,12 @@ public class ViewListActivity extends FragmentActivity
     	}
     	if (id.equals("16")) {
     		startActivity(new Intent(this, ApplationInfoUsage.class));
+    	}
+    	if (id.equals("17")) {
+    		startActivity(new Intent(this, ApplationInfoUsage.class));
+    	}
+    	if (id.equals("18")) {
+    		startActivity(new Intent(this, SlidingMenuUsage.class));
     	}
 //        if (mTwoPane) {
 //            // In two-pane mode, show the detail view in this activity by

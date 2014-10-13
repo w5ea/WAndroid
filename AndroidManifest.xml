@@ -126,6 +126,7 @@
         <activity android:name=".text.TextUseage"></activity>
         <activity android:name=".applation.ApplationInfoUsage"></activity>
         <activity android:name=".activities.residemenu.ResideMenuUsage"></activity>
+        <activity android:name=".slidingmenu.usage.SlidingMenuUsage"></activity>
     </application>
 
 </manifest>
