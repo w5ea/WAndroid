@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.ImageLoader;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.FocusImageFragment;
@@ -19,6 +20,7 @@ import cn.way.wandroid.utils.PageNavigateManager;
 import cn.way.wandroid.utils.PageNavigateManager.PageNavigateTag;
 import cn.way.wandroid.utils.WTimer;
 import cn.way.wandroid.views.PageIndicator;
+import cn.way.wandroid.views.WViewPager;
 
 public class ViewPagerUsage extends FragmentActivity {
 	private ArrayList<Fragment>fragments = new ArrayList<Fragment>();
@@ -43,12 +45,23 @@ public class ViewPagerUsage extends FragmentActivity {
 		if (PageNavigateManager.getTag()==PageNavigateTag.PageNavigateTagPrizes) {
 			
 		}
-		final ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
+		final WViewPager pager = (WViewPager) findViewById(R.id.viewPager);
+		pager.setScrollable(false);
 //		final ArrayList<String>imageUrls = new ArrayList<String>();
 		for (int i = 0; i < 5; i++) {
 //			fragments.add(new SimpleFragment().setTitle(""+i));
 			
-			fragments.add(FocusImageFragment.newInstance(R.layout.image_detail_fragment,getImageLoader(), "http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds",null));
+			fragments.add(FocusImageFragment.newInstance(R.layout.image_detail_fragment,getImageLoader(), "http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds",new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+//					Toast.makeText(getApplicationContext(), "wwww", 0).show();
+					int currentIndex = pager.getCurrentItem()+1;
+					if (currentIndex>=fragments.size()) {
+						currentIndex = 0;
+					}
+					pager.setCurrentItem(currentIndex,true);
+				}
+			}));
 			
 //			imageUrls.add("http://cn.bing.com/th?id=OJ.7V064eoyjkShZg&pid=MSNJVFeeds");
 			
