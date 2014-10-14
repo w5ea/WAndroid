@@ -812,6 +812,7 @@ public class CustomViewAbove extends ViewGroup {
 		mScrollX = x;
 		mViewBehind.scrollBehindTo(mContent, x, y);	
 		((SlidingMenu)getParent()).manageLayers(getPercentOpen());
+		setupScale(true);
 	}
 
 	private int determineTargetPage(float pageOffset, int velocity, int deltaX) {
