@@ -1,13 +1,8 @@
 package cn.way.wandroid.graphics;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Toast;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
-import cn.way.wandroid.graphics.GuideDialog.ContentView;
-import cn.way.wandroid.utils.AppGuider;
 
 public class GraphicsUsage extends BaseFragmentActivity {
 	
@@ -15,9 +10,9 @@ public class GraphicsUsage extends BaseFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_graphics_usage);
-		AnnularProgressView progressView = (AnnularProgressView) findViewById(R.id.progressView);
-		progressView.setColorRGBA(255, 0, 0, 255);
-		progressView.setStrokeWidth(50);
+//		AnnularProgressView progressView = (AnnularProgressView) findViewById(R.id.progressView);
+//		progressView.setColorRGBA(255, 0, 0, 255);
+//		progressView.setStrokeWidth(50);
 //		FrameLayout view = new FrameLayout(this);
 //		view.setLayoutParams(new FrameLayout.LayoutParams(android.widget.FrameLayout.LayoutParams.MATCH_PARENT,android.widget.FrameLayout.LayoutParams.MATCH_PARENT));
 //		setContentView(view);
@@ -26,30 +21,30 @@ public class GraphicsUsage extends BaseFragmentActivity {
 //		progressView.setLayoutParams(params);
 //		view.addView(progressView);
 		
-		progressView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				AnnularProgressView view = (AnnularProgressView) v;
-				if (view.getProgress()==1) {
-					view.setProgress(0);
-				}
-				float newProgress = view.getProgress()+0.1f;
-				newProgress = newProgress>1?1:newProgress;
-				view.setProgress(newProgress);
-			}
-		});
+//		progressView.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				AnnularProgressView view = (AnnularProgressView) v;
+//				if (view.getProgress()==1) {
+//					view.setProgress(0);
+//				}
+//				float newProgress = view.getProgress()+0.1f;
+//				newProgress = newProgress>1?1:newProgress;
+//				view.setProgress(newProgress);
+//			}
+//		});
 		
-		if (AppGuider.beginGuide(this)) {
-			final GuideDialog dialog = new GuideDialog(this,ContentView.ContentViewCover);
-			dialog.setOnClickTargetListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(GraphicsUsage.this, "www", Toast.LENGTH_SHORT).show();
-					dialog.dismiss();
-				}
-			});
-			dialog.show();
-		}
+//		if (AppGuider.beginGuide(this)) {
+//			final GuideDialog dialog = new GuideDialog(this,ContentView.ContentViewCover);
+//			dialog.setOnClickTargetListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					Toast.makeText(GraphicsUsage.this, "www", Toast.LENGTH_SHORT).show();
+//					dialog.dismiss();
+//				}
+//			});
+//			dialog.show();
+//		}
 		
 		
 //		final TagCoverView tagView = new TagCoverView(this);
@@ -80,6 +75,8 @@ public class GraphicsUsage extends BaseFragmentActivity {
 //				tagView.dismiss(GraphicsUsage.this);
 //			}
 //		});
+		
+//		setContentView(new RoundtableView(this),new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
 	
 }

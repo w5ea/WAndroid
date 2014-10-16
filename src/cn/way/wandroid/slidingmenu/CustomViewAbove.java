@@ -25,6 +25,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
+import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.slidingmenu.SlidingMenu.OnClosedListener;
 import cn.way.wandroid.slidingmenu.SlidingMenu.OnOpenedListener;
 //import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnCloseListener;
@@ -521,11 +522,13 @@ public class CustomViewAbove extends ViewGroup {
 
 	@SuppressLint("NewApi")
 	private void setupScale(boolean isLeft){
-		float scaleValue = 1f-(1-scaleTo)*getPercentOpen();
-		setScaleY(scaleValue);
-		setScaleX(scaleValue);
-		setPivotX(isLeft?getWidth():0);
-		setPivotY(getHeight()/2);
+		if (Utils.hasHoneycomb()) {
+			float scaleValue = 1f-(1-scaleTo)*getPercentOpen();
+			setScaleY(scaleValue);
+			setScaleX(scaleValue);
+			setPivotX(isLeft?getWidth():0);
+			setPivotY(getHeight()/2);
+		}
 	}
 	/**
 	 * This method will be invoked when the current page is scrolled, either as part
