@@ -1,8 +1,12 @@
 package cn.way.wandroid.graphics;
 
 import android.os.Bundle;
+import android.view.SoundEffectConstants;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
+import cn.way.wandroid.graphics.RoundtableView.RotationListener;
+import cn.way.wandroid.graphics.RoundtableView.State;
+import cn.way.wandroid.utils.WLog;
 
 public class GraphicsUsage extends BaseFragmentActivity {
 	
@@ -77,6 +81,27 @@ public class GraphicsUsage extends BaseFragmentActivity {
 //		});
 		
 //		setContentView(new RoundtableView(this),new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		final RoundtableView rv = (RoundtableView) findViewById(R.id.roundtableView);
+		for (int j = 0; j < 8; j++) {
+			rv.getImageView(j).setImageResource(R.drawable.ic_launcher);
+			rv.getTextView(j).setText("---"+j);
+		}
+		rv.setRotationListener(new RotationListener() {
+			@Override
+			public void onStateChange(State state) {
+				WLog.d(state.toString());
+				if (state==State.StateSpeedConstant) {
+					ii+=1;
+					ii = ii>7?0:ii;
+					rv.stop(ii);
+				}
+			}
+			@Override
+			public void onSlowdownPerStep() {
+				rv.playSoundEffect(SoundEffectConstants.CLICK);
+			}
+		});
+		
 	}
-	
+	int ii = 7;
 }

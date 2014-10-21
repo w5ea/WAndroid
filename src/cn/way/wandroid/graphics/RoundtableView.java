@@ -12,31 +12,56 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
-import cn.way.wandroid.R;
+import android.widget.TextView;
 
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 import com.nineoldandroids.view.ViewHelper;
 
 public class RoundtableView extends FrameLayout {
+	public interface RotationListener{
+		/**
+		 * 在state == StateSpeedConstant 时可以做请求网络数据的操作
+		 * @param state
+		 */
+		void onStateChange(State state);
+		void onSlowdownPerStep();
+	}
+	
 	private PanView pan;
-	private PointerView pv;
-	private ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-	private float maxSpeed = 8;
-	private float speedChangeValue = 0.05f;
-	private float currentSpeed;
-
-	public enum State {
-		StateSpeedConstant, StateSpeedUp, StateStateSpeedDown
+	private PointerView pointerView;
+	public FrameLayout getCenterLayout() {
+		return pointerView.getCenterFrameLayout();
 	}
 
-	private State state = State.StateSpeedConstant;
+	public PointerView getPointerView() {
+		return pointerView;
+	}
+
+	private ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+	private float maxSpeed = 8.0f;
+	private float speedChangeValue = 0.10f;
+	private final float adjustingAngle = 360-(computeTotalRotation()%360);
+	
+	private float currentSpeed;
+	private float leftAdjustingAngle;
+	private float constantAngle ;//均速运动过程中转过的总角度
+	private float speedDownAngle;//减速过程中转过的角度
+
+	private RotationListener rotationListener;
+	
+	public enum State {
+		StateStoped,StateSpeedConstant, StateSpeedup, StateSlowdown
+	}
+
+	private State state = State.StateStoped;
 
 	public RoundtableView(Context context) {
 		super(context);
@@ -51,7 +76,11 @@ public class RoundtableView extends FrameLayout {
 		super(context, attrs, defStyle);
 		init();
 	}
-
+	@Override
+	protected void onDetachedFromWindow() {
+		stop();
+		super.onDetachedFromWindow();
+	}
 	private void init() {
 
 		if (pan == null) {
@@ -65,30 +94,110 @@ public class RoundtableView extends FrameLayout {
 			@Override
 			public void onAnimationUpdate(ValueAnimator arg0) {
 				if (pan != null) {
-					if (state == State.StateSpeedUp) {
+					if (state == State.StateSpeedup) {
 						currentSpeed += speedChangeValue;
 						if (currentSpeed >= maxSpeed) {
-							state = State.StateStateSpeedDown;
+							currentSpeed = maxSpeed;
+							state = State.StateSpeedConstant;
+							stateChanged();
+//							state = State.StateSlowdown;
+//							ii+=1;
+//							ii = ii>7?0:ii;
+//							slowdown(ii);
 						}
 					}
-
-					if (state == State.StateStateSpeedDown) {
-						currentSpeed -= speedChangeValue;
-						if (currentSpeed <= 0) {
-							currentSpeed = 0;
-							state = State.StateSpeedConstant;
-							animator.end();
-							Toast.makeText(getContext(), ""+(ViewHelper.getRotation(pan)), 0).show();
-						}
+					if (state == State.StateSpeedConstant) {
+						constantAngle += maxSpeed;
 					}
 					ViewHelper.setRotation(pan,ViewHelper.getRotation(pan)+currentSpeed);
+					if (state == State.StateSlowdown) {
+						if (constantAngle>0) {
+							leftAdjustingAngle += 360-(constantAngle%360);
+							constantAngle = 0;
+						}
+						if (Math.floor(leftAdjustingAngle)>0) {
+							leftAdjustingAngle -= maxSpeed;
+						}else{
+							currentSpeed -= speedChangeValue;
+							if (currentSpeed <= 0) {
+								stop();
+								getRotationListener().onSlowdownPerStep();
+//								Toast.makeText(getContext(), adjustingAngle+" -- "+(ViewHelper.getRotation(pan)), 0).show();
+							}else{
+								speedDownAngle += currentSpeed;
+								if (speedDownAngle>=360/8.f&&getRotationListener()!=null) {
+									speedDownAngle = 0;
+									getRotationListener().onSlowdownPerStep();
+								}
+							}
+						}
+					}
+//					ViewHelper.setRotation(pan,ViewHelper.getRotation(pan)+currentSpeed);
 //					pan.setRotation(pan.getRotation() + currentSpeed);
 				}
 			}
 		});
 		animator.setRepeatCount(ValueAnimator.INFINITE);
 		animator.setDuration(3000);
-		Toast.makeText(getContext(), ""+computeTotalRotation(), 0).show();
+//		Toast.makeText(getContext(), adjustingAngle+" -- "+computeTotalRotation(), 0).show();
+		
+		if (pointerView == null) {
+			pointerView = new PointerView(getContext());
+			addView(pointerView);
+			pointerView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (currentSpeed <= 0) {
+						start();
+					}
+				}
+			});
+		}
+	}
+	public void stop(int index){
+		slowdown(index);
+	}
+	public TextView getTextView(int index){
+		return pan.getTextViews().get(index);
+	}
+	public ImageView getImageView(int index){
+		return pan.getImageViews().get(index);
+	}
+	private void stateChanged(){
+		if (getRotationListener()!=null) {
+			getRotationListener().onStateChange(state);
+		}
+	}
+	private void reset(){
+		leftAdjustingAngle = adjustingAngle;
+		constantAngle = 0;
+		speedDownAngle = 0;
+		ViewHelper.setRotation(pan,0);
+	}
+	public void start(){
+		if (state!=State.StateStoped) {
+			return;
+		}
+		reset();
+		state = State.StateSpeedup;
+		stateChanged();
+		animator.start();
+	}
+	private void slowdown(int index){
+		leftAdjustingAngle += getAngleByIndex(index);
+		if (index>1||index==0) {
+			float adjustingValue = index/5f*4;
+//			if(index==0)adjustingValue = 3.6f;
+			leftAdjustingAngle -= adjustingValue;
+		}
+		state = State.StateSlowdown;
+		stateChanged();
+	}
+	private void stop(){
+		currentSpeed = 0;
+		state = State.StateStoped;
+		stateChanged();
+		animator.end();
 	}
 	private float computeTotalRotation(){
 		float rotation = 0;
@@ -97,14 +206,19 @@ public class RoundtableView extends FrameLayout {
 			speed += speedChangeValue;
 			rotation += speed;
 		}
-		return (rotation - maxSpeed)*2;
+		return rotation*2;
+	}
+//	private int getIndexByAngle(float angle){
+//		return (int) Math.floor((angle%360)/(360/8));
+//	}
+	private float getAngleByIndex(int index){
+		return (360-index * (360/8.f)+180)%360;
 	}
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right,
 			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 	}
-
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
@@ -114,32 +228,28 @@ public class RoundtableView extends FrameLayout {
 		lp.width = getWidth();
 		lp.height = getWidth();
 
-		if (pv == null) {
-			pv = new PointerView(getContext());
-			addView(pv);
-			pv.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (currentSpeed <= 0) {
-						state = State.StateSpeedUp;
-						ViewHelper.setRotation(pan,0);
-						animator.start();
-					}
-				}
-			});
-		}
-		LayoutParams params = (LayoutParams) pv.getLayoutParams();
-		params.width = lp.width;
-		params.height = lp.width;
-		// requestLayout();
+		LayoutParams params = (LayoutParams) pointerView.getLayoutParams();
+		params.width = getWidth();
+		params.height = getWidth();
 	}
+
+	
+	
+	public RotationListener getRotationListener() {
+		return rotationListener;
+	}
+
+	public void setRotationListener(RotationListener rotationListener) {
+		this.rotationListener = rotationListener;
+	}
+
 
 	public class PanView extends FrameLayout {
 		private Paint paint;
 		private float strokeWidth = 4;
 		private float innerStrokeWidth = 8;
 		private float lineWidth = 3f;
-		private RectF rect;
+		private RectF rect = null;
 		private RectF innerRect;
 		private RectF innerBgRect;
 		// private float centerRadius = 50;
@@ -148,10 +258,20 @@ public class RoundtableView extends FrameLayout {
 		private int innerBgColor = Color.rgb(249, 225, 161);
 		// private int centerColor = Color.RED;
 
-		private ArrayList<ImageView> images = null;
+		private ArrayList<ImageView> imageViews = null;
+		private ArrayList<TextView> textViews = null;
+
+		public ArrayList<ImageView> getImageViews() {
+			return imageViews;
+		}
+
+		public ArrayList<TextView> getTextViews() {
+			return textViews;
+		}
 
 		private ArrayList<Point> ps = new ArrayList<Point>();
 		private ArrayList<Point> inSidePs = new ArrayList<Point>();
+		private ArrayList<Point> inSideTitlePs = new ArrayList<Point>();
 		private float density;
 
 		public PanView(Context context) {
@@ -205,25 +325,45 @@ public class RoundtableView extends FrameLayout {
 			}
 			float inSize = getWidth() / 5 * 3;
 			float reSize = (getWidth() - inSize) / 2;
+			float inSizeTitle = getWidth()/5*4.3f;
+			float reSizeTitle = (getWidth() - inSizeTitle) / 2;
 			for (int i = 0; i < 8; i++) {
 				Point p = GraphicsUtil.getPointThatAroundTheRectByAngle(
 						360 / 8 * i, inSize);
 				p.x += reSize;
 				p.y += reSize;
 				inSidePs.add(p);
+				
+				Point pTitle = GraphicsUtil.getPointThatAroundTheRectByAngle(
+						360 / 8 * i, inSizeTitle);
+				pTitle.x += reSizeTitle;
+				pTitle.y += reSizeTitle;
+				inSideTitlePs.add(pTitle);
 			}
 
-			int width = (int) (getWidth() / 4);
-			int height = (int) (getWidth() / 3);
+			int width = (int) (getWidth() / 7);
+			int height = (int) (getWidth() / 5);
 
-			for (ImageView iv : images) {
-				int pos = images.indexOf(iv);
+			for (ImageView iv : imageViews) {
+				int pos = imageViews.indexOf(iv);
 				LayoutParams params = (LayoutParams) iv.getLayoutParams();
 				params.width = width;
 				params.height = height;
 				params.setMargins(inSidePs.get(pos).x - width / 2,
 						inSidePs.get(pos).y - height / 2, -1, -1);
 				ViewHelper.setRotation(iv, 360 / 8 * pos + 180);
+			}
+			
+			width = (int) (getWidth() / 3.3);
+			height = (int) (width / 5);
+			for (TextView tv : textViews) {
+				int pos = textViews.indexOf(tv);
+				LayoutParams params = (LayoutParams) tv.getLayoutParams();
+				params.width = width;
+				params.height = height;
+				params.setMargins(inSideTitlePs.get(pos).x - width / 2,
+						inSideTitlePs.get(pos).y - height / 2, -1, -1);
+				ViewHelper.setRotation(tv, 360 / 8 * pos + 180);
 			}
 		}
 
@@ -247,17 +387,33 @@ public class RoundtableView extends FrameLayout {
 			paint.setStrokeCap(Cap.ROUND);
 			paint.setStrokeJoin(Join.ROUND);
 
-			if (images == null) {
-				images = new ArrayList<ImageView>();
+			if (imageViews == null) {
+				imageViews = new ArrayList<ImageView>();
 				for (int i = 0; i < 8; i++) {
 					ImageView iv = new ImageView(getContext());
 					// iv.setLayoutParams(new FrameLayout.LayoutParams(100,
 					// LayoutParams.WRAP_CONTENT));
-					iv.setImageResource(R.drawable.ic_launcher);
-					// iv.setBackgroundColor(Color.BLUE);
-					images.add(iv);
-					iv.setVisibility(View.GONE);
+//					iv.setImageResource(R.drawable.ic_launcher);
+//					 iv.setBackgroundColor(Color.BLUE);
+					imageViews.add(iv);
+//					iv.setVisibility(View.GONE);
 					addView(iv);
+				}
+//				images.get(0).setVisibility(View.VISIBLE);
+			}
+			if (textViews == null) {
+				textViews = new ArrayList<TextView>();
+				for (int i = 0; i < 8; i++) {
+					TextView tv = new TextView(getContext());
+					tv.setGravity(Gravity.CENTER);
+//					tv.setText(""+i);
+					tv.setTextSize(11);
+					tv.setTypeface(null, Typeface.BOLD);
+					tv.setTextColor(Color.rgb(145, 94, 79));
+					tv.setSingleLine();
+					textViews.add(tv);
+					addView(tv);
+//					tv.setBackgroundColor(Color.YELLOW);
 				}
 			}
 		}
@@ -266,7 +422,7 @@ public class RoundtableView extends FrameLayout {
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
 
-			if (rect == null) {
+			if (paint==null||rect == null||getWidth()==0) {
 				return;
 			}
 			// draw border
@@ -285,16 +441,17 @@ public class RoundtableView extends FrameLayout {
 			// draw innerLine
 			paint.setColor(innerColor);
 			paint.setStrokeWidth(lineWidth);
+			
 			float rectSize = getWidth() / 2;
 			for (Point p : ps) {
 				canvas.drawLine(p.x, p.y, rectSize, rectSize, paint);
 			}
-			 for (Point p : inSidePs) {
-				 paint.setColor(Color.MAGENTA);
-				 paint.setTextSize(30);
+//			 for (Point p : inSidePs) {
+//				 paint.setColor(Color.MAGENTA);
+//				 paint.setTextSize(30);
 //				 canvas.drawCircle(p.x, p.y,20, paint);
-				 canvas.drawText(""+(inSidePs.indexOf(p)), p.x, p.y, paint);
-			 }
+//				 canvas.drawText(""+(inSidePs.indexOf(p)), p.x, p.y, paint);
+//			 }
 			//
 			// paint.setColor(centerColor);
 			// canvas.drawCircle(getWidth()/2, getWidth()/2, centerRadius,
@@ -305,11 +462,15 @@ public class RoundtableView extends FrameLayout {
 	public class PointerView extends FrameLayout {
 		private Paint paint;
 		private Path trianglePath;
-		private ImageView pointerView;
+		private FrameLayout centerFrameLayout;
+		public FrameLayout getCenterFrameLayout() {
+			return centerFrameLayout;
+		}
+
 		private int fillColor = Color.RED;
 		private int pointerSize = 30;
 		private int centerRadius = 100;
-		private int centerImageRadius = 90;
+		private int centerLayoutRadius = 100;
 		float density;
 
 		public PointerView(Context context) {
@@ -320,7 +481,7 @@ public class RoundtableView extends FrameLayout {
 		private void init() {
 			density = getResources().getDisplayMetrics().density;
 			pointerSize *= density;
-			centerImageRadius *= density;
+			centerLayoutRadius *= density;
 
 			setBackgroundColor(Color.TRANSPARENT);
 
@@ -333,31 +494,36 @@ public class RoundtableView extends FrameLayout {
 			paint.setColor(fillColor);
 			// paint.setStrokeWidth(50);
 
-			pointerView = new ImageView(getContext());
+			centerFrameLayout = new FrameLayout(getContext());
 			FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-					centerImageRadius, centerImageRadius, Gravity.CENTER);
-			pointerView.setLayoutParams(lp);
-			// pointerView.setScaleType(ScaleType.CENTER);
-			pointerView.setImageResource(R.drawable.ic_launcher);
-			// pointerView.setBackgroundColor(Color.BLUE);
-			addView(pointerView);
+					centerLayoutRadius, centerLayoutRadius, Gravity.CENTER);
+			centerFrameLayout.setLayoutParams(lp);
+			centerFrameLayout.setBackgroundColor(Color.BLUE);
+			addView(centerFrameLayout);
 		}
-
+		
 		@Override
 		protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 			super.onSizeChanged(w, h, oldw, oldh);
 			centerRadius = getWidth() / 2 / 3;
+			centerLayoutRadius = (int) (centerRadius*0.9f);
+			ViewGroup.LayoutParams lp = centerFrameLayout.getLayoutParams();
+			lp.width = centerLayoutRadius*2;
+			lp.height = lp.width;
+			
 			if (trianglePath == null) {
 				trianglePath = new Path();
-				int startX = getWidth() / 2;
-				int startY = (int) (getHeight() / 2 + centerRadius + pointerSize * 0.9f);
-				trianglePath.moveTo(startX, startY);
-				int xMove = pointerSize / 2;
-				int yMove = (int) (Math.sin(45) * pointerSize);
-				trianglePath.lineTo(startX - xMove, startY - yMove);
-				trianglePath.lineTo(startX + xMove, startY - yMove);
-				trianglePath.close();
+			}else{
+				trianglePath.reset();
 			}
+			int startX = getWidth() / 2;
+			int startY = (int) (getHeight() / 2 + centerRadius + pointerSize * 0.9f);
+			trianglePath.moveTo(startX, startY);
+			int xMove = pointerSize / 2;
+			int yMove = (int) (Math.sin(45) * pointerSize);
+			trianglePath.lineTo(startX - xMove, startY - yMove);
+			trianglePath.lineTo(startX + xMove, startY - yMove);
+			trianglePath.close();
 		}
 
 		@Override
