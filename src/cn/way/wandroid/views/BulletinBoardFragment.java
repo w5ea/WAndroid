@@ -3,7 +3,6 @@ package cn.way.wandroid.views;
 import java.util.ArrayList;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextPaint;
@@ -76,6 +75,7 @@ public class BulletinBoardFragment extends Fragment {
 			bulletinTextView.setLayoutParams(lp);
 			bulletinTextView.setTextColor(Color.WHITE);
 			bulletinTextView.setTextSize(14);
+			bulletinTextView.setSingleLine();
 			bulletinView.addView(bulletinTextView);
 		}
 		return bulletinView;
@@ -135,12 +135,12 @@ public class BulletinBoardFragment extends Fragment {
 					}
 					String text = " ";
 					if(bulletins.size()>0)text = bulletins.get(bulletinIndex);
-					TextPaint fontPaint = new TextPaint();
-					fontPaint.setTypeface(Typeface.DEFAULT_BOLD);// why width less
-					fontPaint.setTextSize(bulletinTextView.getTextSize());
+					TextPaint fontPaint = bulletinTextView.getPaint();
+//					fontPaint.setTypeface(Typeface.DEFAULT_BOLD);// why width less
+//					fontPaint.setTextSize(bulletinTextView.getTextSize());
 					float width = fontPaint.measureText(text);
 					lp.width = (int) Math.ceil(width);
-					lp.height = LayoutParams.MATCH_PARENT;
+					lp.height = LayoutParams.WRAP_CONTENT;
 					bulletinTextView.setLayoutParams(lp);
 					bulletinTextView.setText(text);
 					TranslateAnimation turnOutAnimation = new TranslateAnimation(
@@ -177,6 +177,7 @@ public class BulletinBoardFragment extends Fragment {
 	@Override
 	public void onPause() {
 		super.onPause();
+		stopAnimation();
 	}
 
 	@Override

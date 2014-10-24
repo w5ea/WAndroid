@@ -1,7 +1,15 @@
 package cn.way.wandroid.graphics;
 
 import android.os.Bundle;
+import android.text.BoringLayout;
+import android.text.Layout;
+import android.text.Layout.Alignment;
+import android.text.TextPaint;
 import android.view.SoundEffectConstants;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Toast;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.graphics.RoundtableView.RotationListener;
@@ -13,7 +21,20 @@ public class GraphicsUsage extends BaseFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_graphics_usage);
+		ViewGroup view = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_graphics_usage, null);
+		setContentView(view);
+		final ATextVeiw atv = new ATextVeiw(this);
+		atv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		String text = "sdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfasdfasdfasdfasdfasdfaaaa";
+		atv.setText(text);
+		view.addView(atv);
+		atv.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				atv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				Toast.makeText(GraphicsUsage.this, atv.getWidth()+"", 0).show();
+			}
+		});
 //		AnnularProgressView progressView = (AnnularProgressView) findViewById(R.id.progressView);
 //		progressView.setColorRGBA(255, 0, 0, 255);
 //		progressView.setStrokeWidth(50);

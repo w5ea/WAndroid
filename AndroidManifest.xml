@@ -5,7 +5,7 @@
     android:versionName="1.0.1" >
 
     <uses-sdk
-        android:minSdkVersion="7"
+        android:minSdkVersion="10"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -127,6 +127,7 @@
         <activity android:name=".applation.ApplationInfoUsage"></activity>
         <activity android:name=".activities.residemenu.ResideMenuUsage"></activity>
         <activity android:name=".slidingmenu.usage.SlidingMenuUsage"></activity>
+        <activity android:name=".shapeimageview.ShapeImageViewUsage"></activity>
     </application>
 
 </manifest>

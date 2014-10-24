@@ -13,8 +13,10 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -78,7 +80,8 @@ public class RoundtableView extends FrameLayout {
 	}
 	@Override
 	protected void onDetachedFromWindow() {
-		stop();
+//		setRotationListener(null);
+//		stop();
 		super.onDetachedFromWindow();
 	}
 	private void init() {
@@ -147,9 +150,7 @@ public class RoundtableView extends FrameLayout {
 			pointerView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (currentSpeed <= 0) {
-						start();
-					}
+					start();
 				}
 			});
 		}
@@ -176,6 +177,9 @@ public class RoundtableView extends FrameLayout {
 	}
 	public void start(){
 		if (state!=State.StateStoped) {
+			return;
+		}
+		if (currentSpeed > 0) {
 			return;
 		}
 		reset();
@@ -227,12 +231,59 @@ public class RoundtableView extends FrameLayout {
 		LayoutParams lp = (LayoutParams) pan.getLayoutParams();
 		lp.width = getWidth();
 		lp.height = getWidth();
+		lp.gravity = Gravity.CENTER;
 
 		LayoutParams params = (LayoutParams) pointerView.getLayoutParams();
 		params.width = getWidth();
 		params.height = getWidth();
+		params.gravity = Gravity.CENTER;
 	}
 
+	
+	private static final int INVALID_POINTER = -1;
+	private float moveDistance;
+	private int mActivePointerId;
+	private float mLastMotionX;
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+		final int action = ev.getAction();
+
+		switch (action & MotionEventCompat.ACTION_MASK) {
+		case MotionEvent.ACTION_DOWN:
+			// Remember where the motion event started
+			int index = MotionEventCompat.getActionIndex(ev);
+			mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+			mLastMotionX = ev.getX();
+			break;
+		case MotionEvent.ACTION_MOVE:{
+				// Scroll to follow the motion event
+				final int activePointerIndex = getPointerIndex(ev, mActivePointerId);
+				if (mActivePointerId == INVALID_POINTER)
+					break;
+				final float x = MotionEventCompat.getX(ev, activePointerIndex);
+				moveDistance = mLastMotionX - x;
+				mLastMotionX = x;
+		}break;
+		case MotionEvent.ACTION_UP:
+//			Toast.makeText(getContext(), ""+moveDistance, 0).show();
+			float minDeltaxX = 5;
+			if (moveDistance>minDeltaxX) {//flip to left
+				RoundtableView.this.start();
+			}
+			if (-moveDistance>minDeltaxX) {
+			}
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			break;
+		}
+		return true;
+	}
+	private int getPointerIndex(MotionEvent ev, int id) {
+		int activePointerIndex = MotionEventCompat.findPointerIndex(ev, id);
+		if (activePointerIndex == -1)
+			mActivePointerId = INVALID_POINTER;
+		return activePointerIndex;
+	}
 	
 	
 	public RotationListener getRotationListener() {
@@ -477,7 +528,10 @@ public class RoundtableView extends FrameLayout {
 			super(context);
 			init();
 		}
-
+		@Override
+		public void setOnClickListener(OnClickListener l) {
+			centerFrameLayout.setOnClickListener(l);
+		}
 		private void init() {
 			density = getResources().getDisplayMetrics().density;
 			pointerSize *= density;
@@ -498,7 +552,7 @@ public class RoundtableView extends FrameLayout {
 			FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
 					centerLayoutRadius, centerLayoutRadius, Gravity.CENTER);
 			centerFrameLayout.setLayoutParams(lp);
-			centerFrameLayout.setBackgroundColor(Color.BLUE);
+//			centerFrameLayout.setBackgroundColor(Color.BLUE);
 			addView(centerFrameLayout);
 		}
 		

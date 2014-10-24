@@ -3,21 +3,23 @@ package cn.way.wandroid.animation;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.annotation.TargetApi;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
-import cn.way.wandroid.animation.nineold.FlakeView;
-import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.utils.WTimer;
+
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 public class AnimationUsage extends BaseFragmentActivity {
 	private WTimer timer ;
@@ -124,7 +126,71 @@ public class AnimationUsage extends BaseFragmentActivity {
 		as.setStartOffset((long)(maxOffset*new Random().nextFloat()));
 		view.startAnimation(as);
 	}
-	
+	public void doJumpAnimation(View view){
+		ObjectAnimator move = ObjectAnimator.ofFloat(view, "translationY",
+				0,-600,
+				0,-550,
+				0,-490,
+				0,-420,
+				0,-360,0).setDuration(500);
+		move.setInterpolator(new AccelerateDecelerateInterpolator());
+		move.start();
+	}
+	private void doBounceAnimation(View view){
+		float startY = getY(view);
+        float endY = startY - 500f;
+        float h = (float)view.getHeight();
+//        float eventY = event.getY();
+        int duration = (int)(5000 * ((h - startY)/h));
+        ValueAnimator bounceAnim = ObjectAnimator.ofFloat(view, "y", startY, endY);
+        bounceAnim.setDuration(duration);
+        bounceAnim.setInterpolator(new AccelerateInterpolator());
+        ValueAnimator squashAnim1 = ObjectAnimator.ofFloat(view, "x", getX(view),
+                getX(view) - 25f);
+        squashAnim1.setDuration(duration/4);
+        squashAnim1.setRepeatCount(1);
+        squashAnim1.setRepeatMode(ValueAnimator.REVERSE);
+        squashAnim1.setInterpolator(new DecelerateInterpolator());
+        ValueAnimator squashAnim2 = ObjectAnimator.ofFloat(view, "width", view.getWidth(),
+                view.getWidth() + 50);
+        squashAnim2.setDuration(duration/4);
+        squashAnim2.setRepeatCount(1);
+        squashAnim2.setRepeatMode(ValueAnimator.REVERSE);
+        squashAnim2.setInterpolator(new DecelerateInterpolator());
+        ValueAnimator stretchAnim1 = ObjectAnimator.ofFloat(view, "y", endY,
+                endY + 25f);
+        stretchAnim1.setDuration(duration/4);
+        stretchAnim1.setRepeatCount(1);
+        stretchAnim1.setInterpolator(new DecelerateInterpolator());
+        stretchAnim1.setRepeatMode(ValueAnimator.REVERSE);
+        ValueAnimator stretchAnim2 = ObjectAnimator.ofFloat(view, "height",
+                view.getHeight(), view.getHeight() - 25);
+        stretchAnim2.setDuration(duration/4);
+        stretchAnim2.setRepeatCount(1);
+        stretchAnim2.setInterpolator(new DecelerateInterpolator());
+        stretchAnim2.setRepeatMode(ValueAnimator.REVERSE);
+        ValueAnimator bounceBackAnim = ObjectAnimator.ofFloat(view, "y", endY,
+                startY);
+        bounceBackAnim.setDuration(duration);
+        bounceBackAnim.setInterpolator(new DecelerateInterpolator());
+        // Sequence the down/squash&stretch/up animations
+        AnimatorSet bouncer = new AnimatorSet();
+        bouncer.play(bounceAnim).before(squashAnim1);
+        bouncer.play(squashAnim1).with(squashAnim2);
+        bouncer.play(squashAnim1).with(stretchAnim1);
+        bouncer.play(squashAnim1).with(stretchAnim2);
+        bouncer.play(bounceBackAnim).after(stretchAnim2);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(bouncer);
+        animatorSet.start();
+	}
+	private float getX(View view){
+		return ViewHelper.getX(view);
+	}
+	private float getY(View view){
+		return ViewHelper.getY(view);
+	}
 	@Override
     protected void onPause() {
         super.onPause();

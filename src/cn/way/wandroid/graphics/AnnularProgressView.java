@@ -1,5 +1,6 @@
 package cn.way.wandroid.graphics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -74,8 +75,10 @@ public class AnnularProgressView extends View {
 	public void setProgress(float progress) {
 		updateView(progress);
 	}
+	@SuppressLint("NewApi")
 	public Paint getPaint() {
 		if (paint==null) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 			paint = new Paint();
 			paint.setFlags(Paint.ANTI_ALIAS_FLAG);
 			paint.setAntiAlias(true);
@@ -85,6 +88,7 @@ public class AnnularProgressView extends View {
 			paint.setStrokeWidth(strokeWidth);
 			paint.setStrokeCap(Cap.ROUND);
 			paint.setStrokeJoin(Join.ROUND);
+//			paint.setShadowLayer(getWidth()/8, getWidth()/2, getHeight()/2, Color.CYAN);
 		}
 		return paint;
 	}
