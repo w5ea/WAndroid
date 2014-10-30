@@ -119,4 +119,10 @@ public class ImageLoader extends Fragment {
 	public void loadImage(String urlStr, ImageView imageView) {
 		if(imageFetcher!=null)imageFetcher.loadImage(urlStr, imageView);
 	}
+	
+	public void deleteImage(String urlStr){
+		if(imageFetcher!=null) {
+			imageFetcher.getImageCache().deleteBitmapFromDiskCache(urlStr);
+		}
+	}
 }

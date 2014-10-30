@@ -18,5 +18,13 @@
         android:layout_height="50dp"
         android:background="#fc0"
         android:orientation="horizontal" />
+    <cn.way.wandroid.views.CountdownView 
+        android:id="@+id/countdownView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textColor="#FF0"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

@@ -159,9 +159,15 @@ public class RoundtableView extends FrameLayout {
 		slowdown(index);
 	}
 	public TextView getTextView(int index){
+		if (index>=pan.getTextViews().size()) {
+			return null;
+		}
 		return pan.getTextViews().get(index);
 	}
 	public ImageView getImageView(int index){
+		if (index>=pan.getImageViews().size()) {
+			return null;
+		}
 		return pan.getImageViews().get(index);
 	}
 	private void stateChanged(){
@@ -176,7 +182,7 @@ public class RoundtableView extends FrameLayout {
 		ViewHelper.setRotation(pan,0);
 	}
 	public void start(){
-		if (state!=State.StateStoped) {
+		if (state!=State.StateStoped||!isEnabled()) {
 			return;
 		}
 		if (currentSpeed > 0) {

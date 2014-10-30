@@ -391,6 +391,25 @@ public class ImageCache {
 
     }
 
+    public boolean deleteBitmapFromDiskCache(String data) {
+        final String key = hashKeyForDisk(data);
+        synchronized (mDiskCacheLock) {
+            while (mDiskCacheStarting) {
+                try {
+                    mDiskCacheLock.wait();
+                } catch (InterruptedException e) {}
+            }
+            if (mDiskLruCache != null) {
+                try {
+					return mDiskLruCache.remove(key);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+            return false;
+        }
+    }
+    
     /**
      * Clears both the memory and disk cache associated with this ImageCache object. Note that
      * this includes disk access so this should not be executed on the main/UI thread.
