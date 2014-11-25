@@ -1,17 +1,19 @@
 package cn.way.wandroid;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import cn.way.wandroid.activities.bulletin.BulletinUsage;
 import cn.way.wandroid.activities.dialog.DialogUsage;
@@ -61,58 +63,31 @@ public class ViewListActivity extends FragmentActivity{
      * device.
      */
 //    private boolean mTwoPane;
-	private String[] titles = {
-			"sdf",
-			"sdf332",
-			"sd",
-			"221",
-			"fdf",
-			"sdf1ff"
-	};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_list);
+        setContentView(R.layout.activity_main_list);
         ListView lv = (ListView) findViewById(R.id.listView);
-        lv.setAdapter(new ArrayAdapter<String>(this, 0){
-        	@Override
-        	public View getView(int position, View convertView, ViewGroup parent) {
-        		TextView tv = (TextView) convertView;
-        		if (tv == null) {
-        			tv = new TextView(getContext());
-        			tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        			tv.setPadding(20, 20, 20, 20);
-				}
-        		tv.setText(titles[position]);
-        		return tv;
-        	}
-        	@Override
-        	public int getCount() {
-        		return titles.length;
-        	}
-        });
+        lv.setAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+                this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                DummyContent.ITEMS));
+        lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				onItemSelected(position);
+			}
+		});
         setTitle(AppUtil.getAppName(this)+AppUtil.getAppVersionName(this));
 //        UpdateConfig.setDebug(true);
         UmengUpdateAgent.update(this);
-//        UpdateConfig.setDeltaUpdate(false);
-//        if (findViewById(R.id.view_detail_container) != null) {
-//            // The detail container view will be present only in the
-//            // large-screen layouts (res/values-large and
-//            // res/values-sw600dp). If this view is present, then the
-//            // activity should be in two-pane mode.
-//            mTwoPane = true;
-//
-//            // In two-pane mode, list items should be given the
-//            // 'activated' state when touched.
-//            ((ViewListFragment) getSupportFragmentManager()
-//                    .findFragmentById(R.id.view_list))
-//                    .setActivateOnItemClick(true);
-//        }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
-    public void onItemSelected(String id) {
+    public void onItemSelected(int index) {
+    	String id = DummyContent.ITEMS.get(index).id;
     	Log.d("test", PageNavigateManager.tag.toString());
     	PageNavigateManager.clearTag();
     	if (id.equals("1")) {
@@ -194,4 +169,67 @@ public class ViewListActivity extends FragmentActivity{
 			}
 		}
 	}
+	
+	
+	
+	public static class DummyContent {
+
+	    /**
+	     * An array of sample (dummy) items.
+	     */
+	    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+
+	    /**
+	     * A map of sample (dummy) items, by ID.
+	     */
+	    public static Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+
+	    static {
+	        // Add 3 sample items.
+	        addItem(new DummyItem("1", "AsynchronousHttpClient"));
+	        addItem(new DummyItem("2", "Gson"));
+	        addItem(new DummyItem("3", "Green Dao"));
+	        addItem(new DummyItem("4", "LifeManager"));
+	        addItem(new DummyItem("5", "Bulletin"));
+	        addItem(new DummyItem("6", "Graphics"));
+	        addItem(new DummyItem("7", "Dialog"));
+	        addItem(new DummyItem("8", "PullRefresh"));
+	        addItem(new DummyItem("9", "ImageLoader"));
+	        addItem(new DummyItem("10", "FragmentTabBar"));
+	        addItem(new DummyItem("11", "Views"));
+	        addItem(new DummyItem("12", "友盟社会化组件"));
+	        addItem(new DummyItem("13", "ViewPager"));
+	        addItem(new DummyItem("14", "Anmiation"));
+	        addItem(new DummyItem("15", "Text"));
+	        addItem(new DummyItem("16", "Applation"));
+	        addItem(new DummyItem("17", "ResideMenu"));
+	        addItem(new DummyItem("18", "SlidingMenu"));
+	        addItem(new DummyItem("19", "ShapeImageView"));
+	        addItem(new DummyItem("20", "UnivervalImageLoader"));
+	    }
+
+	    private static void addItem(DummyItem item) {
+	        ITEMS.add(item);
+	        ITEM_MAP.put(item.id, item);
+	    }
+
+	    /**
+	     * A dummy item representing a piece of content.
+	     */
+	    public static class DummyItem {
+	        public String id;
+	        public String content;
+
+	        public DummyItem(String id, String content) {
+	            this.id = id;
+	            this.content = content;
+	        }
+
+	        @Override
+	        public String toString() {
+	            return content;
+	        }
+	    }
+	}
+
 }

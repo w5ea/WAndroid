@@ -12,9 +12,5 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="TextView" />
-    <cn.way.wandroid.views.WLabel 
-        android:id="@+id/label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>

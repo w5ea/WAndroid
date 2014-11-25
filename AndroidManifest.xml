@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.way.wandroid"
-    android:versionCode="1"
-    android:versionName="1.0.1" >
+    android:versionCode="2"
+    android:versionName="1.0.2" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -83,14 +83,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="cn.way.wandroid.ViewDetailActivity"
-            android:label="@string/title_view_detail"
-            android:parentActivityName="cn.way.wandroid.ViewListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cn.way.wandroid.ViewListActivity" />
         </activity>
         <activity android:name="cn.way.wandroid.net.AsynchronousHttpClientUsage" >
         </activity>

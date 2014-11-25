@@ -3,11 +3,12 @@ package cn.way.wandroid.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint.Style;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import cn.way.wandroid.utils.WLog;
 
 /**
  * @author Wayne
@@ -15,7 +16,7 @@ import android.view.ViewGroup.LayoutParams;
  */
 public class WLabel extends View {
 	private String text;
-	private float textSize;
+	private float textSize = 12;
 	private int textColor = Color.BLACK;
 	private TextPaint textPaint;
 	private WLabel(Context context) {
@@ -33,13 +34,16 @@ public class WLabel extends View {
 			textPaint = new TextPaint();
 			textPaint.setColor(textColor);
 			textPaint.setAntiAlias(true);
+//			textPaint.setStrokeWidth(1);
+			textPaint.setStyle(Style.STROKE);
 		}
+		setBackgroundColor(Color.YELLOW);
 	}
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right,
 			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
-		updateView();
+//		updateView();
 	}
 	private void updateView(){
 		if (textPaint==null||text==null) {
@@ -48,9 +52,9 @@ public class WLabel extends View {
 		float width = textPaint.measureText(text);
 		float height = textSize;
 		ViewGroup.LayoutParams lp = getLayoutParams();
-		if (lp.width == LayoutParams.WRAP_CONTENT) {
+//		if (lp.width == LayoutParams.WRAP_CONTENT) {
 			lp.width = (int) width;
-		}
+//		}
 		lp.height = (int) height;
 	}
 	public String getText() {
@@ -58,7 +62,13 @@ public class WLabel extends View {
 	}
 
 	public void setText(String text) {
+		if (text==null) {
+			return;
+		}
 		this.text = text;
+		updateView();
+		requestLayout();
+		invalidate();
 	}
 
 	@Override
@@ -67,7 +77,8 @@ public class WLabel extends View {
 		if (text==null||textPaint==null) {
 			return;
 		}
-		canvas.drawText(text, 0, 0, textPaint);
+		canvas.drawText(text, 0, textSize, textPaint);
+		WLog.d(text);
 	}
 
 	public float getTextSize() {

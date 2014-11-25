@@ -11,9 +11,9 @@ public class LifeManagerUsage extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_greendao_usage);
+		setContentView(R.layout.activity_lifemanager);
 		final WLabel tv = (WLabel) findViewById(R.id.label);
-		
+		tv.setTextSize(50);
 		lm = new WLifeManager(this);
 		lm.setListener(new WLifeManagerListener() {
 			@Override
@@ -27,7 +27,7 @@ public class LifeManagerUsage extends Activity {
 				tv.setText(String.format("%02d:%02d:%02d  %d", lifePlusLeftTimeSeconds/60/60,lifePlusLeftTimeSeconds/60%60,lifePlusLeftTimeSeconds%60,lm.getLifeCount()));
 			}
 		});
-        lm.start(5,0,10,10);
+        lm.start(50,9,3,5);
 //        lm.start();
 	}
 	@Override
