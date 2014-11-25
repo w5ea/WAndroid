@@ -3,8 +3,10 @@ package cn.way.wandroid.net;
 import java.util.Date;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import cn.way.wandroid.utils.WLog;
 import cn.way.wandroid.utils.WStringUtil;
 
 import com.loopj.android.http.*;
@@ -12,11 +14,32 @@ import com.loopj.android.http.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AsynchronousHttpClientUsage extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		testOAuth2();
+	}
+	private void testOAuth2(){
+		String url = "https://api.weibo.com/oauth2/authorize?client_id=1905473307&redirect_uri=http%3A%2F%2Fsns.whalecloud.com%2Fsina2%2Fcallback&display=client";
+		new AsyncHttpClient().get(url, new TextHttpResponseHandler(){
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					String responseString) {
+				WLog.d(responseString);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				WLog.d(responseString);
+			}
+		});
+	}
+	
+	private void test(){
 		/*{"ID":"1","Token":"Sl1OOfvb0I51TMqlic88T1JkXPoLoaYWZwtj64udeq0="}*/
 		String host = 
 //				"http://auth.91yaojiang.com/v1/";

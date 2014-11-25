@@ -20,11 +20,17 @@ public class TabSelector {
 		items.add(view);
 		view.setOnClickListener(listener);
 	}
+	public void clearItems(){
+		items.clear();
+	}
 	public int getCurrentIndex() {
 		return currentIndex;
 	}
 	public void setCurrentIndex(int currentIndex) {
-		if (items.size()==0||currentIndex+1>items.size()||currentIndex==this.currentIndex) {
+		setCurrentIndex(currentIndex, false);
+	}
+	public void setCurrentIndex(int currentIndex,boolean force) {
+		if ((items.size()==0||currentIndex+1>items.size()||currentIndex==this.currentIndex)&&!force) {
 			return;
 		}
 		this.currentIndex = currentIndex;

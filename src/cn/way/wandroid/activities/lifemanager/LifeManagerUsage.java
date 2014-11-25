@@ -2,9 +2,9 @@ package cn.way.wandroid.activities.lifemanager;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
 import cn.way.wandroid.R;
 import cn.way.wandroid.activities.lifemanager.WLifeManager.WLifeManagerListener;
+import cn.way.wandroid.views.WLabel;
 
 public class LifeManagerUsage extends Activity {
 	private WLifeManager lm;
@@ -12,7 +12,7 @@ public class LifeManagerUsage extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_greendao_usage);
-		final TextView tv = (TextView) findViewById(R.id.textView1);
+		final WLabel tv = (WLabel) findViewById(R.id.label);
 		
 		lm = new WLifeManager(this);
 		lm.setListener(new WLifeManagerListener() {

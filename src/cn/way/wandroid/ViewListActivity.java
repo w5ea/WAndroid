@@ -1,9 +1,17 @@
 package cn.way.wandroid;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import cn.way.wandroid.activities.bulletin.BulletinUsage;
 import cn.way.wandroid.activities.dialog.DialogUsage;
@@ -12,9 +20,11 @@ import cn.way.wandroid.activities.tabhost.TabHostActivity;
 import cn.way.wandroid.activities.viewpager.ViewPagerUsage;
 import cn.way.wandroid.activities.views.ViewsActivity;
 import cn.way.wandroid.animation.AnimationUsage;
+import cn.way.wandroid.applation.AppUtil;
 import cn.way.wandroid.applation.ApplationInfoUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
+import cn.way.wandroid.imageloader.universal.UsageActivity;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
@@ -44,19 +54,44 @@ import com.umeng.update.UmengUpdateAgent;
  * {@link ViewListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class ViewListActivity extends FragmentActivity
-        implements ViewListFragment.Callbacks {
+public class ViewListActivity extends FragmentActivity{
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
 //    private boolean mTwoPane;
-
+	private String[] titles = {
+			"sdf",
+			"sdf332",
+			"sd",
+			"221",
+			"fdf",
+			"sdf1ff"
+	};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_list);
+        ListView lv = (ListView) findViewById(R.id.listView);
+        lv.setAdapter(new ArrayAdapter<String>(this, 0){
+        	@Override
+        	public View getView(int position, View convertView, ViewGroup parent) {
+        		TextView tv = (TextView) convertView;
+        		if (tv == null) {
+        			tv = new TextView(getContext());
+        			tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        			tv.setPadding(20, 20, 20, 20);
+				}
+        		tv.setText(titles[position]);
+        		return tv;
+        	}
+        	@Override
+        	public int getCount() {
+        		return titles.length;
+        	}
+        });
+        setTitle(AppUtil.getAppName(this)+AppUtil.getAppVersionName(this));
 //        UpdateConfig.setDebug(true);
         UmengUpdateAgent.update(this);
 //        UpdateConfig.setDeltaUpdate(false);
@@ -77,11 +112,6 @@ public class ViewListActivity extends FragmentActivity
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
-    /**
-     * Callback method from {@link ViewListFragment.Callbacks}
-     * indicating that the item with the given ID was selected.
-     */
-    @Override
     public void onItemSelected(String id) {
     	Log.d("test", PageNavigateManager.tag.toString());
     	PageNavigateManager.clearTag();
@@ -144,25 +174,9 @@ public class ViewListActivity extends FragmentActivity
     	if (id.equals("19")) {
     		startActivity(new Intent(this, ShapeImageViewUsage.class));
     	}
-//        if (mTwoPane) {
-//            // In two-pane mode, show the detail view in this activity by
-//            // adding or replacing the detail fragment using a
-//            // fragment transaction.
-//            Bundle arguments = new Bundle();
-//            arguments.putString(ViewDetailFragment.ARG_ITEM_ID, id);
-//            ViewDetailFragment fragment = new ViewDetailFragment();
-//            fragment.setArguments(arguments);
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.view_detail_container, fragment)
-//                    .commit();
-//
-//        } else {
-//            // In single-pane mode, simply start the detail activity
-//            // for the selected item ID.
-//            Intent detailIntent = new Intent(this, ViewDetailActivity.class);
-//            detailIntent.putExtra(ViewDetailFragment.ARG_ITEM_ID, id);
-//            startActivity(detailIntent);
-//        }
+    	if (id.equals("20")) {
+    		startActivity(new Intent(this, UsageActivity.class));
+    	}
     }
     private long lastExitTime = -1;
 	@Override

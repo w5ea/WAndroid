@@ -44,6 +44,7 @@ public class DummyContent {
         addItem(new DummyItem("17", "ResideMenu"));
         addItem(new DummyItem("18", "SlidingMenu"));
         addItem(new DummyItem("19", "ShapeImageView"));
+        addItem(new DummyItem("20", "UnivervalImageLoader"));
     }
 
     private static void addItem(DummyItem item) {
