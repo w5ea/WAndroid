@@ -7,7 +7,7 @@
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="cn.way.wandroid.ViewListActivity" >
+    tools:context="cn.way.wandroid.UasgeListActivity" >
 
     <!--
     This layout is a two-pane layout for the Draw
