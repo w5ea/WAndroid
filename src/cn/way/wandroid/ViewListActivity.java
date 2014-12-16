@@ -84,6 +84,7 @@ public class ViewListActivity extends FragmentActivity{
         setTitle(AppUtil.getAppName(this)+AppUtil.getAppVersionName(this));
 //        UpdateConfig.setDebug(true);
         UmengUpdateAgent.update(this);
+        
     }
 
     public void onItemSelected(int index) {

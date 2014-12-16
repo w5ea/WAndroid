@@ -1,0 +1,42 @@
+package cn.way.wandroid.data;
+
+public class AppStores {/*
+	安卓			hiapk
+	机锋			jifeng
+	安智			anzhi
+	应用汇		yingyonghui
+	91			m91
+	木蚂蚁		mmy
+	N多			nduo
+	优亿			youyi
+	安机			anji
+	飞流			feiliu
+	GooglePlay	googleplay
+	HTC			htc
+	历趣			liqu
+	十字猫		shizimao
+	开奇			kaiqi
+	爱米			aimi
+	我查查		wocaca
+	魅族			meizu
+	联想			lenovo
+	OPPO		oppo
+	中国移动		cnmobile
+	联通沃		unicom
+	电信天翼		tianyi
+	华为智汇云		huawei
+	腾讯			tencent
+	豌豆荚		wandoujia
+	360			m360
+	泡椒			paojiao
+	天网			tiangwang
+	乐讯			lexun
+	宜搜			yisou
+	天空			tiankong
+	华军			huajun
+	非凡			feifan
+	绿软			lvruan
+	苏宁			suning
+	百度			baidu
+	小米			xiaomi
+*/}

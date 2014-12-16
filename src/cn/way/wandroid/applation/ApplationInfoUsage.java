@@ -14,7 +14,7 @@ public class ApplationInfoUsage extends BaseFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_usage_applation);
 		TextView tv = (TextView) findViewById(R.id.textVeiw);
-		String value = "...";
+		String value = AppUtil.getAppInfoMetaData(this, "UMENG_CHANNEL");
 		try {
 			value = "Manifest.xml/applation/meta-data/"
 					+ getPackageManager().getApplicationInfo(getPackageName(),
