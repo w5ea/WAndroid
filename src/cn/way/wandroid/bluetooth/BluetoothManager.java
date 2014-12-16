@@ -33,6 +33,8 @@ public class BluetoothManager {
 			return "Bluetooth is  disabled,Please enable it.";
 		}
 	}
+	public static int REQUEST_ENABLE_BT = 1001;
+	public static int REQUEST_DISCOVERABLE_BT = 1002;
 	private static BluetoothManager manager;
 	public static BluetoothManager instance() throws BluetoothSupportException, BluetoothEnableException {
 		if (!BluetoothManager.isBluetoothSupported()) {
@@ -65,8 +67,17 @@ public class BluetoothManager {
 		}
 		return true;
 	}
-	public static void showBluetoothConfigActivity(Activity activity,int resultCode){
+	public static void requestEnable(Activity activity){
 		Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		activity.startActivityForResult(enableBtIntent, resultCode);
+		activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+	}
+	public static void requestDiscoverable(Activity activity){
+		Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+		//maximum duration is 300 seconds,default is 120 seconds.
+		discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+		activity.startActivityForResult(discoverableIntent, REQUEST_DISCOVERABLE_BT);
+	}
+	public static interface StateChangeListener{
+		
 	}
 }

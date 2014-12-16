@@ -16,6 +16,7 @@ import android.widget.Toast;
 import cn.way.wandroid.activities.bulletin.BulletinUsage;
 import cn.way.wandroid.activities.dialog.DialogUsage;
 import cn.way.wandroid.activities.lifemanager.LifeManagerUsage;
+import cn.way.wandroid.activities.residemenu.ResideMenuUsage;
 import cn.way.wandroid.activities.tabhost.TabHostActivity;
 import cn.way.wandroid.activities.viewpager.ViewPagerUsage;
 import cn.way.wandroid.activities.views.ViewsActivity;
@@ -25,7 +26,7 @@ import cn.way.wandroid.applation.ApplationInfoUsage;
 import cn.way.wandroid.bluetooth.BluetoothUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
-import cn.way.wandroid.imageloader.universal.UsageActivity;
+import cn.way.wandroid.imageloader.universal.UniversalImageLoaderUsage;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
@@ -103,15 +104,15 @@ public class UasgeListActivity extends FragmentActivity{
 	    	addItem(new DummyItem(ImageLoaderUsage.class));
 			addItem(new DummyItem(TabHostActivity.class));
 			addItem(new DummyItem(ViewsActivity.class));
+			addItem(new DummyItem(ResideMenuUsage.class));
 			addItem(new DummyItem(UMengSocialUsage.class));
 			addItem(new DummyItem(ViewPagerUsage.class));
 			addItem(new DummyItem(AnimationUsage.class));
 			addItem(new DummyItem(TextUseage.class));
 			addItem(new DummyItem(ApplationInfoUsage.class));
-			addItem(new DummyItem(ApplationInfoUsage.class));
 			addItem(new DummyItem(SlidingMenuUsage.class));
 			addItem(new DummyItem(ShapeImageViewUsage.class));
-			addItem(new DummyItem(UsageActivity.class));
+			addItem(new DummyItem(UniversalImageLoaderUsage.class));
 			addItem(new DummyItem(BluetoothUsage.class));
 	    }
 	    private static void addItem(DummyItem item) {
@@ -120,10 +121,14 @@ public class UasgeListActivity extends FragmentActivity{
 	}
 	public static class DummyItem {
         public Class<? extends Activity> clazz;
-        public String title;
+        private String title;
         public DummyItem(Class<? extends Activity> clazz) {
             this.clazz = clazz;
             this.title = clazz.getSimpleName();
+        }
+        @Override
+        public String toString() {
+        	return (1+DummyContent.ITEMS.indexOf(this))+"."+this.title;
         }
     }
 }

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import cn.way.wandroid.BaseFragmentActivity;
 
-public class UsageActivity extends BaseFragmentActivity {
+public class UniversalImageLoaderUsage extends BaseFragmentActivity {
 	private ImageView iv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -122,7 +122,7 @@
         <activity android:name=".activities.residemenu.ResideMenuUsage"></activity>
         <activity android:name=".slidingmenu.usage.SlidingMenuUsage"></activity>
         <activity android:name=".shapeimageview.ShapeImageViewUsage"></activity>
-        <activity android:name=".imageloader.universal.UsageActivity"></activity>
+        <activity android:name=".imageloader.universal.UniversalImageLoaderUsage"></activity>
         <activity android:name=".openapi.AuthActivity">
             <intent-filter android:icon="@drawable/ic_launcher"
                 android:label="Auth">
