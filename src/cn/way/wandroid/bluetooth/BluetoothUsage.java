@@ -16,7 +16,7 @@ public class BluetoothUsage extends BaseFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setTitle(this.getClass().getSimpleName());
 		try {
-			BluetoothManager bm = BluetoothManager.instance();
+			BluetoothManager bm = BluetoothManager.instance(this);
 		} catch (BluetoothSupportException e) {
 			Toaster.instance(this).setup(e.toString()).show();
 		} catch (BluetoothEnableException e) {

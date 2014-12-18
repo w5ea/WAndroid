@@ -35,6 +35,7 @@ import cn.way.wandroid.shapeimageview.ShapeImageViewUsage;
 import cn.way.wandroid.share.UMengSocialUsage;
 import cn.way.wandroid.slidingmenu.usage.SlidingMenuUsage;
 import cn.way.wandroid.text.TextUseage;
+import cn.way.wandroid.webview.WebviewUsage;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -93,6 +94,7 @@ public class UasgeListActivity extends FragmentActivity{
 	public static class DummyContent {
 	    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 	    static {
+	    	addItem(new DummyItem(WebviewUsage.class));
 	    	addItem(new DummyItem(AsynchronousHttpClientUsage.class));
 	    	addItem(new DummyItem(GsonUsageActivity.class));
 	    	addItem(new DummyItem(GreenDaoUsage.class));

@@ -130,6 +130,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".bluetooth.BluetoothUsage"></activity>
+        <activity android:name=".webview.WebviewUsage"></activity>
     </application>
 
 </manifest>
