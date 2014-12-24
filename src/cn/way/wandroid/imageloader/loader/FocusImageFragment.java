@@ -1,4 +1,4 @@
-package cn.way.wandroid.imageloader.displayingbitmaps.ui;
+package cn.way.wandroid.imageloader.loader;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +16,7 @@ public class FocusImageFragment extends Fragment {
     private String mImageUrl;
     private ImageView mImageView;
     private ImageLoader imageLoader;
-    private Integer layoutId;
+    private int layoutId;
     private OnClickListener clickListener;
     public ImageLoader getImageLoader() {
 		return imageLoader;
@@ -52,10 +52,14 @@ public class FocusImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate and locate the main ImageView
-        final View v = inflater.inflate(getLayoutId(), container, false);
-        mImageView = (ImageView) v.findViewById(R.id.imageView);
-        mImageView.setOnClickListener(clickListener);
-        return v;
+    	View v = null;
+        try {
+			v = inflater.inflate(getLayoutId(), container, false);
+			mImageView = (ImageView) v.findViewById(R.id.imageView);
+			mImageView.setOnClickListener(clickListener);
+		} catch (Exception e) {
+		}
+		return v;
     }
 
     @Override

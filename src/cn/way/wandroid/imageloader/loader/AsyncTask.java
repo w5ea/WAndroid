@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.way.wandroid.imageloader;
+package cn.way.wandroid.imageloader.loader;
 
 import java.util.ArrayDeque;
 import java.util.concurrent.BlockingQueue;
@@ -32,6 +32,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.way.wandroid.imageloader.Utils;
 import android.annotation.TargetApi;
 import android.os.Handler;
 import android.os.Message;

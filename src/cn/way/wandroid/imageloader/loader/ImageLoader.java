@@ -1,4 +1,4 @@
-package cn.way.wandroid.imageloader;
+package cn.way.wandroid.imageloader.loader;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;

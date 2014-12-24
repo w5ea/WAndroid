@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.way.wandroid.imageloader;
+package cn.way.wandroid.imageloader.loader;
 
 import java.lang.ref.WeakReference;
 
@@ -31,6 +31,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.ImageView;
 import cn.way.wandroid.BuildConfig;
+import cn.way.wandroid.imageloader.Utils;
 
 /**
  * This class wraps up completing some arbitrary long running work when loading a bitmap to an

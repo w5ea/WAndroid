@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.way.wandroid.imageloader;
+package cn.way.wandroid.imageloader.loader;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

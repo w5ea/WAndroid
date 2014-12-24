@@ -3,7 +3,7 @@ package cn.way.wandroid.shapeimageview;
 import android.os.Bundle;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
-import cn.way.wandroid.imageloader.ImageLoader;
+import cn.way.wandroid.imageloader.loader.ImageLoader;
 import cn.way.wandroid.shapeimageview.custom.CircleImageView;
 
 public class ShapeImageViewUsage extends BaseFragmentActivity {

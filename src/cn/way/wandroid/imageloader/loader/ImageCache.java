@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.way.wandroid.imageloader;
+package cn.way.wandroid.imageloader.loader;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -46,6 +46,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import cn.way.wandroid.BuildConfig;
+import cn.way.wandroid.imageloader.Utils;
 
 /**
  * This class handles disk and memory caching of bitmaps in conjunction with the

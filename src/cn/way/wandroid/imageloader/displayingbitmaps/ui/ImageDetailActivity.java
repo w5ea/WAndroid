@@ -36,10 +36,10 @@ import android.widget.Toast;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.BuildConfig;
 import cn.way.wandroid.R;
-import cn.way.wandroid.imageloader.ImageCache;
-import cn.way.wandroid.imageloader.ImageFetcher;
 import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.provider.Images;
+import cn.way.wandroid.imageloader.loader.ImageCache;
+import cn.way.wandroid.imageloader.loader.ImageFetcher;
 
 public class ImageDetailActivity extends BaseFragmentActivity implements OnClickListener {
     private static final String IMAGE_CACHE_DIR = "images";

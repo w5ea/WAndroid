@@ -1,4 +1,4 @@
-package cn.way.wandroid.utils;
+package cn.way.wandroid.imageloader.universal;
 
 import java.util.Collections;
 import java.util.LinkedList;

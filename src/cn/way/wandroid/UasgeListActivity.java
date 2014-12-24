@@ -1,5 +1,7 @@
 package cn.way.wandroid;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import cn.way.wandroid.applation.ApplationInfoUsage;
 import cn.way.wandroid.bluetooth.BluetoothUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
 import cn.way.wandroid.graphics.GraphicsUsage;
-import cn.way.wandroid.imageloader.universal.UniversalImageLoaderUsage;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
@@ -35,6 +36,7 @@ import cn.way.wandroid.shapeimageview.ShapeImageViewUsage;
 import cn.way.wandroid.share.UMengSocialUsage;
 import cn.way.wandroid.slidingmenu.usage.SlidingMenuUsage;
 import cn.way.wandroid.text.TextUseage;
+import cn.way.wandroid.utils.WLog;
 import cn.way.wandroid.webview.WebviewUsage;
 
 import com.umeng.analytics.MobclickAgent;
@@ -64,6 +66,9 @@ public class UasgeListActivity extends FragmentActivity{
         UpdateConfig.setDebug(BuildConfig.DEBUG);
         MobclickAgent.setDebugMode(BuildConfig.DEBUG);
         UmengUpdateAgent.update(this);
+        WLog.d(new BigDecimal(new BigInteger("8888", 10)).toString());
+        WLog.d(new BigDecimal(new BigInteger("8888", 16)).toString());
+        WLog.d(new BigDecimal(new BigInteger("8888", Character.MAX_RADIX)).toString());
     }
 
     public void onItemSelected(int index) {
@@ -94,6 +99,8 @@ public class UasgeListActivity extends FragmentActivity{
 	public static class DummyContent {
 	    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 	    static {
+	    	addItem(new DummyItem(BluetoothUsage.class));
+	    	addItem(new DummyItem(ImageLoaderUsage.class));
 	    	addItem(new DummyItem(WebviewUsage.class));
 	    	addItem(new DummyItem(AsynchronousHttpClientUsage.class));
 	    	addItem(new DummyItem(GsonUsageActivity.class));
@@ -103,7 +110,6 @@ public class UasgeListActivity extends FragmentActivity{
 	    	addItem(new DummyItem(GraphicsUsage.class));
 	    	addItem(new DummyItem(DialogUsage.class));
 	    	addItem(new DummyItem(PullToRefreshUsage.class));
-	    	addItem(new DummyItem(ImageLoaderUsage.class));
 			addItem(new DummyItem(TabHostActivity.class));
 			addItem(new DummyItem(ViewsActivity.class));
 			addItem(new DummyItem(ResideMenuUsage.class));
@@ -114,8 +120,6 @@ public class UasgeListActivity extends FragmentActivity{
 			addItem(new DummyItem(ApplationInfoUsage.class));
 			addItem(new DummyItem(SlidingMenuUsage.class));
 			addItem(new DummyItem(ShapeImageViewUsage.class));
-			addItem(new DummyItem(UniversalImageLoaderUsage.class));
-			addItem(new DummyItem(BluetoothUsage.class));
 	    }
 	    private static void addItem(DummyItem item) {
 	        ITEMS.add(item);

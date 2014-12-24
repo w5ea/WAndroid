@@ -19,7 +19,7 @@
  *  @author Ephraim A. Tekle
  *
  */
-package cn.way.wandroid.utils;
+package cn.way.wandroid.animation;
 
 import android.view.animation.Animation;
 import android.graphics.Camera;

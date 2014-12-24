@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.way.wandroid.imageloader;
+package cn.way.wandroid.imageloader.loader;
 
 import java.io.FileDescriptor;
 
@@ -26,6 +26,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 import cn.way.wandroid.BuildConfig;
+import cn.way.wandroid.imageloader.Utils;
 
 /**
  * A simple subclass of {@link ImageWorker} that resizes images from resources given a target width

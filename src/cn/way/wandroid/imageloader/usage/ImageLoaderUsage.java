@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -18,10 +17,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import cn.way.wandroid.R;
-import cn.way.wandroid.imageloader.ImageLoader;
-import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity;
+import cn.way.wandroid.imageloader.universal.ImageManager;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -33,20 +31,13 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class ImageLoaderUsage extends FragmentActivity {
 	private PullToRefreshListView pullRefreshListView;
 	private JSONArray jArray = new JSONArray();
-	private ImageLoader imageLoader;
 	private ArrayAdapter<JSONArray> adapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_imageloader_usage);
 		
-		int width = (int) (getResources().getDimensionPixelSize(R.dimen.list_image_thumbnail_size)*getResources().getDisplayMetrics().density*2);
-//		int height = (int) (getResources().getDimensionPixelSize(R.dimen.list_image_thumbnail_size)*getResources().getDisplayMetrics().density*2);
-        imageLoader = new ImageLoader();
-        imageLoader.init(this,width);
-        imageLoader.setLoadingImage(R.drawable.empty_photo);
-		
-        Toast.makeText(this, "dip="+getResources().getDisplayMetrics().density, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "[dip]="+getResources().getDisplayMetrics().density, Toast.LENGTH_LONG).show();
 		pullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_listview);
 		pullRefreshListView.setMode(Mode.BOTH);
 		pullRefreshListView.setScrollingWhileRefreshingEnabled(false);
@@ -54,7 +45,6 @@ public class ImageLoaderUsage extends FragmentActivity {
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 				loadData(true);
-				imageLoader.clearCache();
 			}
 
 			@Override
@@ -62,25 +52,7 @@ public class ImageLoaderUsage extends FragmentActivity {
 				loadData(false);
 			}
 		});
-		pullRefreshListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                // Pause fetcher to ensure smoother scrolling when flinging
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    // Before Honeycomb pause image loading on scroll to help with performance
-                    if (!Utils.hasHoneycomb()) {
-                        imageLoader.setPauseWork(true);
-                    }
-                } else {
-                    imageLoader.setPauseWork(false);
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem,
-                    int visibleItemCount, int totalItemCount) {
-            }
-        });
+		
 		
 		adapter = new ArrayAdapter<JSONArray>(this, 0){
 			@Override
@@ -103,7 +75,7 @@ public class ImageLoaderUsage extends FragmentActivity {
 					String urlStr = jArray.getJSONObject(position)
 							.getString("artworkUrl512");
 //							.getString("artworkUrl60");
-					imageLoader.loadImage(urlStr, holder.profileIV);
+					ImageManager.instance(getApplicationContext()).loadImage(urlStr, holder.profileIV);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

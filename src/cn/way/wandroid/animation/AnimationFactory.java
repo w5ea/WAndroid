@@ -19,8 +19,9 @@
  *  @author Ephraim A. Tekle
  *
  */
-package cn.way.wandroid.utils;  
+package cn.way.wandroid.animation;  
 
+import cn.way.wandroid.animation.FlipAnimation.ScaleUpDownEnum;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;

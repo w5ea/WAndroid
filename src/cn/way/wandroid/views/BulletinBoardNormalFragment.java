@@ -11,7 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import cn.way.wandroid.R;
-import cn.way.wandroid.utils.FlipAnimation;
+import cn.way.wandroid.animation.FlipAnimation;
 
 public class BulletinBoardNormalFragment extends Fragment {
 

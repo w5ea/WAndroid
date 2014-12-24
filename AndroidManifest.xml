@@ -122,7 +122,6 @@
         <activity android:name=".activities.residemenu.ResideMenuUsage"></activity>
         <activity android:name=".slidingmenu.usage.SlidingMenuUsage"></activity>
         <activity android:name=".shapeimageview.ShapeImageViewUsage"></activity>
-        <activity android:name=".imageloader.universal.UniversalImageLoaderUsage"></activity>
         <activity android:name=".openapi.AuthActivity">
             <intent-filter android:icon="@drawable/ic_launcher"
                 android:label="Auth">
@@ -131,6 +130,7 @@
         </activity>
         <activity android:name=".bluetooth.BluetoothUsage"></activity>
         <activity android:name=".webview.WebviewUsage"></activity>
+        <activity android:name=".bluetooth.im.MainActivity"></activity>
     </application>
 
 </manifest>

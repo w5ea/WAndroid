@@ -24,9 +24,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import cn.way.wandroid.R;
-import cn.way.wandroid.imageloader.ImageFetcher;
-import cn.way.wandroid.imageloader.ImageWorker;
 import cn.way.wandroid.imageloader.Utils;
+import cn.way.wandroid.imageloader.loader.ImageFetcher;
+import cn.way.wandroid.imageloader.loader.ImageWorker;
 
 /**
  * This fragment will populate the children of the ViewPager from {@link ImageDetailActivity}.

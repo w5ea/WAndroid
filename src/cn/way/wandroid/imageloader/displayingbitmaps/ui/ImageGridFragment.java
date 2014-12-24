@@ -40,11 +40,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import cn.way.wandroid.BuildConfig;
 import cn.way.wandroid.R;
-import cn.way.wandroid.imageloader.ImageCache;
-import cn.way.wandroid.imageloader.ImageFetcher;
-import cn.way.wandroid.imageloader.RecyclingImageView;
 import cn.way.wandroid.imageloader.Utils;
 import cn.way.wandroid.imageloader.displayingbitmaps.provider.Images;
+import cn.way.wandroid.imageloader.loader.ImageCache;
+import cn.way.wandroid.imageloader.loader.ImageFetcher;
+import cn.way.wandroid.imageloader.loader.RecyclingImageView;
 
 /**
  * The main fragment that powers the ImageGridActivity screen. Fairly straight forward GridView
