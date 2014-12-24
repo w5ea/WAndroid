@@ -100,6 +100,7 @@ public class UasgeListActivity extends FragmentActivity{
 	    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 	    static {
 	    	addItem(new DummyItem(BluetoothUsage.class));
+	    	addItem(new DummyItem(AnimationUsage.class));
 	    	addItem(new DummyItem(ImageLoaderUsage.class));
 	    	addItem(new DummyItem(WebviewUsage.class));
 	    	addItem(new DummyItem(AsynchronousHttpClientUsage.class));
@@ -115,7 +116,6 @@ public class UasgeListActivity extends FragmentActivity{
 			addItem(new DummyItem(ResideMenuUsage.class));
 			addItem(new DummyItem(UMengSocialUsage.class));
 			addItem(new DummyItem(ViewPagerUsage.class));
-			addItem(new DummyItem(AnimationUsage.class));
 			addItem(new DummyItem(TextUseage.class));
 			addItem(new DummyItem(ApplationInfoUsage.class));
 			addItem(new DummyItem(SlidingMenuUsage.class));

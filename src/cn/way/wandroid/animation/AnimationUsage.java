@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
@@ -31,6 +33,41 @@ public class AnimationUsage extends BaseFragmentActivity {
 		ViewGroup viewGroup = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_animation_usage, null);
 		setContentView(viewGroup);
 		
+		final View v1 = findViewById(R.id.v1);
+		final View v2 = findViewById(R.id.v2);
+		v1.setVisibility(View.INVISIBLE);
+		v2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AnimationUtil.doFlipAnimation(1000,v1.getVisibility()==View.INVISIBLE?v1:v2, v2.getVisibility()==View.VISIBLE?v2:v1,new AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation) {
+					}
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+					}
+					@Override
+					public void onAnimationEnd(Animation animation) {
+					}
+				});
+			}
+		});
+		v1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AnimationUtil.doFlipAnimation(1000,v1.getVisibility()==View.INVISIBLE?v1:v2, v2.getVisibility()==View.VISIBLE?v2:v1,new AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation) {
+					}
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+					}
+					@Override
+					public void onAnimationEnd(Animation animation) {
+					}
+				});
+			}
+		});
 //		flakeView = new FlakeView(this);
 //		flakeView.setLayoutParams(new LayoutParams(500, 500));
 //		viewGroup.addView(flakeView);
