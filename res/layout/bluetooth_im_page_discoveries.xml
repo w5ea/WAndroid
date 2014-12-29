@@ -11,6 +11,10 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="back"/>
+        <Button android:id="@+id/searchBtn" 
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="查找"/>
     </LinearLayout>
     <ListView android:id="@+id/im_discoveries_list"
         android:layout_width="match_parent"

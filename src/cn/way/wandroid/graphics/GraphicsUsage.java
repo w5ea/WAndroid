@@ -1,5 +1,7 @@
 package cn.way.wandroid.graphics;
 
+import com.nineoldandroids.view.ViewHelper;
+
 import android.os.Bundle;
 import android.text.BoringLayout;
 import android.text.Layout;
@@ -33,6 +35,7 @@ public class GraphicsUsage extends BaseFragmentActivity {
 			public void onGlobalLayout() {
 				atv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				Toast.makeText(GraphicsUsage.this, atv.getWidth()+"", 0).show();
+				ViewHelper.setRotation(atv, 180);
 			}
 		});
 //		AnnularProgressView progressView = (AnnularProgressView) findViewById(R.id.progressView);

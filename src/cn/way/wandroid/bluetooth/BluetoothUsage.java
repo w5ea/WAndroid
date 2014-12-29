@@ -15,14 +15,6 @@ public class BluetoothUsage extends BaseFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(this.getClass().getSimpleName());
-//		try {
-//			BluetoothManager bm = BluetoothManager.instance(this);
-//		} catch (BluetoothSupportException e) {
-//			Toaster.instance(this).setup(e.toString()).show();
-//		} catch (BluetoothEnableException e) {
-//			BluetoothManager.requestDiscoverable(BluetoothUsage.this);
-//			BluetoothManager.requestDiscoverable(BluetoothUsage.this);
-//		}
 		setContentView(R.layout.bluetooth_page_usage);
 		findViewById(R.id.bluetooth_im_btn).setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -32,7 +24,6 @@ public class BluetoothUsage extends BaseFragmentActivity {
 		}); 
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayUseLogoEnabled(false);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 	@Override
 	protected void onResume() {
