@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.way.wandroid"
     android:versionCode="2"
-    android:versionName="1.0.2" >
+    android:versionName="1.0.3" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -29,52 +29,6 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="CHANEL_VALUE" />
-        <!-- ###################注册SDK使用的Activity###################### -->
-        <!-- 分享编辑页 -->
-        <activity
-            android:name="com.umeng.socialize.view.ShareActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:noHistory="true"
-            android:theme="@style/Theme.UMDialog"
-            android:windowSoftInputMode="stateVisible|adjustResize" >
-        </activity>
-
-        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- 100424468，如果你使用的公用账号，则不需要修改；否则修改成你在QQ开放平台申请的 APP ID -->
-                <data android:scheme="tencent100424468" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-<!--         umeng update -->
-        <service
-		    android:name="com.umeng.update.net.DownloadingService"
-		    android:process=":DownloadingService" >
-		</service>
-		<activity 
-		    android:name="com.umeng.update.UpdateDialogActivity"
-		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-		</activity>
-        
         
         
         <activity
@@ -112,8 +66,6 @@
         </activity>
         <activity android:name="cn.way.wandroid.activities.views.ViewsActivity" >
         </activity>
-        <activity android:name="cn.way.wandroid.share.UMengSocialUsage" >
-        </activity>
         <activity android:name=".activities.viewpager.ViewPagerUsage"></activity>
         <activity android:name=".imageloader.displayingbitmaps.ui.ImageDetailActivity2"></activity>
         <activity android:name=".animation.AnimationUsage"></activity>
@@ -121,7 +73,6 @@
         <activity android:name=".applation.ApplationInfoUsage"></activity>
         <activity android:name=".activities.residemenu.ResideMenuUsage"></activity>
         <activity android:name=".slidingmenu.usage.SlidingMenuUsage"></activity>
-        <activity android:name=".shapeimageview.ShapeImageViewUsage"></activity>
         <activity android:name=".openapi.AuthActivity">
             <intent-filter android:icon="@drawable/ic_launcher"
                 android:label="Auth">

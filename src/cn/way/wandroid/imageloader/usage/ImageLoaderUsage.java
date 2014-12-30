@@ -4,7 +4,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -20,16 +20,11 @@ import cn.way.wandroid.R;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity;
 import cn.way.wandroid.imageloader.universal.ImageManager;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class ImageLoaderUsage extends FragmentActivity {
-	private PullToRefreshListView pullRefreshListView;
+	private ListView listView;
 	private JSONArray jArray = new JSONArray();
 	private ArrayAdapter<JSONArray> adapter;
 	@Override
@@ -38,27 +33,14 @@ public class ImageLoaderUsage extends FragmentActivity {
 		setContentView(R.layout.activity_imageloader_usage);
 		
         Toast.makeText(this, "[dip]="+getResources().getDisplayMetrics().density, Toast.LENGTH_LONG).show();
-		pullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_listview);
-		pullRefreshListView.setMode(Mode.BOTH);
-		pullRefreshListView.setScrollingWhileRefreshingEnabled(false);
-		pullRefreshListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
-			@Override
-			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-				loadData(true);
-			}
-
-			@Override
-			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-				loadData(false);
-			}
-		});
-		
+		listView = (ListView) findViewById(R.id.listview);
 		
 		adapter = new ArrayAdapter<JSONArray>(this, 0){
 			@Override
 			public int getCount() {
 				return jArray.length();
 			}
+			@SuppressLint("InflateParams")
 			@Override
 			public View getView(int position, View convertView, ViewGroup parent) {
 				View view = convertView;
@@ -86,10 +68,10 @@ public class ImageLoaderUsage extends FragmentActivity {
 				ImageView profileIV;
 			}
 		};
-		pullRefreshListView.setAdapter(adapter);
+		listView.setAdapter(adapter);
 		loadData(false);
 		
-		pullRefreshListView.setOnItemClickListener(new OnItemClickListener() {
+		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -111,7 +93,7 @@ public class ImageLoaderUsage extends FragmentActivity {
         adapter.notifyDataSetChanged();
     }
 
-    static final int PAGE_SIZE = 100;
+    static final int PAGE_SIZE = 500;
 	private void loadData(final boolean refresh){
 		
 		int pageIndex = 0;
@@ -125,7 +107,6 @@ public class ImageLoaderUsage extends FragmentActivity {
 		client.get(path, new JsonHttpResponseHandler(){
 			@Override
 			public void onFinish() {
-				pullRefreshListView.onRefreshComplete();
 			}
 			@Override
 			public void onSuccess(int statusCode, Header[] headers,

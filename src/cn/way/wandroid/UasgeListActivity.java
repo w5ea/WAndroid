@@ -31,9 +31,6 @@ import cn.way.wandroid.graphics.GraphicsUsage;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
-import cn.way.wandroid.pullrefresh.PullToRefreshUsage;
-import cn.way.wandroid.shapeimageview.ShapeImageViewUsage;
-import cn.way.wandroid.share.UMengSocialUsage;
 import cn.way.wandroid.slidingmenu.usage.SlidingMenuUsage;
 import cn.way.wandroid.text.TextUseage;
 import cn.way.wandroid.utils.WLog;
@@ -110,16 +107,13 @@ public class UasgeListActivity extends FragmentActivity{
 	    	addItem(new DummyItem(BulletinUsage.class));
 	    	addItem(new DummyItem(GraphicsUsage.class));
 	    	addItem(new DummyItem(DialogUsage.class));
-	    	addItem(new DummyItem(PullToRefreshUsage.class));
 			addItem(new DummyItem(TabHostActivity.class));
 			addItem(new DummyItem(ViewsActivity.class));
 			addItem(new DummyItem(ResideMenuUsage.class));
-			addItem(new DummyItem(UMengSocialUsage.class));
 			addItem(new DummyItem(ViewPagerUsage.class));
 			addItem(new DummyItem(TextUseage.class));
 			addItem(new DummyItem(ApplationInfoUsage.class));
 			addItem(new DummyItem(SlidingMenuUsage.class));
-			addItem(new DummyItem(ShapeImageViewUsage.class));
 	    }
 	    private static void addItem(DummyItem item) {
 	        ITEMS.add(item);
