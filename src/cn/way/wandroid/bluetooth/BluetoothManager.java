@@ -96,11 +96,9 @@ public class BluetoothManager {
 
 	public void release() {
 		// Make sure we're not doing discovery anymore
-		if (mBluetoothAdapter != null) {
-			mBluetoothAdapter.cancelDiscovery();
-		}
+		cancelDiscovery();
 		// Unregister broadcast listeners
-		this.context.unregisterReceiver(mReceiver);
+		if(this.context!=null&&mReceiver!=null)this.context.unregisterReceiver(mReceiver);
 	}
 
 	/**
@@ -161,6 +159,13 @@ public class BluetoothManager {
 		}
 	}
 
+	public boolean isEnabled() {
+		if (!mBluetoothAdapter.isEnabled()) {
+			return false;
+		}
+		return true;
+	}
+	
 	public void enable() {
 		if (!mBluetoothAdapter.isEnabled()) {
 			mBluetoothAdapter.enable();
@@ -182,7 +187,7 @@ public class BluetoothManager {
 	}
 
 	public void cancelDiscovery() {
-		if (mBluetoothAdapter.isDiscovering()) {
+		if (mBluetoothAdapter!=null&&mBluetoothAdapter.isDiscovering()) {
 			mBluetoothAdapter.cancelDiscovery();
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,23 @@ public class FriendsFragment extends BaseFragment {
 	private ListView lv;//列表
 	private ArrayAdapter<BluetoothDevice> adapter;
 	private ArrayList<BluetoothDevice> friends = new ArrayList<BluetoothDevice>();
-	private BluetoothManager manager;
+	private BluetoothManager bluetoothManager;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		view = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.bluetooth_im_page_friends, null);
 		lv = (ListView) view.findViewById(R.id.im_friends_list);
+		view.findViewById(R.id.addFriendBtn).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				DiscoveriesFragment df = new DiscoveriesFragment();
+				df.setBluetoothManager(bluetoothManager);
+				ft.replace(R.id.bluetooth_page_main_root,df);
+				ft.addToBackStack(null);
+				ft.commit();
+			}
+		});
 		adapter = new ArrayAdapter<BluetoothDevice>(getActivity(), 0){
 			@Override
 			public int getCount() {
@@ -56,8 +68,6 @@ public class FriendsFragment extends BaseFragment {
 			}
 		};
 		lv.setAdapter(adapter);
-		
-		updateView();	
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +77,11 @@ public class FriendsFragment extends BaseFragment {
 		}
 		return view;
 	}
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateView();	
+	}
 	public void updateView(){
 		friends.clear();
 		if (getManager()!=null) {
@@ -75,9 +90,9 @@ public class FriendsFragment extends BaseFragment {
 		adapter.notifyDataSetChanged();
 	}
 	public BluetoothManager getManager() {
-		return manager;
+		return bluetoothManager;
 	}
 	public void setManager(BluetoothManager manager) {
-		this.manager = manager;
+		this.bluetoothManager = manager;
 	}
 }

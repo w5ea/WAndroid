@@ -3,18 +3,17 @@ package cn.way.wandroid.net;
 import java.util.Date;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import cn.way.wandroid.utils.WLog;
-import cn.way.wandroid.utils.WStringUtil;
-
-import com.loopj.android.http.*;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import cn.way.wandroid.utils.WLog;
+import cn.way.wandroid.utils.WStringUtil;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 public class AsynchronousHttpClientUsage extends Activity {
 	@Override
@@ -39,6 +38,7 @@ public class AsynchronousHttpClientUsage extends Activity {
 		});
 	}
 	
+	@SuppressWarnings("unused")
 	private void test(){
 		/*{"ID":"1","Token":"Sl1OOfvb0I51TMqlic88T1JkXPoLoaYWZwtj64udeq0="}*/
 		String host = 

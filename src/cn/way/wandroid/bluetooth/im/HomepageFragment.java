@@ -10,7 +10,7 @@ import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
 
 public class HomepageFragment extends BaseFragment{
-	private BluetoothManager manager;
+	private BluetoothManager bluetoothManager;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -20,36 +20,23 @@ public class HomepageFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.bluetooth_page_home, container, false);
-		
-		view.findViewById(R.id.addFriendBtn).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-				DiscoveriesFragment df = new DiscoveriesFragment();
-				df.setBluetoothManager(manager);
-				ft.replace(R.id.bluetooth_page_main_root,df);
-				ft.addToBackStack(null);
-				ft.commit();
-				
-			}
-		});
 		return view;
 	}
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		if (getManager()!=null) {
+		if (getBluetoothManager()!=null) {
 			FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 			FriendsFragment ff = new FriendsFragment();
-			ff.setManager(manager);
+			ff.setManager(bluetoothManager);
 			ft.replace(R.id.im_fragment_friends, ff);
 			ft.commit();
 		}
 	}
-	public BluetoothManager getManager() {
-		return manager;
+	public BluetoothManager getBluetoothManager() {
+		return bluetoothManager;
 	}
-	public void setManager(BluetoothManager manager) {
-		this.manager = manager;
+	public void setBluetoothManager(BluetoothManager manager) {
+		this.bluetoothManager = manager;
 	}
 }

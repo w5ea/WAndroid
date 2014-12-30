@@ -49,6 +49,7 @@ public class GreenDaoUsage extends BaseFragmentActivity {
 	private User queryUserById(String identity){
 		return daoSession.getUserDao().queryBuilder().where(UserDao.Properties.Identity.eq(identity)).unique();
 	}
+	@SuppressWarnings("unused")
 	private void updateUser(){
 //		User user = queryUserById("GGG");
 //		daoSession.getUserDao().up

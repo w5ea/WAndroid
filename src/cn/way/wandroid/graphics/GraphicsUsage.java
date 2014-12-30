@@ -1,12 +1,7 @@
 package cn.way.wandroid.graphics;
 
-import com.nineoldandroids.view.ViewHelper;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.BoringLayout;
-import android.text.Layout;
-import android.text.Layout.Alignment;
-import android.text.TextPaint;
 import android.view.SoundEffectConstants;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -17,7 +12,9 @@ import cn.way.wandroid.R;
 import cn.way.wandroid.graphics.RoundtableView.RotationListener;
 import cn.way.wandroid.graphics.RoundtableView.State;
 import cn.way.wandroid.utils.WLog;
+import com.nineoldandroids.view.ViewHelper;
 
+@SuppressLint("InflateParams")
 public class GraphicsUsage extends BaseFragmentActivity {
 	
 	@Override
@@ -31,10 +28,11 @@ public class GraphicsUsage extends BaseFragmentActivity {
 		atv.setText(text);
 		view.addView(atv);
 		atv.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onGlobalLayout() {
 				atv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				Toast.makeText(GraphicsUsage.this, atv.getWidth()+"", 0).show();
+				Toast.makeText(GraphicsUsage.this, atv.getWidth()+"", Toast.LENGTH_SHORT).show();
 				ViewHelper.setRotation(atv, 180);
 			}
 		});
