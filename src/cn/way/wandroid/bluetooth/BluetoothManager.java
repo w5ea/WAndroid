@@ -37,7 +37,7 @@ public class BluetoothManager {
 		}
 		return manager;
 	}
-
+	
 	public static boolean isBluetoothSupported() {
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 				.getDefaultAdapter();

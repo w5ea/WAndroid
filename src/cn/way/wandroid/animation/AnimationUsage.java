@@ -3,6 +3,7 @@ package cn.way.wandroid.animation;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +38,10 @@ public class AnimationUsage extends BaseFragmentActivity {
 		final View v2 = findViewById(R.id.v2);
 		v1.setVisibility(View.INVISIBLE);
 		v2.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View v) {
+//				android.animation.ObjectAnimator.ofFloat(v2, "rotationY", 0, 180, 0).setDuration(3000).start();
 				AnimationUtil.doFlipAnimation(1000,v1.getVisibility()==View.INVISIBLE?v1:v2, v2.getVisibility()==View.VISIBLE?v2:v1,new AnimationListener() {
 					@Override
 					public void onAnimationStart(Animation animation) {

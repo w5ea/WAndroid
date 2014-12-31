@@ -20,7 +20,11 @@ import cn.way.wandroid.bluetooth.BluetoothManager.DeviceState;
 import cn.way.wandroid.bluetooth.BluetoothManager.DeviceStateListener;
 import cn.way.wandroid.bluetooth.BluetoothManager.DiscoveryListener;
 import cn.way.wandroid.toast.Toaster;
-
+/**
+ * 
+ * @author Wayne
+ * @2014年12月31日
+ */
 @SuppressLint("InflateParams")
 public class DiscoveriesFragment extends BaseFragment {
 	private Button searchBtn;
