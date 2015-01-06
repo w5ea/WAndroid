@@ -2,6 +2,7 @@ package cn.way.wandroid.bluetooth.im;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
@@ -9,13 +10,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 import cn.way.wandroid.BaseFragment;
 import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
+import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothConnectionListener;
+import cn.way.wandroid.bluetooth.BluetoothManager.ConnectionState;
 import cn.way.wandroid.bluetooth.BluetoothManager.DeviceState;
 import cn.way.wandroid.bluetooth.BluetoothManager.DeviceStateListener;
 import cn.way.wandroid.bluetooth.BluetoothManager.DiscoveryListener;
@@ -32,6 +38,7 @@ public class DiscoveriesFragment extends BaseFragment {
 	private BluetoothManager bluetoothManager;
 	private ArrayList<BluetoothDevice> nearbyDevices = new ArrayList<BluetoothDevice>();
 	private ArrayAdapter<BluetoothDevice> adapter;
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -84,12 +91,24 @@ public class DiscoveriesFragment extends BaseFragment {
 			}
 		};
 		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				BluetoothDevice bd = nearbyDevices.get(position);
+				Toast.makeText(getActivity(), ""+bd, 0).show();
+				if(getBluetoothManager()!=null)getBluetoothManager().getConnection().connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE);
+			}
+		});
+		
+		
 		view.findViewById(R.id.backBtn).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				backAction();
 			}
 		});
+		
 		searchBtn = (Button) view.findViewById(R.id.searchBtn);
 		searchBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -143,5 +162,11 @@ public class DiscoveriesFragment extends BaseFragment {
 	}
 	public void setBluetoothManager(BluetoothManager bluetoothManager) {
 		this.bluetoothManager = bluetoothManager;
+		bluetoothManager.setConnectionListener(new BluetoothConnectionListener() {
+			@Override
+			public void onConnectionStateChanged(ConnectionState state) {
+				Toast.makeText(getActivity(), "state="+state, 0).show();
+			}
+		});
 	}
 }

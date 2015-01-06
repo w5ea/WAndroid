@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -15,6 +18,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.Toast;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.utils.WTimer;
@@ -28,6 +32,11 @@ public class AnimationUsage extends BaseFragmentActivity {
 	private WTimer timer ;
 	private ArrayList<View> views = new ArrayList<View>();
 //	FlakeView flakeView;
+	Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			Toast.makeText(getApplicationContext(), "qqqq", 0).show();
+		};
+	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,6 +80,24 @@ public class AnimationUsage extends BaseFragmentActivity {
 				});
 			}
 		});
+		
+		try {
+			new Thread() {
+				@Override
+				public void run() {
+					super.run();
+					Looper.prepare();
+					handler.sendEmptyMessage(0);
+					Looper.loop();
+//					new AlertDialog.Builder(AnimationUsage.this).setTitle("wwwww").show();
+//					Toast.makeText(getApplicationContext(), "wwwww", 0).show();
+				}
+			}.start();
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.toString(), 0).show();
+		}
+		
+		
 //		flakeView = new FlakeView(this);
 //		flakeView.setLayoutParams(new LayoutParams(500, 500));
 //		viewGroup.addView(flakeView);

@@ -1,8 +1,9 @@
 package cn.way.wandroid.bluetooth.im;
 
+import java.util.UUID;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
@@ -13,7 +14,9 @@ import cn.way.wandroid.toast.Toaster;
 
 public class MainActivity extends BaseFragmentActivity {
 	private BluetoothManager bluetoothManager;
-
+	public static final UUID M_UUID =
+	        UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a67");
+	public static boolean IS_SECURE = true;
 	@Override
 	protected void onDestroy() {
 		if (bluetoothManager!=null) {
@@ -39,6 +42,7 @@ public class MainActivity extends BaseFragmentActivity {
 						hf.setBluetoothManager(bluetoothManager);
 						ft.replace(R.id.bluetooth_page_main_root, hf);
 						ft.commit();
+						bluetoothManager.getConnection().connect(M_UUID, null, IS_SECURE);
 						break;
 					case OFF:
 						break;

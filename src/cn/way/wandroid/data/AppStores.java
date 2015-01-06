@@ -39,4 +39,12 @@ public class AppStores {/*
 	苏宁			suning
 	百度			baidu
 	小米			xiaomi
+	宝瓶网		baoping
+	网易应用		netease
+	安粉网		anfen
+	搜狐应用		sohu
+	中关村在线		zol
+	2345软件大全	m2345
+	UC+			uc
+	软吧			ruanba
 */}

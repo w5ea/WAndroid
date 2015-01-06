@@ -1,6 +1,7 @@
 package cn.way.wandroid.bluetooth.im;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
@@ -9,20 +10,26 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.way.wandroid.BaseFragment;
 import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
+import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothConnectionListener;
+import cn.way.wandroid.bluetooth.BluetoothManager.ConnectionState;
 
-@SuppressLint("InflateParams")
+@SuppressLint({ "InflateParams", "NewApi" })
 public class FriendsFragment extends BaseFragment {
 	private ViewGroup view;//主视图
 	private ListView lv;//列表
 	private ArrayAdapter<BluetoothDevice> adapter;
 	private ArrayList<BluetoothDevice> friends = new ArrayList<BluetoothDevice>();
 	private BluetoothManager bluetoothManager;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +75,15 @@ public class FriendsFragment extends BaseFragment {
 			}
 		};
 		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				BluetoothDevice bd = friends.get(position);
+				Toast.makeText(getActivity(), ""+bd, 0).show();
+				if(getManager()!=null)getManager().getConnection().connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE);
+			}
+		});
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,5 +110,11 @@ public class FriendsFragment extends BaseFragment {
 	}
 	public void setManager(BluetoothManager manager) {
 		this.bluetoothManager = manager;
+		manager.setConnectionListener(new BluetoothConnectionListener() {
+			@Override
+			public void onConnectionStateChanged(ConnectionState state) {
+				Toast.makeText(getActivity(), "state="+state, 0).show();
+			}
+		});
 	}
 }
