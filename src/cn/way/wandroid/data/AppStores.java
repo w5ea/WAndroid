@@ -47,4 +47,5 @@ public class AppStores {/*
 	2345软件大全	m2345
 	UC+			uc
 	软吧			ruanba
+	PP助手		m25PP
 */}

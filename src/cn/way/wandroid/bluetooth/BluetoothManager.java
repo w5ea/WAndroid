@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 /**
  * 1.add permissions. <uses-permission
@@ -317,19 +319,39 @@ public class BluetoothManager {
 
 	public enum ConnectionState {
 		DISCONNECTED, // 未连接或连接断开
-		LISTENING, // 正在等待对方来连接
 		CONNECTING, // 正在试图去连接对方
 		CONNECTED// 已经连接
 	}
 
+	
+	public interface ServerListeningResultListener{
+		/**
+		 * 开发监听连接请求
+		 */
+		void onStart();
+		/**
+		 * 监听结束
+		 * @param success true说明连接成功 否则连接失败，失败有两个原因，
+		 * 一是连接无法创建。二是当前状态已经是连接状态ConnectionState.CONNECTED
+		 */
+		void onFinish(boolean success);
+	}
 	@SuppressLint("HandlerLeak")
 	public class BluetoothConnection {
+		private final int MSG_STATE_CHANGED = 0;
 		private final Handler mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
 				super.handleMessage(msg);
-				getBluetoothConnectionListener()
-				.onConnectionStateChanged(state);
+				switch (msg.what) {
+				case 0:
+					getBluetoothConnectionListener()
+					.onConnectionStateChanged(state);
+					break;
+
+				default:
+					break;
+				}
 			}
 		};
 		
@@ -344,8 +366,6 @@ public class BluetoothManager {
 
 		private BluetoothSocket socket;
 		private BluetoothServerSocket serverSocket;
-		private InputStream inStream;
-		private OutputStream outStream;
 
 		private Thread listeningThread;// 等待客户端连接线程
 		private Thread connectingThread;// 连接服务器线程
@@ -356,8 +376,7 @@ public class BluetoothManager {
 		/**
 		 * 创建一个连接
 		 * 
-		 * @param device 可为空。为空是则创建ServerSocket，并进入等待连接状态（
-		 *            ConnectionState.LISTENING）,不为空则通过device创建Socket并尝试连接（ConnectionState.CONNECTING）
+		 * @param device 不可为空。通过device创建Socket并尝试连接（ConnectionState.CONNECTING）
 		 * @param isSecure
 		 *            true 创建安全连接，false 创建不安全连接
 		 */
@@ -365,27 +384,45 @@ public class BluetoothManager {
 			cannel();
 			this.uuid = uuid;
 			this.remoteDevice = device;
-			if (device == null) {
-				doListening();
-			} else {
+			if (device != null) {
 				doConnecting();
+			}else{
+				changeState(ConnectionState.DISCONNECTED);
 			}
 		}
 
 		public void cannel() {
 			try {
-				if (serverSocket != null)
+				if (serverSocket != null){
 					serverSocket.close();
+					serverSocket = null;
+				}
 				if (socket != null) {
 					socket.close();
+					socket = null;
 				}
-			} catch (IOException e) {
-			}
+			} catch (IOException e) {}
 			changeState(ConnectionState.DISCONNECTED);
 		}
-
-		private void doListening() {
-			try {
+		
+		/**
+		 * 是否处于等待对方连接状态
+		 */
+		private boolean isListening;
+		/**
+		 * @return the isListening
+		 */
+		public boolean isListening() {
+			return isListening;
+		}
+		
+		public void startServerListening(final ServerListeningResultListener l) {
+			if (this.isListening) {
+				Toast.makeText(context, "监听服务已经开启", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			this.isListening = false;
+			try {//创建一个ServerSocket
 				if (isSecure) {
 					this.serverSocket = mBluetoothAdapter
 							.listenUsingRfcommWithServiceRecord(NAME_SECURE,
@@ -397,20 +434,32 @@ public class BluetoothManager {
 				}
 			} catch (IOException e) {
 				this.serverSocket = null;
-				changeState(ConnectionState.DISCONNECTED);
+				//创建失败，执行状态回调
+				if (l!=null) {
+					l.onFinish(false);
+				}
 			}
-			changeState(ConnectionState.LISTENING);
+			
+			//创建成功，开启一个线程 不断尝试接受连接直到连接完成
+			this.isListening = true;
+			if (l!=null) {
+				l.onStart();
+			}
+			
 			listeningThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// 不断尝试连接直到连接完成
+					//直到连接成功才停止接受连接请求
 					while (state != ConnectionState.CONNECTED) {
 						try {
+							//进入等待对方连接状态，会阻塞线程，所以开一下子线程
 							socket = serverSocket.accept();
 						} catch (IOException e) {
 							// 尝试连接异常退出
 							socket = null;
-							changeState(ConnectionState.DISCONNECTED);
+							if (l!=null) {
+								l.onFinish(false);
+							}
 							break;
 						}
 						if (socket != null) {
@@ -418,17 +467,22 @@ public class BluetoothManager {
 								switch (state) {
 								case CONNECTING:
 									//连接完成，进入交换数据状态
+									if (l!=null) {
+										l.onFinish(true);
+									}
 									doConnected();
 									break;
 								case CONNECTED:
 									try {
+										// 目前只要求有一个连接，所以有已经存在连接则关闭当前得到的Socket
 										socket.close();
 										socket = null;
 									} catch (IOException e) {
 										//关闭失败
 									}
-									// 已经连接则关闭当前得到的Socket
-									changeState(ConnectionState.DISCONNECTED);
+									if (l!=null) {
+										l.onFinish(false);
+									}
 									break;
 								default:
 									break;
@@ -483,18 +537,7 @@ public class BluetoothManager {
 		private void doConnected() {
 			changeState(ConnectionState.CONNECTED);
 			mBluetoothAdapter.cancelDiscovery();
-			InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
-                //数据流打开失败
-            }
-
-            inStream = tmpIn;
-            outStream = tmpOut;
+			
 		}
 
 		private synchronized void changeState(ConnectionState state) {
