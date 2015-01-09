@@ -7,9 +7,6 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
-
-import cn.way.wandroid.bluetooth.chat.BluetoothChat;
-import cn.way.wandroid.bluetooth.chat.BluetoothChatService;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -22,8 +19,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * 1.add permissions. <uses-permission
@@ -390,9 +385,6 @@ public class BluetoothManager {
 		}
 
 		private void doListening() {
-			if (state != ConnectionState.DISCONNECTED) {
-				return;
-			}
 			try {
 				if (isSecure) {
 					this.serverSocket = mBluetoothAdapter
@@ -499,40 +491,11 @@ public class BluetoothManager {
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
                 //数据流打开失败
-            	Toast.makeText(context, "error opening stream socket="+socket, 0).show();
             }
 
             inStream = tmpIn;
             outStream = tmpOut;
-            
-            connectedThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					byte[] buffer = new byte[1024];
-		            int bytes;
-		            while (true) {
-		                try {
-		                    bytes = inStream.read(buffer);
-		                } catch (IOException e) {
-		                	changeState(ConnectionState.DISCONNECTED);
-		                	doListening();
-		                    break;
-		                }
-		            }
-				}
-			});
-            connectedThread.start();
 		}
-		
-		public void write(byte[] buffer) {
-            try {
-                outStream.write(buffer);
-                Toast.makeText(context, "写数据...", 0).show();
-            } catch (IOException e) {
-            	//写数据失败
-            	Toast.makeText(context, "写数据失败", 0).show();
-            }
-        }
 
 		private synchronized void changeState(ConnectionState state) {
 			this.state = state;
