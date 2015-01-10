@@ -2,6 +2,7 @@ package cn.way.wandroid.bluetooth.im;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.IllegalFormatCodePointException;
 import java.util.UUID;
 
 import android.annotation.SuppressLint;
@@ -20,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import cn.way.wandroid.BaseFragment;
 import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
+import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothClientConnection;
 import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothConnectionListener;
 import cn.way.wandroid.bluetooth.BluetoothManager.ConnectionState;
 import cn.way.wandroid.bluetooth.BluetoothManager.DeviceState;
@@ -97,7 +99,23 @@ public class DiscoveriesFragment extends BaseFragment {
 					int position, long id) {
 				BluetoothDevice bd = nearbyDevices.get(position);
 				Toast.makeText(getActivity(), ""+bd, 0).show();
-				if(getBluetoothManager()!=null)getBluetoothManager().getConnection().connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE);
+				if(getBluetoothManager()!=null){
+					final BluetoothClientConnection bcc = 
+					getBluetoothManager().createClientConnection();
+					bcc.connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE,new BluetoothConnectionListener() {
+						@Override
+						public void onDataReceived(byte[] data) {
+							Toast.makeText(getActivity(), new String(data), 0).show();
+						}
+						@Override
+						public void onConnectionStateChanged(ConnectionState state, int errorCode) {
+							Toast.makeText(getActivity(), state.toString(), 0).show();
+							if (state == ConnectionState.CONNECTED) {
+								bcc.write(new String("我是客户端。。。"));
+							}
+						}
+					});
+				}
 			}
 		});
 		

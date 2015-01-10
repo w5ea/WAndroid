@@ -3,6 +3,7 @@ package cn.way.wandroid.bluetooth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
@@ -102,15 +103,7 @@ public class BluetoothManager {
 	private BluetoothAdapter mBluetoothAdapter;
 	private Context context;
 	private DeviceStateListener deviceStateListener;
-	private BluetoothConnectionListener connectionListener;
-	private BluetoothConnection connection;
-	/**
-	 * @return the connection
-	 */
-	public BluetoothConnection getConnection() {
-		return connection;
-	}
-
+	
 	public void release() {
 		// Make sure we're not doing discovery anymore
 		cancelDiscovery();
@@ -140,7 +133,6 @@ public class BluetoothManager {
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		
-		connection = new BluetoothConnection();
 	}
 
 	public enum DeviceState {
@@ -290,18 +282,8 @@ public class BluetoothManager {
 		this.deviceStateListener = deviceStateListener;
 	}
 
-	public BluetoothConnectionListener getConnectionListener() {
-		return connectionListener;
-	}
-
-	public void setConnectionListener(BluetoothConnectionListener connectionListener) {
-		this.connectionListener = connectionListener;
-		this.connection.setBluetoothConnectionListener(connectionListener);
-	}
-
 	/**
 	 * Device does not support Bluetooth
-	 * 
 	 * @author Wayne
 	 */
 	public static class BluetoothSupportException extends Exception {
@@ -313,237 +295,144 @@ public class BluetoothManager {
 		}
 	}
 
+////////////////////////////////////////////////////////////////////////////////////
+	
+	private BluetoothServerConnection serverConnection;
+
+	/**
+	 * @return the serverConnection
+	 */
+	public BluetoothServerConnection getServerConnection() {
+		if (serverConnection==null) {
+			serverConnection = new BluetoothServerConnection();
+		}
+		return serverConnection;
+	}
+	public BluetoothClientConnection createClientConnection(){
+		BluetoothClientConnection conn = new BluetoothClientConnection();
+		return conn;
+	}
+	
 	public interface BluetoothConnectionListener {
-		void onConnectionStateChanged(ConnectionState state);
+		/**
+		 * @param state 当前状态
+		 * @param errorCode 连接错误码
+		 */
+		void onConnectionStateChanged(ConnectionState state, int errorCode);
+		void onDataReceived(byte[] data);
 	}
 
+	public static final int ConnectionErrorCodeNode = 0;// 没有错误
+	public static final int ConnectionErrorCodeException = 1;// 未知错误
+	public static final int ConnectionErrorCodeOnOnly = 2;// 已经有一个连接，不能创建更多连接
+	public static final int ConnectionErrorCodeNoDevice = 3;// 远程设备为空
 	public enum ConnectionState {
 		DISCONNECTED, // 未连接或连接断开
-		CONNECTING, // 正在试图去连接对方
+		CONNECTING, // 正在试图去连接对方或接受连接
 		CONNECTED// 已经连接
 	}
 
-	
-	public interface ServerListeningResultListener{
-		/**
-		 * 开发监听连接请求
-		 */
-		void onStart();
-		/**
-		 * 监听结束
-		 * @param success true说明连接成功 否则连接失败，失败有两个原因，
-		 * 一是连接无法创建。二是当前状态已经是连接状态ConnectionState.CONNECTED
-		 */
-		void onFinish(boolean success);
-	}
 	@SuppressLint("HandlerLeak")
-	public class BluetoothConnection {
-		private final int MSG_STATE_CHANGED = 0;
-		private final Handler mHandler = new Handler(){
+	private abstract class BluetoothConnection {
+		protected static final int MSG_CONNECTION_STATE = 0;
+		protected static final int MSG_READ = 1;
+		protected static final int MSG_WRITE = 2;
+		protected final Handler mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
 				super.handleMessage(msg);
+				if (getBluetoothConnectionListener()==null) {
+					return;
+				}
 				switch (msg.what) {
-				case 0:
+				case MSG_CONNECTION_STATE:
 					getBluetoothConnectionListener()
-					.onConnectionStateChanged(state);
+					.onConnectionStateChanged(state,msg.arg1);
 					break;
-
+				case MSG_READ:
+					getBluetoothConnectionListener().onDataReceived((byte[]) msg.obj);
+					break;
+				case MSG_WRITE:
+					break;
 				default:
 					break;
 				}
 			}
 		};
 		
-		private static final String NAME_SECURE = "BluetoothSecure";
-		private static final String NAME_INSECURE = "BluetoothInsecure";
-		private UUID uuid;
-		private boolean isSecure;// true is secure or insecure
-		private ConnectionState state = ConnectionState.DISCONNECTED;
+		protected static final String NAME_SECURE = "BluetoothSecure";
+		protected static final String NAME_INSECURE = "BluetoothInsecure";
+		protected UUID uuid;
+		protected boolean isSecure;// true is secure or insecure
+		protected ConnectionState state = ConnectionState.DISCONNECTED;
 
-		private BluetoothDevice remoteDevice;// 准备或已经连接的远程设备
-		private BluetoothConnectionListener bluetoothConnectionListener;
+		protected BluetoothConnectionListener bluetoothConnectionListener;
 
-		private BluetoothSocket socket;
-		private BluetoothServerSocket serverSocket;
+		protected Thread connectedThread;// 连接后的通讯线程
 
-		private Thread listeningThread;// 等待客户端连接线程
-		private Thread connectingThread;// 连接服务器线程
-		private Thread connectedThread;// 连接后的通讯线程
+		protected Object lock = BluetoothConnection.this;
 
-		private Object lock = BluetoothConnection.this;
-
-		/**
-		 * 创建一个连接
-		 * 
-		 * @param device 不可为空。通过device创建Socket并尝试连接（ConnectionState.CONNECTING）
-		 * @param isSecure
-		 *            true 创建安全连接，false 创建不安全连接
-		 */
-		public void connect(UUID uuid, BluetoothDevice device, boolean isSecure) {
-			cannel();
-			this.uuid = uuid;
-			this.remoteDevice = device;
-			if (device != null) {
-				doConnecting();
-			}else{
-				changeState(ConnectionState.DISCONNECTED);
-			}
-		}
-
-		public void cannel() {
-			try {
-				if (serverSocket != null){
-					serverSocket.close();
-					serverSocket = null;
-				}
-				if (socket != null) {
-					socket.close();
-					socket = null;
-				}
-			} catch (IOException e) {}
-			changeState(ConnectionState.DISCONNECTED);
-		}
+		protected abstract void disconnect() ;
 		
-		/**
-		 * 是否处于等待对方连接状态
-		 */
-		private boolean isListening;
-		/**
-		 * @return the isListening
-		 */
-		public boolean isListening() {
-			return isListening;
-		}
+		protected abstract InputStream getInputStream() throws IOException;
+		protected abstract OutputStream getOutputStream() throws IOException;
 		
-		public void startServerListening(final ServerListeningResultListener l) {
-			if (this.isListening) {
-				Toast.makeText(context, "监听服务已经开启", Toast.LENGTH_SHORT).show();
+		protected void startDataReceiving() {
+			changeState(ConnectionState.CONNECTED,ConnectionErrorCodeNode);
+			mBluetoothAdapter.cancelDiscovery();
+			
+			connectedThread = new Thread(new Runnable() {
+				
+				@Override 
+				public void run() {
+					byte[] buffer = new byte[1024];
+					int byteCount;
+		            // Keep listening to the InputStream while connected
+		            while (true) {
+		                try {
+		                    // Read from the InputStream
+		                    byteCount = getInputStream().read(buffer);
+		                    ByteBuffer bb = ByteBuffer.wrap(buffer, 0, byteCount);
+		                    // Send the obtained bytes to the UI Activity
+		                    mHandler.obtainMessage(MSG_READ,bb.array()).sendToTarget();
+		                } catch (IOException e) {
+		                	//TODO
+		                    //connectionLost();
+		                    // Start the service over to restart listening mode
+		                    //BluetoothChatService.this.start();
+		                    break;
+		                }
+		            }
+				}
+			});
+			connectedThread.start();
+		}
+		public void write(String chars){
+			write(chars.getBytes());
+		}
+		public void write(byte[] data) {
+			if (data==null||data.length==0) {
 				return;
 			}
-			this.isListening = false;
-			try {//创建一个ServerSocket
-				if (isSecure) {
-					this.serverSocket = mBluetoothAdapter
-							.listenUsingRfcommWithServiceRecord(NAME_SECURE,
-									uuid);
-				} else {
-					this.serverSocket = mBluetoothAdapter
-							.listenUsingInsecureRfcommWithServiceRecord(
-									NAME_INSECURE, uuid);
-				}
+	        // Synchronize a copy of the ConnectedThread
+	        synchronized (this) {
+	            if (state != ConnectionState.CONNECTED) return;
+	        }
+	        // Perform the write unsynchronized
+	        try {
+				getOutputStream().write(data);
+				mHandler.obtainMessage(MSG_WRITE, data)
+                .sendToTarget();
 			} catch (IOException e) {
-				this.serverSocket = null;
-				//创建失败，执行状态回调
-				if (l!=null) {
-					l.onFinish(false);
-				}
+				e.printStackTrace();
+				Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
 			}
-			
-			//创建成功，开启一个线程 不断尝试接受连接直到连接完成
-			this.isListening = true;
-			if (l!=null) {
-				l.onStart();
-			}
-			
-			listeningThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					//直到连接成功才停止接受连接请求
-					while (state != ConnectionState.CONNECTED) {
-						try {
-							//进入等待对方连接状态，会阻塞线程，所以开一下子线程
-							socket = serverSocket.accept();
-						} catch (IOException e) {
-							// 尝试连接异常退出
-							socket = null;
-							if (l!=null) {
-								l.onFinish(false);
-							}
-							break;
-						}
-						if (socket != null) {
-							synchronized (lock) {
-								switch (state) {
-								case CONNECTING:
-									//连接完成，进入交换数据状态
-									if (l!=null) {
-										l.onFinish(true);
-									}
-									doConnected();
-									break;
-								case CONNECTED:
-									try {
-										// 目前只要求有一个连接，所以有已经存在连接则关闭当前得到的Socket
-										socket.close();
-										socket = null;
-									} catch (IOException e) {
-										//关闭失败
-									}
-									if (l!=null) {
-										l.onFinish(false);
-									}
-									break;
-								default:
-									break;
-								}
-							}
-						}
-					}
-				}
-			});
-			listeningThread.start();
-		}
-
-		private void doConnecting() {
-			try {
-				if (isSecure) {
-					this.socket = remoteDevice
-							.createRfcommSocketToServiceRecord(uuid);
-				} else {
-					this.socket = remoteDevice
-							.createInsecureRfcommSocketToServiceRecord(uuid);
-				}
-			} catch (IOException e) {
-				changeState(ConnectionState.DISCONNECTED);
-			}
-			changeState(ConnectionState.CONNECTING);
-			mBluetoothAdapter.cancelDiscovery();
-			connectingThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-		            try {
-		            	//这个连接操作是同步的。所以在线程中执行
-		                socket.connect();
-		            } catch (IOException e) {
-		                try {
-		                    socket.close();
-		                } catch (IOException e2) {
-		                    //未成功关闭
-		                }
-		                changeState(ConnectionState.DISCONNECTED);
-		                return;
-		            }
-		            //如果连接未出现异常，则说明连接成功，可以进入数据交换了
-		            synchronized (lock) {
-		            	connectingThread = null;
-		            }
-		            doConnected();
-				}
-			});
-			connectingThread.start();
-		}
-
-		private void doConnected() {
-			changeState(ConnectionState.CONNECTED);
-			mBluetoothAdapter.cancelDiscovery();
-			
-		}
-
-		private synchronized void changeState(ConnectionState state) {
+	    }
+		
+		protected synchronized void changeState(ConnectionState state,int errorCode) {
 			this.state = state;
 			if (getBluetoothConnectionListener() != null) {
-				mHandler.sendEmptyMessage(0);
+				mHandler.obtainMessage(MSG_CONNECTION_STATE, errorCode, -1);
 			}
 		}
 		public synchronized ConnectionState getState() {
@@ -557,6 +446,202 @@ public class BluetoothManager {
 		public void setBluetoothConnectionListener(
 				BluetoothConnectionListener bluetoothConnectionListener) {
 			this.bluetoothConnectionListener = bluetoothConnectionListener;
+		}
+	}
+	/**
+	 * 服务器连接，支持多个客户端陆续连接，目前仅支持一对一连接
+	 * @author Wayne
+	 * @2015年1月10日
+	 */
+	public class BluetoothServerConnection extends BluetoothConnection{
+		@Override
+		public void disconnect() {
+			try {
+				if (serverSocket != null){
+					serverSocket.close();
+					serverSocket = null;
+				}
+				if (socket != null) {
+					socket.close();
+					socket = null;
+				}
+			} catch (IOException e) {}
+			changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeNode);
+		}
+		
+		protected BluetoothSocket socket;
+		protected BluetoothServerSocket serverSocket;
+		protected Thread listeningThread;// 等待客户端连接线程
+		
+		
+		
+		public void connect(UUID uuid,boolean isSecure,BluetoothConnectionListener l) {
+			setBluetoothConnectionListener(l);
+			disconnect();
+			this.isSecure = isSecure;
+			this.uuid = uuid;
+			if (this.state == ConnectionState.CONNECTING) {
+				Toast.makeText(context, "监听服务已经开启", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			try {//创建一个ServerSocket
+				if (isSecure) {
+					this.serverSocket = mBluetoothAdapter
+							.listenUsingRfcommWithServiceRecord(NAME_SECURE,
+									uuid);
+				} else {
+					this.serverSocket = mBluetoothAdapter
+							.listenUsingInsecureRfcommWithServiceRecord(
+									NAME_INSECURE, uuid);
+				}
+			} catch (IOException e) {
+				this.serverSocket = null;
+				//创建失败，执行状态回调
+				changeState(ConnectionState.DISCONNECTED, ConnectionErrorCodeException);
+			}
+			
+			//创建成功，开启一个线程 不断尝试接受连接直到连接完成
+			changeState(ConnectionState.CONNECTING, ConnectionErrorCodeNode);
+			
+			listeningThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					//直到连接成功才停止接受连接请求
+					while (state != ConnectionState.CONNECTED) {
+						try {
+							//进入等待对方连接状态，会阻塞线程，所以开一下子线程
+							socket = serverSocket.accept();
+						} catch (IOException e) {
+							// 尝试连接异常退出
+							socket = null;
+							changeState(ConnectionState.DISCONNECTED, ConnectionErrorCodeException);
+							break;
+						}
+						if (socket != null) {
+							synchronized (lock) {
+								switch (state) {
+								case CONNECTING:
+									//连接完成，进入交换数据状态
+									startDataReceiving();
+									break;
+								case CONNECTED:
+									try {
+										// 目前只要求有一个连接，所以有已经存在连接则关闭当前得到的Socket
+										socket.close();
+										socket = null;
+									} catch (IOException e) {
+										//关闭失败
+									}
+									//保持当前连接状态不变，但返回错误信息
+									changeState(ConnectionState.CONNECTED, ConnectionErrorCodeOnOnly);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					}
+				}
+			});
+			listeningThread.start();
+		}
+		@Override
+		protected InputStream getInputStream() throws IOException {
+			// TODO Auto-generated method stub
+			return socket.getInputStream();
+		}
+		@Override
+		protected OutputStream getOutputStream() throws IOException {
+			// TODO Auto-generated method stub
+			return socket.getOutputStream();
+		}
+	}
+	/**
+	 * 客户端连接只能连接到一个服务器
+	 * @author Wayne
+	 * @2015年1月10日
+	 */
+	public class BluetoothClientConnection extends BluetoothConnection{
+		@Override
+		public void disconnect() {
+			try {
+				if (socket != null) {
+					socket.close();
+					socket = null;
+				}
+			} catch (IOException e) {}
+			changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeNode);
+		}
+		protected BluetoothSocket socket;
+		protected Thread connectingThread;// 连接服务器线程
+		private BluetoothDevice remoteServerDevice;// 准备或已经连接的远程设备
+		/**
+		 * 创建一个连接
+		 * 
+		 * @param device 不可为空。通过device创建Socket并尝试连接（ConnectionState.CONNECTING）
+		 * @param isSecure
+		 *            true 创建安全连接，false 创建不安全连接
+		 */
+		public void connect(UUID uuid, BluetoothDevice device, boolean isSecure,BluetoothConnectionListener l) {
+			setBluetoothConnectionListener(l);
+			disconnect();
+			this.uuid = uuid;
+			this.isSecure = isSecure;
+			this.remoteServerDevice = device;
+			if (device != null) {
+				doConnecting();
+			}else{
+				changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeNoDevice);
+			}
+		}
+		private void doConnecting() {
+			try {
+				if (isSecure) {
+					this.socket = remoteServerDevice
+							.createRfcommSocketToServiceRecord(uuid);
+				} else {
+					this.socket = remoteServerDevice
+							.createInsecureRfcommSocketToServiceRecord(uuid);
+				}
+			} catch (IOException e) {
+				changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeException);
+			}
+			changeState(ConnectionState.CONNECTING,ConnectionErrorCodeNode);
+			mBluetoothAdapter.cancelDiscovery();
+			connectingThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+		            try {
+		            	//这个连接操作是同步的。所以在线程中执行
+		                socket.connect();
+		            } catch (IOException e) {
+		                try {
+		                    socket.close();
+		                } catch (IOException e2) {
+		                    //未成功关闭
+		                }
+		                changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeException);
+		                return;
+		            }
+		            //如果连接未出现异常，则说明连接成功，可以进入数据交换了
+		            synchronized (lock) {
+		            	connectingThread = null;
+		            }
+		            startDataReceiving();
+				}
+			});
+			connectingThread.start();
+		}
+		@Override
+		protected InputStream getInputStream() throws IOException {
+			// TODO Auto-generated method stub
+			return socket.getInputStream();
+		}
+		@Override
+		protected OutputStream getOutputStream() throws IOException {
+			// TODO Auto-generated method stub
+			return socket.getOutputStream();
 		}
 	}
 }
