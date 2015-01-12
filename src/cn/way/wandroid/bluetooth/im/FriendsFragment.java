@@ -1,7 +1,8 @@
 package cn.way.wandroid.bluetooth.im;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import cn.way.wandroid.BaseFragment;
 import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
+import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothClientConnection;
 import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothConnectionListener;
 import cn.way.wandroid.bluetooth.BluetoothManager.ConnectionState;
 
@@ -29,7 +31,8 @@ public class FriendsFragment extends BaseFragment {
 	private ArrayAdapter<BluetoothDevice> adapter;
 	private ArrayList<BluetoothDevice> friends = new ArrayList<BluetoothDevice>();
 	private BluetoothManager bluetoothManager;
-
+	
+	private HashMap<String,BluetoothClientConnection> conns = new HashMap<String, BluetoothManager.BluetoothClientConnection>() ;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,9 +82,35 @@ public class FriendsFragment extends BaseFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				BluetoothDevice bd = friends.get(position);
+				final BluetoothDevice bd = friends.get(position);
 				Toast.makeText(getActivity(), ""+bd, 0).show();
-				if(getManager()!=null)getManager().getConnection().connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE);
+				if(getManager()!=null){
+					if (conns.size()==0||conns.get(bd.getAddress())==null) {
+						BluetoothClientConnection bcc = 
+						getManager().createClientConnection();
+						bcc.connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE,new BluetoothConnectionListener() {
+							
+							@Override
+							public void onConnectionStateChanged(ConnectionState state,
+									int errorCode) {
+								getActivity().getActionBar().setTitle(state.toString()+"|"+bd.getName());
+							}
+							
+							@Override
+							public void onDataReceived(byte[] data) {
+								Toast.makeText(getActivity(), "DataReceived:    "+new String(data), 0).show();
+							}
+							
+						});
+						
+						conns.put(bd.getAddress(), bcc);
+					}else{
+						BluetoothClientConnection bcc = conns.get(bd.getAddress());
+						if (bcc.getState()==ConnectionState.CONNECTED) {
+							bcc.write("你好吗");
+						}
+					}
+				}
 			}
 		});
 	}
@@ -110,11 +139,5 @@ public class FriendsFragment extends BaseFragment {
 	}
 	public void setManager(BluetoothManager manager) {
 		this.bluetoothManager = manager;
-		manager.setConnectionListener(new BluetoothConnectionListener() {
-			@Override
-			public void onConnectionStateChanged(ConnectionState state) {
-				Toast.makeText(getActivity(), "state="+state, 0).show();
-			}
-		});
 	}
 }

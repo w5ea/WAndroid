@@ -1,17 +1,22 @@
 package cn.way.wandroid.bluetooth.im;
 
 import java.util.UUID;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Toast;
 import cn.way.wandroid.BaseFragmentActivity;
 import cn.way.wandroid.R;
 import cn.way.wandroid.bluetooth.BluetoothManager;
+import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothConnectionListener;
+import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothServerConnection;
 import cn.way.wandroid.bluetooth.BluetoothManager.BluetoothSupportException;
+import cn.way.wandroid.bluetooth.BluetoothManager.ConnectionState;
 import cn.way.wandroid.bluetooth.BluetoothManager.DeviceState;
 import cn.way.wandroid.bluetooth.BluetoothManager.DeviceStateListener;
 import cn.way.wandroid.toast.Toaster;
 
+@SuppressLint("NewApi")
 public class MainActivity extends BaseFragmentActivity {
 	private BluetoothManager bluetoothManager;
 	public static final UUID M_UUID =
@@ -42,7 +47,21 @@ public class MainActivity extends BaseFragmentActivity {
 						hf.setBluetoothManager(bluetoothManager);
 						ft.replace(R.id.bluetooth_page_main_root, hf);
 						ft.commit();
-						bluetoothManager.getConnection().connect(M_UUID, null, IS_SECURE);
+					
+						final BluetoothServerConnection bsc = bluetoothManager.getServerConnection();
+						bsc.connect(M_UUID, IS_SECURE,new BluetoothConnectionListener() {
+							@Override
+							public void onConnectionStateChanged(ConnectionState state,
+									int errorCode) {
+								MainActivity.this.getActionBar().setTitle(state.toString()+"|"+bsc.getClientDevice().getName());
+							}
+
+							@Override
+							public void onDataReceived(byte[] data) {
+								Toast.makeText(MainActivity.this, "DataReceived:    "+new String(data), 0).show();
+								bsc.write("我收到了，谢谢");
+							}
+						});
 						break;
 					case OFF:
 						break;

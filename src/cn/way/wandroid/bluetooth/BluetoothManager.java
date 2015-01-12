@@ -556,6 +556,12 @@ public class BluetoothManager {
 			// TODO Auto-generated method stub
 			return socket.getOutputStream();
 		}
+		public BluetoothDevice getClientDevice(){
+			if (socket!=null) {
+				return socket.getRemoteDevice();
+			}
+			return null;
+		}
 	}
 	/**
 	 * 客户端连接只能连接到一个服务器

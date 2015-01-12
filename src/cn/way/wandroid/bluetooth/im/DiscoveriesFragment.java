@@ -180,11 +180,5 @@ public class DiscoveriesFragment extends BaseFragment {
 	}
 	public void setBluetoothManager(BluetoothManager bluetoothManager) {
 		this.bluetoothManager = bluetoothManager;
-		bluetoothManager.setConnectionListener(new BluetoothConnectionListener() {
-			@Override
-			public void onConnectionStateChanged(ConnectionState state) {
-				Toast.makeText(getActivity(), "state="+state, 0).show();
-			}
-		});
 	}
 }
