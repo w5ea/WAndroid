@@ -3,9 +3,9 @@ package cn.way.wandroid.bluetooth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.UUID;
@@ -31,21 +31,21 @@ import android.widget.Toast;
  * 
  * @author Wayne
  */
-public class BluetoothManager {
+public class CopyOfBluetoothManager {
 	public static int REQUEST_ENABLE_BT = 1001;
 	public static int REQUEST_DISCOVERABLE_BT = 1002;
-	private static BluetoothManager manager;
+	private static CopyOfBluetoothManager manager;
 
-	public static BluetoothManager instance(Context context)
+	public static CopyOfBluetoothManager instance(Context context)
 			throws BluetoothSupportException {
-		if (!BluetoothManager.isBluetoothSupported()) {
+		if (!CopyOfBluetoothManager.isBluetoothSupported()) {
 			throw new BluetoothSupportException();
 		}
 		if (context == null) {
 			return null;
 		}
 		if (manager == null) {
-			manager = new BluetoothManager(context.getApplicationContext());
+			manager = new CopyOfBluetoothManager(context.getApplicationContext());
 		}
 		return manager;
 	}
@@ -117,7 +117,7 @@ public class BluetoothManager {
 	 * 
 	 * @param context
 	 */
-	private BluetoothManager(Context context) {
+	private CopyOfBluetoothManager(Context context) {
 		super();
 		// 监听蓝牙设置的开关状态
 		IntentFilter filter = new IntentFilter(
@@ -299,18 +299,43 @@ public class BluetoothManager {
 ////////////////////////////////////////////////////////////////////////////////////
 	
 	private BluetoothServerConnection serverConnection;
+	private HashMap<String, BluetoothClientConnection> clientConnections = new HashMap<String, CopyOfBluetoothManager.BluetoothClientConnection>();
 
 	/**
 	 * @return the serverConnection
 	 */
-	public BluetoothServerConnection getServerConnection() {
-		if (serverConnection==null) {
-			serverConnection = new BluetoothServerConnection();
+	public BluetoothServerConnection openServerConnection(UUID uuid,boolean isSecure,BluetoothConnectionListener l) {
+		if (serverConnection!=null) {
+			serverConnection.disconnect();
+			serverConnection = null;
 		}
+		serverConnection = new BluetoothServerConnection(uuid,isSecure,l);
 		return serverConnection;
 	}
-	public BluetoothClientConnection createClientConnection(){
-		BluetoothClientConnection conn = new BluetoothClientConnection();
+	public BluetoothClientConnection createClientConnection(UUID uuid, BluetoothDevice device, boolean isSecure,BluetoothConnectionListener l){
+		final BluetoothConnectionListener listener = l;
+		final BluetoothDevice bd = device;
+		BluetoothClientConnection conn = new BluetoothClientConnection(uuid, device, isSecure,new BluetoothConnectionListener(){
+			@Override
+			public void onConnectionStateChanged(ConnectionState state,
+					int errorCode) {
+				if (state==ConnectionState.DISCONNECTED) {
+					if(bd!=null)clientConnections.remove(bd.getAddress());
+				}
+				
+				if (listener!=null) {
+					listener.onConnectionStateChanged(state, errorCode);
+				}
+			}
+			@Override
+			public void onDataReceived(byte[] data) {
+				
+				if (listener!=null) {
+					listener.onDataReceived(data);
+				}
+			}
+		});
+		if(bd!=null)clientConnections.put(device.getAddress(), conn);
 		return conn;
 	}
 	
@@ -373,15 +398,7 @@ public class BluetoothManager {
 
 		protected Object lock = BluetoothConnection.this;
 
-		/**
-		 * 断开连接
-		 * @param needCallbak true 执行回调 false则不执行
-		 */
-		protected void disconnect(boolean needCallbak){
-			if (!needCallbak) {//取消执行回调
-				setBluetoothConnectionListener(null);
-			}
-		};
+		protected abstract void disconnect() ;
 		
 		protected abstract InputStream getInputStream() throws IOException;
 		protected abstract OutputStream getOutputStream() throws IOException;
@@ -464,8 +481,7 @@ public class BluetoothManager {
 	 */
 	public class BluetoothServerConnection extends BluetoothConnection{
 		@Override
-		public void disconnect(boolean needCallbak) {
-			super.disconnect(needCallbak);
+		public void disconnect() {
 			try {
 				if (serverSocket != null){
 					serverSocket.close();
@@ -484,17 +500,22 @@ public class BluetoothManager {
 		protected Thread listeningThread;// 等待客户端连接线程
 		
 		
-		
-		public void connect(UUID uuid,boolean isSecure,BluetoothConnectionListener l) {
-			disconnect(true);
+		public BluetoothServerConnection(UUID uuid,boolean isSecure,BluetoothConnectionListener l) {
+			super();
 			setBluetoothConnectionListener(l);
 			this.isSecure = isSecure;
 			this.uuid = uuid;
+			connect();
+		}
+		public void connect() {
+			if (uuid == null) {
+				changeState(ConnectionState.DISCONNECTED, ConnectionErrorCodeException);
+				return;
+			}
 			if (this.state == ConnectionState.CONNECTING) {
 				Toast.makeText(context, "监听服务已经开启", Toast.LENGTH_SHORT).show();
 				return;
 			}
-			
 			try {//创建一个ServerSocket
 				if (isSecure) {
 					this.serverSocket = mBluetoothAdapter
@@ -509,6 +530,7 @@ public class BluetoothManager {
 				this.serverSocket = null;
 				//创建失败，执行状态回调
 				changeState(ConnectionState.DISCONNECTED, ConnectionErrorCodeException);
+				return;
 			}
 			
 			//创建成功，开启一个线程 不断尝试接受连接直到连接完成
@@ -580,8 +602,7 @@ public class BluetoothManager {
 	 */
 	public class BluetoothClientConnection extends BluetoothConnection{
 		@Override
-		public void disconnect(boolean needCallbak) {
-			super.disconnect(needCallbak);
+		public void disconnect() {
 			try {
 				if (socket != null) {
 					socket.close();
@@ -593,6 +614,20 @@ public class BluetoothManager {
 		protected BluetoothSocket socket;
 		protected Thread connectingThread;// 连接服务器线程
 		private BluetoothDevice remoteServerDevice;// 准备或已经连接的远程设备
+		
+		
+		public BluetoothClientConnection(UUID uuid, BluetoothDevice device, boolean isSecure,BluetoothConnectionListener l) {
+			super();
+			setBluetoothConnectionListener(l);
+			this.uuid = uuid;
+			this.isSecure = isSecure;
+			this.remoteServerDevice = device;
+			if (uuid != null&&device != null) {
+				connect();
+			}else{
+				changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeNoDevice);
+			}
+		}
 		/**
 		 * 创建一个连接
 		 * 
@@ -600,20 +635,7 @@ public class BluetoothManager {
 		 * @param isSecure
 		 *            true 创建安全连接，false 创建不安全连接
 		 */
-		public void connect(UUID uuid, BluetoothDevice device, boolean isSecure,BluetoothConnectionListener l) {
-			setBluetoothConnectionListener(null);
-			disconnect(true);
-			setBluetoothConnectionListener(l);
-			this.uuid = uuid;
-			this.isSecure = isSecure;
-			this.remoteServerDevice = device;
-			if (device != null) {
-				doConnecting();
-			}else{
-				changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeNoDevice);
-			}
-		}
-		private void doConnecting() {
+		public void connect() {
 			try {
 				if (isSecure) {
 					this.socket = remoteServerDevice
@@ -624,6 +646,7 @@ public class BluetoothManager {
 				}
 			} catch (IOException e) {
 				changeState(ConnectionState.DISCONNECTED,ConnectionErrorCodeException);
+				return;
 			}
 			changeState(ConnectionState.CONNECTING,ConnectionErrorCodeNode);
 			mBluetoothAdapter.cancelDiscovery();

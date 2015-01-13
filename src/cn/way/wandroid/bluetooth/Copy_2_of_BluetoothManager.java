@@ -3,7 +3,6 @@ package cn.way.wandroid.bluetooth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -31,21 +30,21 @@ import android.widget.Toast;
  * 
  * @author Wayne
  */
-public class BluetoothManager {
+public class Copy_2_of_BluetoothManager {
 	public static int REQUEST_ENABLE_BT = 1001;
 	public static int REQUEST_DISCOVERABLE_BT = 1002;
-	private static BluetoothManager manager;
+	private static Copy_2_of_BluetoothManager manager;
 
-	public static BluetoothManager instance(Context context)
+	public static Copy_2_of_BluetoothManager instance(Context context)
 			throws BluetoothSupportException {
-		if (!BluetoothManager.isBluetoothSupported()) {
+		if (!Copy_2_of_BluetoothManager.isBluetoothSupported()) {
 			throw new BluetoothSupportException();
 		}
 		if (context == null) {
 			return null;
 		}
 		if (manager == null) {
-			manager = new BluetoothManager(context.getApplicationContext());
+			manager = new Copy_2_of_BluetoothManager(context.getApplicationContext());
 		}
 		return manager;
 	}
@@ -117,7 +116,7 @@ public class BluetoothManager {
 	 * 
 	 * @param context
 	 */
-	private BluetoothManager(Context context) {
+	private Copy_2_of_BluetoothManager(Context context) {
 		super();
 		// 监听蓝牙设置的开关状态
 		IntentFilter filter = new IntentFilter(
@@ -373,15 +372,7 @@ public class BluetoothManager {
 
 		protected Object lock = BluetoothConnection.this;
 
-		/**
-		 * 断开连接
-		 * @param needCallbak true 执行回调 false则不执行
-		 */
-		protected void disconnect(boolean needCallbak){
-			if (!needCallbak) {//取消执行回调
-				setBluetoothConnectionListener(null);
-			}
-		};
+		protected abstract void disconnect() ;
 		
 		protected abstract InputStream getInputStream() throws IOException;
 		protected abstract OutputStream getOutputStream() throws IOException;
@@ -464,8 +455,7 @@ public class BluetoothManager {
 	 */
 	public class BluetoothServerConnection extends BluetoothConnection{
 		@Override
-		public void disconnect(boolean needCallbak) {
-			super.disconnect(needCallbak);
+		public void disconnect() {
 			try {
 				if (serverSocket != null){
 					serverSocket.close();
@@ -486,8 +476,8 @@ public class BluetoothManager {
 		
 		
 		public void connect(UUID uuid,boolean isSecure,BluetoothConnectionListener l) {
-			disconnect(true);
 			setBluetoothConnectionListener(l);
+			disconnect();
 			this.isSecure = isSecure;
 			this.uuid = uuid;
 			if (this.state == ConnectionState.CONNECTING) {
@@ -580,8 +570,7 @@ public class BluetoothManager {
 	 */
 	public class BluetoothClientConnection extends BluetoothConnection{
 		@Override
-		public void disconnect(boolean needCallbak) {
-			super.disconnect(needCallbak);
+		public void disconnect() {
 			try {
 				if (socket != null) {
 					socket.close();
@@ -601,9 +590,8 @@ public class BluetoothManager {
 		 *            true 创建安全连接，false 创建不安全连接
 		 */
 		public void connect(UUID uuid, BluetoothDevice device, boolean isSecure,BluetoothConnectionListener l) {
-			setBluetoothConnectionListener(null);
-			disconnect(true);
 			setBluetoothConnectionListener(l);
+			disconnect();
 			this.uuid = uuid;
 			this.isSecure = isSecure;
 			this.remoteServerDevice = device;
