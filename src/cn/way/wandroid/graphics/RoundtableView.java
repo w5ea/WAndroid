@@ -264,10 +264,12 @@ public class RoundtableView extends FrameLayout {
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
+	
 	private void updateView(){
 		LayoutParams lp = (LayoutParams) pan.getLayoutParams();
-		lp.width = getWidth();
-		lp.height = getWidth();
+		int size = getWidth()>getHeight()?getHeight():getWidth();
+		lp.width = size;
+		lp.height = size;
 		lp.gravity = Gravity.CENTER;
 
 		LayoutParams params = (LayoutParams) pointerView.getLayoutParams();

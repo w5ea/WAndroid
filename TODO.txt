@@ -1,0 +1,6 @@
+规范命名：
+命名
+模块名为主
+例子：
+cn.way.wandroid.usage.AnimationUsagePage
+usage_page_animation
