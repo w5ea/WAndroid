@@ -4,6 +4,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +18,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import cn.way.wandroid.R;
+import cn.way.wandroid.TestResource;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageDetailActivity;
 import cn.way.wandroid.imageloader.displayingbitmaps.ui.ImageGridActivity;
 import cn.way.wandroid.imageloader.universal.ImageManager;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -103,7 +106,7 @@ public class ImageLoaderUsage extends FragmentActivity {
 		}
 		Toast.makeText(this, "pageIndex="+pageIndex, Toast.LENGTH_LONG).show();
 		AsyncHttpClient client = new AsyncHttpClient();
-		String path = "https://itunes.apple.com/search?term=game&country=cn&entity=software&limit=100";
+		String path = TestResource.URL_JSON;
 		client.get(path, new JsonHttpResponseHandler(){
 			@Override
 			public void onFinish() {

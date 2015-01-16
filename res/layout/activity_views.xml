@@ -26,5 +26,15 @@
         android:textColor="#FF0"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"/>
-
+    <TextView android:id="@+id/seekbar_progress_tv"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"/>
+    <cn.way.wandroid.views.WSeekBar android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+	<RatingBar android:id="@+id/ratingbar"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:numStars="5"/>
 </LinearLayout>

@@ -2,7 +2,6 @@ package cn.way.wandroid.bluetooth.im;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;

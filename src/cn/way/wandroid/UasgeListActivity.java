@@ -31,6 +31,7 @@ import cn.way.wandroid.graphics.GraphicsUsage;
 import cn.way.wandroid.imageloader.usage.ImageLoaderUsage;
 import cn.way.wandroid.json.GsonUsageActivity;
 import cn.way.wandroid.net.AsynchronousHttpClientUsage;
+import cn.way.wandroid.net.VolleyUsage;
 import cn.way.wandroid.slidingmenu.usage.SlidingMenuUsage;
 import cn.way.wandroid.text.TextUseage;
 import cn.way.wandroid.utils.WLog;
@@ -97,6 +98,7 @@ public class UasgeListActivity extends FragmentActivity{
 	    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 	    static {
 	    	addItem(new DummyItem(BluetoothUsage.class));
+	    	addItem(new DummyItem(VolleyUsage.class));
 	    	addItem(new DummyItem(AnimationUsage.class));
 	    	addItem(new DummyItem(ImageLoaderUsage.class));
 	    	addItem(new DummyItem(WebviewUsage.class));
