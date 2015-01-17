@@ -32,7 +32,7 @@ public class VolleyUsage extends BaseFragmentActivity {
 		findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String url = TestResource.URL_JSON;
+				String url = TestResource.URL_JSON_APPS;
 				mQueue.add(new JsonObjectRequest(Method.GET,url,null,
 						new Listener<JSONObject>() {
 							@Override

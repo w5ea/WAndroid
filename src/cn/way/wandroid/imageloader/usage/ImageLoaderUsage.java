@@ -106,7 +106,7 @@ public class ImageLoaderUsage extends FragmentActivity {
 		}
 		Toast.makeText(this, "pageIndex="+pageIndex, Toast.LENGTH_LONG).show();
 		AsyncHttpClient client = new AsyncHttpClient();
-		String path = TestResource.URL_JSON;
+		String path = TestResource.URL_JSON_APPS;
 		client.get(path, new JsonHttpResponseHandler(){
 			@Override
 			public void onFinish() {
