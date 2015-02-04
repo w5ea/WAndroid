@@ -119,6 +119,7 @@ public class BluetoothManager {
 	 */
 	private BluetoothManager(Context context) {
 		super();
+		this.context = context;
 		// 监听蓝牙设置的开关状态
 		IntentFilter filter = new IntentFilter(
 				BluetoothAdapter.ACTION_STATE_CHANGED);

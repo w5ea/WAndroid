@@ -85,13 +85,16 @@ public class FriendsFragment extends BaseFragment {
 				Toast.makeText(getActivity(), ""+bd, 0).show();
 				if(getManager()!=null){
 					if (conns.size()==0||conns.get(bd.getAddress())==null) {
-						BluetoothClientConnection bcc = 
+						final BluetoothClientConnection bcc = 
 						getManager().createClientConnection();
 						bcc.connect(MainActivity.M_UUID, bd, MainActivity.IS_SECURE,new BluetoothConnectionListener() {
 							
 							@Override
 							public void onConnectionStateChanged(ConnectionState state,
 									int errorCode) {
+								if (state == ConnectionState.CONNECTED) {
+									bcc.write("你好吗");
+								}
 								getActivity().getActionBar().setTitle(state.toString()+"|"+bd.getName());
 							}
 							
@@ -107,6 +110,8 @@ public class FriendsFragment extends BaseFragment {
 						BluetoothClientConnection bcc = conns.get(bd.getAddress());
 						if (bcc.getState()==ConnectionState.CONNECTED) {
 							bcc.write("你好吗");
+						}else if (bcc.getState()==ConnectionState.DISCONNECTED){
+							conns.remove(bd.getAddress());
 						}
 					}
 				}
