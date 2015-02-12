@@ -5,11 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <Button android:id="@+id/activityAdapterBtn"
-        android:layout_height="wrap_content"
+    <fragment android:id="@+id/usageListPiece"
+        class="cn.way.wandroid.UsageListPiece"
         android:layout_width="match_parent"
-        android:text="FragmentsActivity"/>
-    <ListView android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>

@@ -22,6 +22,7 @@ import cn.way.wandroid.activities.residemenu.ResideMenuUsage;
 import cn.way.wandroid.activities.tabhost.TabHostActivity;
 import cn.way.wandroid.activities.viewpager.ViewPagerUsage;
 import cn.way.wandroid.activities.views.ViewsActivity;
+import cn.way.wandroid.activityadapter.PageAdapter;
 import cn.way.wandroid.animation.AnimationUsage;
 import cn.way.wandroid.applation.AppUtil;
 import cn.way.wandroid.applation.ApplationInfoUsage;
@@ -41,7 +42,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateConfig;
 
-public class UasgeListActivity extends FragmentActivity{
+public class UsageListActivity extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +68,12 @@ public class UasgeListActivity extends FragmentActivity{
         WLog.d(new BigDecimal(new BigInteger("8888", 10)).toString());
         WLog.d(new BigDecimal(new BigInteger("8888", 16)).toString());
         WLog.d(new BigDecimal(new BigInteger("8888", Character.MAX_RADIX)).toString());
+        findViewById(R.id.activityAdapterBtn).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				PageAdapter.turnToPage(UsageListActivity.this, UsageListPage.class);
+			}
+		});
     }
 
     public void onItemSelected(int index) {

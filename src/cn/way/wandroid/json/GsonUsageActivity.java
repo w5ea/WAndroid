@@ -10,6 +10,7 @@ import cn.way.wandroid.R;
 import com.google.gson.Gson;
 
 public class GsonUsageActivity extends BaseFragmentActivity {
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,10 +19,12 @@ public class GsonUsageActivity extends BaseFragmentActivity {
 		Gson gson = new Gson();
 		ArrayList<User> users = new ArrayList<User>();
 		for (int i = 0; i < 3; i++) {
-			User user = gson.fromJson("{\"name\"=\"wayne\"}", User.class);
+			User user = gson.fromJson("{\"name\"=\"wayne1\"}", User.class);
 			users.add(user);
 		}
-		String userJsonString = gson.toJson(users);
-		tv.setText(userJsonString);
+		String usersJsonString = gson.toJson(users);
+//		tv.setText(usersJsonString);
+		users = gson.fromJson(usersJsonString, ArrayList.class);
+		tv.setText(users.toString());
 	}
 }
