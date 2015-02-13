@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import cn.way.wandroid.account.usage.AccountUsagePageAdapter;
 import cn.way.wandroid.activityadapter.PageAdapter;
 import cn.way.wandroid.activityadapter.Piece;
 import cn.way.wandroid.activityadapter.usage.TestPageAdapter;
@@ -45,6 +46,7 @@ public class UsageListPiece extends Piece<UsageListPage> {
 	    public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 	    static {
 	    	addItem(new DummyItem(TestPageAdapter.class));
+	    	addItem(new DummyItem(AccountUsagePageAdapter.class));
 	    }
 	    static void addItem(DummyItem item) {
 	        ITEMS.add(item);

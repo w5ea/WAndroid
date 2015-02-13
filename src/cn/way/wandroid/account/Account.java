@@ -1,6 +1,6 @@
 package cn.way.wandroid.account;
 
-public class Account {
+public class Account implements Cloneable{
 	private String identity;
 	private User user;
 	@Override
@@ -19,6 +19,7 @@ public class Account {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o==null||(!Account.class.isInstance(o))) {

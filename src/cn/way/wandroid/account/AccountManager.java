@@ -12,4 +12,10 @@ public class AccountManager {
 		}
 		return instance;
 	}
+	
+	
+	public interface AccountListener{
+		void onSucess(Account account);
+		void onFailure(int errorCode);
+	}
 }

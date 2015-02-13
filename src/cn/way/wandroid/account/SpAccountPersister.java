@@ -1,6 +1,7 @@
 package cn.way.wandroid.account;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -46,8 +47,12 @@ public class SpAccountPersister implements AccountPersister {
 		if (account.getIdentity()==null) {
 			account.setIdentity(identity);
 		}
-		accounts.add(account);
-		return persistAll(accounts);
+		//TODO if existed update it
+		if (accounts!=null) {
+			accounts.add(account);
+			return persistAll(accounts);
+		}
+		return false;
 	}
 
 	@Override
@@ -70,7 +75,9 @@ public class SpAccountPersister implements AccountPersister {
 		}
 		ArrayList<Account> accounts = readAll();
 		if (accounts!=null&&accounts.size()>0&&accounts.contains(account)) {
-			accounts.remove(account);
+			Account ac = new Account();
+			ac.setIdentity(account.getIdentity());
+			accounts.remove(ac);
 			accounts.add(account);
 			return persistAll(accounts);
 		}
@@ -93,20 +100,29 @@ public class SpAccountPersister implements AccountPersister {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<Account> readAll() {
-		ArrayList<Account> accounts = null;
+		Account[] accounts = null;
+		ArrayList<Account> accountList = null;
 		String jsonStr = sp.getString(spName, null);
 		if (jsonStr!=null) {
-			accounts = gson.fromJson(jsonStr,ArrayList.class);
+			accounts = gson.fromJson(jsonStr,Account[].class);
 			Log.d("test", accounts.toString());
 		}
-		return accounts;
+		if (accounts==null) {
+			accountList = new ArrayList<Account>(Arrays.asList(accounts));
+			if(persistAll(accountList)){
+				return accountList;
+			}else{
+				return null;
+			}
+		}
+		return null;
 	}
 	private boolean persistAll(ArrayList<Account> accounts){
 		if (accounts!=null) {
 			String accountsStr = gson.toJson(accounts);
+			Log.w("test","saved accounts:"+ accountsStr);
 			return sp.edit().putString(spName, accountsStr).commit();
 		}
 		return false;
