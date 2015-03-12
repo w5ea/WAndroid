@@ -122,6 +122,10 @@ public class GraphicsUsage extends BaseFragmentActivity {
 			public void onSlowdownPerStep() {
 				rv.playSoundEffect(SoundEffectConstants.CLICK);
 			}
+			@Override
+			public boolean shouldStart() {
+				return true;
+			}
 		});
 		
 	}

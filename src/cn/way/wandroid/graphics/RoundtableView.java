@@ -36,6 +36,7 @@ public class RoundtableView extends FrameLayout {
 		 * 在state == StateSpeedConstant 时可以做请求网络数据的操作
 		 * @param state
 		 */
+		boolean shouldStart();
 		void onStateChange(State state);
 		void onSlowdownPerStep();
 	}
@@ -200,6 +201,9 @@ public class RoundtableView extends FrameLayout {
 		ViewHelper.setRotation(pan,0);
 	}
 	public void start(){
+		if (getRotationListener()!=null&&!getRotationListener().shouldStart()) {
+			return;
+		}
 		if (state!=State.StateStoped||!isEnabled()) {
 			return;
 		}
@@ -264,12 +268,10 @@ public class RoundtableView extends FrameLayout {
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
-	
 	private void updateView(){
 		LayoutParams lp = (LayoutParams) pan.getLayoutParams();
-		int size = getWidth()>getHeight()?getHeight():getWidth();
-		lp.width = size;
-		lp.height = size;
+		lp.width = getWidth();
+		lp.height = getWidth();
 		lp.gravity = Gravity.CENTER;
 
 		LayoutParams params = (LayoutParams) pointerView.getLayoutParams();
