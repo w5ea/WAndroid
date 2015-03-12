@@ -42,5 +42,9 @@ public class Delayer {
 	}
 	public void setInvalid(boolean invalid) {
 		this.invalid = invalid;
+		lastTimeupTime = 0;
+		if (!invalid) {
+			getWaitingTime();
+		}
 	}
 }
