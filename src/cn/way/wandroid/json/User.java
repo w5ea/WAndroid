@@ -1,8 +1,10 @@
 package cn.way.wandroid.json;
 
+import java.util.Date;
+
 public class User {
 	private String name;
-
+	public Date birthday;
 	public String getName() {
 		return name;
 	}

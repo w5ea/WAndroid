@@ -24,7 +24,7 @@ import cn.way.wandroid.activities.viewpager.ViewPagerUsage;
 import cn.way.wandroid.activities.views.ViewsActivity;
 import cn.way.wandroid.activityadapter.PageAdapter;
 import cn.way.wandroid.animation.AnimationUsage;
-import cn.way.wandroid.applation.AppUtil;
+import cn.way.wandroid.applation.AppUtils;
 import cn.way.wandroid.applation.ApplationInfoUsage;
 import cn.way.wandroid.bluetooth.BluetoothUsage;
 import cn.way.wandroid.data.greendao.GreenDaoUsage;
@@ -61,7 +61,7 @@ public class UsageListActivity extends FragmentActivity{
 				onItemSelected(position);
 			}
 		});
-        setTitle(AppUtil.getAppName(this)+AppUtil.getAppVersionName(this));
+        setTitle(AppUtils.getAppName(this)+AppUtils.getAppVersionName(this));
         UpdateConfig.setDebug(BuildConfig.DEBUG);
         MobclickAgent.setDebugMode(BuildConfig.DEBUG);
         UmengUpdateAgent.update(this);
@@ -74,6 +74,16 @@ public class UsageListActivity extends FragmentActivity{
 				PageAdapter.turnToPage(UsageListActivity.this, UsageListPage.class);
 			}
 		});
+//        GuideAction ga = GuideAction.A1;
+//        WLog.d(AppGuider.shouldGuide(getApplicationContext(), ga)?ga+"true":ga+"false");
+//        WLog.d(AppGuider.shouldGuide(getApplicationContext(), ga)?ga+"true":ga+"false");
+//        ga = GuideAction.A2;
+//        WLog.d(AppGuider.shouldGuide(getApplicationContext(), ga)?ga+"true":ga+"false");
+//        WLog.d(AppGuider.shouldGuide(getApplicationContext(), ga)?ga+"true":ga+"false");
+//        ga = GuideAction.A3;
+//        WLog.d(AppGuider.shouldGuide(getApplicationContext(), ga)?ga+"true":ga+"false");
+//        WLog.d(AppGuider.shouldGuide(getApplicationContext(), ga)?ga+"true":ga+"false");
+        
     }
 
     public void onItemSelected(int index) {

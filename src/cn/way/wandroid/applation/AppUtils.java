@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-public class AppUtil {
+public class AppUtils {
 	public static String getAppInfoMetaData(Context context, String key) {
 		String value = "";
 		try {
@@ -32,7 +32,7 @@ public class AppUtil {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		return localPackageInfo==null?"":localPackageInfo.versionName;
+		return localPackageInfo==null?null:localPackageInfo.versionName;
 	}
 	
 	public static int getAppVersionCode(Context context) {

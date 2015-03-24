@@ -26,4 +26,21 @@ public class AppGuider {
 	public static boolean isGuideMode() {
 		return isGuideMode;
 	}
+	
+	private static String KEY_PRE__1ST_USING = "KEY_PRE__1ST_USING";
+	public static enum GuideAction{
+		A1,
+		A2,
+		A3
+	}
+	
+	public static boolean shouldGuide(Context context,GuideAction ga){
+		SharedPreferences sp = getPreferences(context);
+		String guideKey = KEY_PRE__1ST_USING+ga.toString();
+		boolean shouldGuide = sp.getBoolean(guideKey, true);
+		if (shouldGuide) {
+			sp.edit().putBoolean(guideKey, false).commit();
+		}
+		return shouldGuide;
+	}
 }

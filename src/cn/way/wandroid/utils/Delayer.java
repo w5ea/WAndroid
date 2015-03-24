@@ -12,8 +12,9 @@ public class Delayer {
 	public Delayer(long delayInterval) {
 		super();
 		this.delayInterval = delayInterval;
+		reset();
 	}
-	private static long lastTimeupTime = 0;
+	private long lastTimeupTime = 0;
 	/**
 	 * @return 剩余延迟时间（毫秒），为0则表示延迟时间到了。否返回还要等待的毫秒数
 	 */
@@ -37,14 +38,14 @@ public class Delayer {
 	public void setDelayInterval(long delayInterval) {
 		this.delayInterval = delayInterval;
 	}
+	public void reset(){
+		lastTimeupTime = System.currentTimeMillis();
+	}
 	public boolean isInvalid() {
 		return invalid;
 	}
 	public void setInvalid(boolean invalid) {
 		this.invalid = invalid;
-		lastTimeupTime = 0;
-		if (!invalid) {
-			getWaitingTime();
-		}
+		reset();
 	}
 }
