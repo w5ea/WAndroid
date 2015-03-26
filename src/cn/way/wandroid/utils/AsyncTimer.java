@@ -56,8 +56,11 @@ public abstract class AsyncTimer {
 			mTimer.cancel();
 			mTimer = null;
 		}
-		boolean result = mAsyncTimertask.cancel(true);
-		mAsyncTimertask = null;
+		boolean result = false;
+		if (mAsyncTimertask!=null) {
+			result = mAsyncTimertask.cancel(true);
+			mAsyncTimertask = null;
+		}
 		reset();
 		if (result) {
 		}else{//may it never happen

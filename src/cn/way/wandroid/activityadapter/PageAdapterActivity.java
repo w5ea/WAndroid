@@ -7,8 +7,8 @@ public class PageAdapterActivity extends FragmentActivity {
 	public static final String EXTRA_PAGE_CLAZZ = "EXTRA_PAGE_CLAZZ";
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		Class<PageAdapter> clazz = (Class<PageAdapter>) getIntent().getSerializableExtra(EXTRA_PAGE_CLAZZ);
 		if (clazz!=null) {
 			PageAdapter adapter = null;

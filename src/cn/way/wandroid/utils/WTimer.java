@@ -39,11 +39,14 @@ public abstract class WTimer {
 	protected abstract void onTimeGoesBy(long totalTimeLength) ;
 	
 	public boolean cancel(){
-		boolean result = task.cancel(true);
-		if (result) {
-			task = null;
-		}else{//may it never happen
-			task.setTimeLimit(0);
+		boolean result = false;
+		if (task!=null) {
+			result = task.cancel(true);
+			if (result) {
+				task = null;
+			}else{//may it never happen
+				task.setTimeLimit(0);
+			}
 		}
 		return result;
 	}

@@ -51,14 +51,19 @@ public class PageIndicator extends LinearLayout {
 //		if (dotWidth==0) {
 //			dotWidth = getHeight();
 //		}
-		int dotWidth = getHeight();
+		
+		int dotHeight = getHeight();
+		if (dotHeight==0) {
+			dotHeight = (int) (15*getResources().getDisplayMetrics().density);
+		}
+		int dotWidth = dotHeight;
 		
 		int marginLR = 0;
 		if (this.dotWidth>0&&this.dotWidth<dotWidth) {
 			marginLR = dotWidth/2-this.dotWidth/2;
 			dotWidth = this.dotWidth;
 		}
-		int dotHeight = getHeight();
+		
 		int marginTB = 0;
 		if (this.dotHeight>0&&this.dotHeight<dotHeight) {
 			marginTB = dotHeight/2-this.dotHeight/2;
@@ -77,8 +82,10 @@ public class PageIndicator extends LinearLayout {
 			iv.setImageResource(resourceId);
 			views.add(iv);
 			addView(iv);
+			getLayoutParams().width = dotWidth*getNumberOfPages();
 		}
 		setCurrentPageIndex(getCurrentPageIndex());
+//		Log.d("test", "wwwww"+getWidth());
 	}
 	
 	public void init(int resourceId,int numberOfPages,int dotWidth,int dotHeight){
@@ -108,6 +115,11 @@ public class PageIndicator extends LinearLayout {
 	public void setNumberOfPages(int numberOfPages) {
 		if (numberOfPages<1) {
 			return;
+		}
+		if (numberOfPages==1) {
+			setVisibility(INVISIBLE);
+		}else{
+			setVisibility(VISIBLE);
 		}
 		this.numberOfPages = numberOfPages;
 		if (!isFirstLayout) updateView();
