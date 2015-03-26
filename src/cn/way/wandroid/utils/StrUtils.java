@@ -15,8 +15,32 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class WStringUtil {
-
+public class StrUtils {
+	public static int parseVersionName(String versionName){
+		int code = 0;
+		if (versionName!=null) {
+//			System.out.println(versionName);
+			String[] parts = versionName.split("\\.");
+//			System.out.println(parts.length);
+			if (parts!=null&&parts.length>0) {
+				for (int i = 0; i < parts.length; i++) {
+					int powerValue = parts.length-i-1;
+					String part = parts[i];
+//					System.out.println(part);
+					int partValue = 0;
+					try {
+						partValue = Integer.valueOf(part);
+					} catch (Exception e) {}
+					if (partValue>0&&powerValue>0) {
+						partValue *= Math.pow(10, powerValue);
+					}
+					code += partValue;
+//					System.out.format(String.format("%d %d %d\n", powerValue,partValue,code));
+				}
+			}
+		}
+		return code;
+	}
 	public static String base64Encode(byte[] data) {
 		return new String(Base64Coder.encode(data));
 	}

@@ -9,7 +9,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import cn.way.wandroid.utils.WLog;
-import cn.way.wandroid.utils.WStringUtil;
+import cn.way.wandroid.utils.StrUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -51,7 +51,7 @@ public class AsynchronousHttpClientUsage extends Activity {
 		String timestamp = new Date().getTime()/1000+"";
 //		Log.d("test", timestamp);
 		try {
-			String authorization = WStringUtil.hmacsha256(timestamp, "Sl1OOfvb0I51TMqlic88T1JkXPoLoaYWZwtj64udeq0=");
+			String authorization = StrUtils.hmacsha256(timestamp, "Sl1OOfvb0I51TMqlic88T1JkXPoLoaYWZwtj64udeq0=");
 			authorization = String.format("yj %s %s", "1",authorization);
 			client.addHeader("Authorization", authorization);
 			Log.d("test", authorization);
