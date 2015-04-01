@@ -34,7 +34,6 @@ public class NotificationFactory {
 		contentInfo = "info";
 	
 		mBuilder
-		        .setSmallIcon(cn.way.wandroid.R.drawable.ic_launcher)
 		        .setContentTitle(contentTitle)
 		        .setContentText(contentText)
 		 		.setContentInfo(contentInfo);
