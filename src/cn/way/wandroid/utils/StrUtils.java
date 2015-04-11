@@ -16,46 +16,76 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class StrUtils {
-	public static int parseVersionName(String versionName){
+	public static int parseVersionName(String versionName) {
 		int code = 0;
-		if (versionName!=null) {
-//			System.out.println(versionName);
+		if (versionName != null) {
+			// System.out.println(versionName);
 			String[] parts = versionName.split("\\.");
-//			System.out.println(parts.length);
-			if (parts!=null&&parts.length>0) {
+			// System.out.println(parts.length);
+			if (parts != null && parts.length > 0) {
 				for (int i = 0; i < parts.length; i++) {
-					int powerValue = parts.length-i-1;
+					int powerValue = parts.length - i - 1;
 					String part = parts[i];
-//					System.out.println(part);
+					// System.out.println(part);
 					int partValue = 0;
 					try {
 						partValue = Integer.valueOf(part);
-					} catch (Exception e) {}
-					if (partValue>0&&powerValue>0) {
+					} catch (Exception e) {
+					}
+					if (partValue > 0 && powerValue > 0) {
 						partValue *= Math.pow(10, powerValue);
 					}
 					code += partValue;
-//					System.out.format(String.format("%d %d %d\n", powerValue,partValue,code));
+					// System.out.format(String.format("%d %d %d\n",
+					// powerValue,partValue,code));
 				}
 			}
 		}
 		return code;
 	}
+
 	public static String base64Encode(byte[] data) {
 		return new String(Base64Coder.encode(data));
 	}
 
+	public static String trim(String source) {
+		return source.trim().replace("\r", "").replace("\r\n", "")
+				.replace("\n", "");
+	}
+
 	public static String hmacsha256(String data, String key) throws Exception {
-		 byte[] keyData = key.getBytes("UTF-8");    
-         //根据给定的字节数组构造一个密钥,第二参数指定一个密钥算法的名称     
-         SecretKey secretKey = new SecretKeySpec(keyData, "HmacSHA256");     
-         //生成一个指定 Mac 算法 的 Mac 对象     
-         Mac mac = Mac.getInstance(secretKey.getAlgorithm());     
-         //用给定密钥初始化 Mac 对象     
-         mac.init(secretKey);                  
-         //完成 Mac 操作      
-         byte[] finalData = mac.doFinal(data.getBytes("UTF-8"));       
-         return Base64.encodeToString(finalData, Base64.DEFAULT);  
+		byte[] keyData = key.getBytes("UTF-8");
+		// 根据给定的字节数组构造一个密钥,第二参数指定一个密钥算法的名称
+		SecretKey secretKey = new SecretKeySpec(keyData, "HmacSHA256");
+		// 生成一个指定 Mac 算法 的 Mac 对象
+		Mac mac = Mac.getInstance(secretKey.getAlgorithm());
+		// 用给定密钥初始化 Mac 对象
+		mac.init(secretKey);
+		// 完成 Mac 操作
+		byte[] finalData = mac.doFinal(data.getBytes("UTF-8"));
+		return Base64.encodeToString(finalData, Base64.DEFAULT);
+	}
+
+	public static String md5(String string) {
+		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'a', 'b', 'c', 'd', 'e', 'f' };
+		try {
+			byte[] bytes = string.getBytes();
+			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.update(bytes);
+			byte[] updateBytes = messageDigest.digest();
+			int len = updateBytes.length;
+			char myChar[] = new char[len * 2];
+			int k = 0;
+			for (int i = 0; i < len; i++) {
+				byte byte0 = updateBytes[i];
+				myChar[k++] = hexDigits[byte0 >>> 4 & 0x0f];
+				myChar[k++] = hexDigits[byte0 & 0x0f];
+			}
+			return new String(myChar);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	private static final String KEY_MD5 = "MD5";

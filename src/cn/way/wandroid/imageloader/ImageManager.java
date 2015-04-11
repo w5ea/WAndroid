@@ -1,11 +1,15 @@
-package cn.way.wandroid.imageloader.universal;
+package cn.way.wandroid.imageloader;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -54,6 +58,16 @@ public class ImageManager {
 	public void setContext(Context context) {
 		this.context = context;
 	}
+	
+	public static void saveImageToPhotoAlbum(Context context,String imageFilePath){
+		ContentValues cv = new ContentValues();
+		cv.put("_data", imageFilePath);
+		cv.put("mime_type", "image/jpeg");
+		ContentResolver cr = context.getContentResolver();
+		Uri localUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+		cr.insert(localUri, cv);
+	}
+	
 	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
 		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
 		@Override
