@@ -1,8 +1,10 @@
 package cn.way.wandroid.graphics;
 
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.TypedValue;
 
 public class GraphicsUtil {
 	
@@ -61,5 +63,7 @@ public class GraphicsUtil {
 	private static double cos(double d){
 		return Math.cos(d);
 	}
-	
+	public static int dpToPx(Resources res, int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+	}
 }

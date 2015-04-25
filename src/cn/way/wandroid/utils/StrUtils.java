@@ -6,6 +6,8 @@ import android.util.Base64;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -66,28 +68,86 @@ public class StrUtils {
 		return Base64.encodeToString(finalData, Base64.DEFAULT);
 	}
 
-	public static String md5(String string) {
-		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-				'a', 'b', 'c', 'd', 'e', 'f' };
-		try {
-			byte[] bytes = string.getBytes();
-			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(bytes);
-			byte[] updateBytes = messageDigest.digest();
-			int len = updateBytes.length;
-			char myChar[] = new char[len * 2];
-			int k = 0;
-			for (int i = 0; i < len; i++) {
-				byte byte0 = updateBytes[i];
-				myChar[k++] = hexDigits[byte0 >>> 4 & 0x0f];
-				myChar[k++] = hexDigits[byte0 & 0x0f];
-			}
-			return new String(myChar);
-		} catch (Exception e) {
-			return null;
-		}
+	public static String md5(String string) {  
+	    byte[] hash;  
+	    try {  
+	        hash = MessageDigest.getInstance("MD5").digest(string.getBytes("UTF-8"));  
+	    } catch (Exception e) {  
+	        return null;  
+	    } 
+	    StringBuilder hex = new StringBuilder(hash.length * 2);  
+	    for (byte b : hash) {  
+	        if ((b & 0xFF) < 0x10)  
+	            hex.append("0");  
+	        hex.append(Integer.toHexString(b & 0xFF));  
+	    }  
+	    return hex.toString();  
 	}
+//	public static String md5(String string) {
+//		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+//				'a', 'b', 'c', 'd', 'e', 'f' };
+//		try {
+//			byte[] bytes = string.getBytes();
+//			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+//			messageDigest.update(bytes);
+//			byte[] updateBytes = messageDigest.digest();
+//			int len = updateBytes.length;
+//			char myChar[] = new char[len * 2];
+//			int k = 0;
+//			for (int i = 0; i < len; i++) {
+//				byte byte0 = updateBytes[i];
+//				myChar[k++] = hexDigits[byte0 >>> 4 & 0x0f];
+//				myChar[k++] = hexDigits[byte0 & 0x0f];
+//			}
+//			return new String(myChar);
+//		} catch (Exception e) {
+//			return null;
+//		}
+//	}
 
+	
+	/**
+     * 是否是手机号
+     * @param value
+     * @return
+     */
+    public static boolean isMobile(String value){
+    	Pattern pattern = Pattern.compile("^1\\d{10}$");
+    	Matcher matcher = pattern.matcher(value);
+    	return matcher.matches();
+    }
+    /**
+     * 是否是手机号或座机号码
+     * @param value
+     * @return
+     */
+    public static boolean isMobileOrPhone(String value){
+    	Pattern pattern = Pattern.compile("^\\d{10,12}$");
+    	Matcher matcher = pattern.matcher(value);
+    	return matcher.matches();
+    }
+    /**
+     * 是否是邮编
+     * @param value
+     * @return
+     */
+    public static boolean isZipcode(String value){
+    	Pattern pattern = Pattern.compile("^\\d{6}$");
+    	Matcher matcher = pattern.matcher(value);
+    	return matcher.matches();
+    }
+    /**
+     * 是否是邮件地址
+     * @param value
+     * @return
+     */
+    public static boolean isEmail(String value){
+    	Pattern pattern = Pattern.compile("^.*@.*\\..*$");
+    	Matcher matcher = pattern.matcher(value);
+    	return matcher.matches();
+    }
+	
+	
 	private static final String KEY_MD5 = "MD5";
 	private static final String KEY_SHA = "SHA";
 
