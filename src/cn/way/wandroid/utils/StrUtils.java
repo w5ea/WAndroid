@@ -6,6 +6,7 @@ import android.util.Base64;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,22 @@ public class StrUtils {
 		byte[] finalData = mac.doFinal(data.getBytes("UTF-8"));
 		return Base64.encodeToString(finalData, Base64.DEFAULT);
 	}
-
+	/**
+	 * 创建一个随机数
+	 * @param len 随机数长度
+	 * @return
+	 */
+	public static String randomString(int len){
+		StringBuilder result = new StringBuilder();
+		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'a', 'b', 'c', 'd', 'e', 'f' };
+		Random random = new Random();
+		for (int i = 0; i < len; i++) {
+			result.append(hexDigits[random.nextInt(hexDigits.length)]);
+		}
+		return result.toString();
+	}
+	
 	public static String md5(String string) {  
 	    byte[] hash;  
 	    try {  

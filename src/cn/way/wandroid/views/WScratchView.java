@@ -15,12 +15,14 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -77,27 +79,40 @@ import android.view.View;
 	private Paint mPaint = null;
 	private Bitmap bitmap = null;
 	private ScratchMarker marker;
-	private static final int ScratchWidth = 40;
+	private static int ScratchWidth = 40;
+	private String resultText = "once again";
 	private ProgressListener progressListener;
-	
+	private float density;
 	public WScratchView(Context context,AttributeSet attrs){
 		super(context,attrs);
-		
+		density = getResources().getDisplayMetrics().density;
 //		setBackgroundColor(Color.GREEN);
+		ScratchWidth = (int) (40 * density);
 	}
 	public void reset(){
+		marker.reset();
 		int width = getMeasuredWidth();
 		int height = getMeasuredHeight();
 		drawDefaultBitmap(width, height);
-		marker.reset();
+		postInvalidate();
 	}
-	public void drawBackgroundText(String text) {
+	
+	public void clear(){
+		int width = getMeasuredWidth();
+		int height = getMeasuredHeight();
+		bitmap = Bitmap.createBitmap(width, height,Config.ARGB_8888);
+		mCanvas = new Canvas(bitmap);
+		mCanvas.drawColor(Color.TRANSPARENT);
+		postInvalidate();
+	}
+	public void drawBackgroundText() {
+		String text = getResultText();
 		TextPaint paint = new TextPaint();
 		int width = getMeasuredWidth();
 		int height = getMeasuredHeight();
 		Bitmap bitmap = Bitmap.createBitmap(width, height,
-				Config.RGB_565);
-		int textSize = 50;
+				Config.ARGB_8888);
+		int textSize = (int) (50*density);
 		paint.setTextSize(textSize);
 		paint.setColor(Color.BLACK);
 		paint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -105,8 +120,16 @@ import android.view.View;
 
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
-		int tWidth = (int) paint.measureText(text);
-		canvas.drawText(text, width/2-tWidth/2, height-textSize/2, paint);
+		
+		Rect bounds = new Rect();
+		paint.getTextBounds(text, 0, text.length()-1, bounds);
+		paint.setTextAlign(Align.CENTER);
+//		int tWidth = (int) paint.measureText(text);
+		int posX = width/2;//-tWidth/2 ;
+		int posY = height/2+bounds.height()/2;//height -(height/2-(int)(bounds.height()/2*density));
+		canvas.drawText(text, posX, posY, paint);
+//		int tWidth = (int) paint.measureText(text);
+//		canvas.drawText(text, width/2-tWidth/2, height/2, paint);
 		setBackground(new BitmapDrawable(getResources(), bitmap));
 	}
 
@@ -135,39 +158,50 @@ import android.view.View;
 			mPaint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
 			mPaint.setAlpha(0);
 			
-			drawBackgroundText("scratch me");
+			drawBackgroundText();
 		}
 		
 		mCanvas.drawPath(mPath, mPaint);
 		canvas.drawBitmap(bitmap, 0, 0, null);
 	}
 
-		
+	private Bitmap coverBitmap;
 	private void drawDefaultBitmap(int width,int height){
 		bitmap = Bitmap.createBitmap(width, height,Config.ARGB_8888);
-//		bitmap = 
-//				BitmapFactory.decodeResource(getResources(), R.drawable.prize_result_rechargeable_card_50);
-//				decodeMutableBitmapFromResourceId(getContext(), R.drawable.prize_result_rechargeable_card_50);
+//		Bitmap mbitmap = 
+//				BitmapFactory.decodeResource(getResources(), R.drawable.star_big_off);
+//				decodeMutableBitmapFromResourceId(getContext(), R.drawable.);
 		mCanvas = new Canvas(bitmap);
 		mCanvas.drawColor(Color.GRAY);
 		
-		int textSize = 50;
-		int strokeWidth = 6;
-		TextPaint paint = new TextPaint();
-		paint.setAntiAlias(true);
-		paint.setTextSize(textSize);
-		paint.setColor(Color.DKGRAY);
-		paint.setStyle(Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(strokeWidth);
-		paint.setStrokeCap(Cap.ROUND);
-		String text = "sorry";
-		int tWidth = (int) paint.measureText(text);
-		int posX = width/2-tWidth/2 ;int posY = height-textSize/2-strokeWidth;
-		mCanvas.drawText(text, posX, posY, paint);
-		paint.setColor(Color.RED);
-		paint.setStrokeWidth(1);
-		mCanvas.drawText(text, posX, posY, paint);
-		
+		if (getCoverBitmap()!=null) {
+			int posX = width/2-getCoverBitmap().getWidth()/2 ;
+			int posY = height/2-getCoverBitmap().getHeight()/2;
+			mCanvas.drawBitmap(getCoverBitmap(), posX, posY, new Paint());
+		}else{
+//			int textSize = 50;
+//			int strokeWidth = 6;
+			int textSize = (int) (50*density);
+			int strokeWidth = (int) (6*density);
+			TextPaint paint = new TextPaint();
+			paint.setAntiAlias(true);
+			paint.setTextSize(textSize);
+			paint.setColor(Color.DKGRAY);
+			paint.setStyle(Style.FILL_AND_STROKE);
+			paint.setStrokeWidth(strokeWidth);
+			paint.setStrokeCap(Cap.ROUND);
+			paint.setTextAlign(Align.CENTER);
+			String text = "刮开";
+			Rect bounds = new Rect();
+			paint.getTextBounds(text, 0, text.length()-1, bounds);
+//			int tWidth = (int) paint.measureText(text);
+			int posX = width/2;//-tWidth/2 ;
+			int posY = height/2-strokeWidth+textSize/2;// -(height/2-(int)(bounds.height()/2*density-strokeWidth/2));//-textSize/2-strokeWidth/2;
+			mCanvas.drawText(text, posX, posY, paint);
+			paint.setColor(Color.RED);
+			paint.setStrokeWidth(1);
+			mCanvas.drawText(text, posX, posY, paint);
+		}
 		
 //		BitmapFactory.Options opt = new BitmapFactory.Options();
 //		opt.inMutable = true;
@@ -263,5 +297,17 @@ import android.view.View;
 	            outputFile.delete();
 	    }
 	    return null;
+	}
+	public String getResultText() {
+		return resultText;
+	}
+	public void setResultText(String resultText) {
+		this.resultText = resultText;
+	}
+	public Bitmap getCoverBitmap() {
+		return coverBitmap;
+	}
+	public void setCoverBitmap(Bitmap coverBitmap) {
+		this.coverBitmap = coverBitmap;
 	}
 }
