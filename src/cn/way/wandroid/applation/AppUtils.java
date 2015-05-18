@@ -1,10 +1,12 @@
 package cn.way.wandroid.applation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 
 public class AppUtils {
 	public static String getAppInfoMetaData(Context context, String key) {
@@ -43,6 +45,12 @@ public class AppUtils {
 			e.printStackTrace();
 		}
 		return localPackageInfo==null?0:localPackageInfo.versionCode;
+	}
+	
+	public static void openUrl(Context context,String url){
+		Uri uri = Uri.parse(url);
+		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		context.startActivity(intent);
 	}
 	
 }

@@ -25,21 +25,27 @@ public class Toaster {
 	}
 	protected Toast toast;
 	protected Toast toastResult;
-	public Toast setup(String text) {
+	public Toaster setup(String text) {
 		return this.setup(text, Gravity.CENTER, 0, 0);
 	}
-	public Toast setup(String text,int gravity) {
+	public Toaster setup(String text,int gravity) {
 		return this.setup(text, gravity, 0, 0);
 	}
-	public Toast setup(String text,int gravity, int xOffset, int yOffset) {
+	public Toaster setup(String text,int gravity, int xOffset, int yOffset) {
 		cancel();
 		//TODO toast.setView();
 		toastResult = Toast.makeText(context, text, toast.getDuration());
 		toastResult.setGravity(gravity, xOffset, yOffset);
-		return toastResult;
+		return this;
 	}
 	public void show(){
-		if(toastResult!=null)toastResult.show();
+		show(true);
+	}
+	public void show(boolean shortOrLong){
+		if(toastResult!=null){
+			toastResult.setDuration(shortOrLong?Toast.LENGTH_SHORT:Toast.LENGTH_LONG);
+			toastResult.show();
+		}
 	}
 	public void cancel(){
 		try {
@@ -54,7 +60,4 @@ public class Toaster {
 //	public Toast getToast(){
 //		return toast;
 //	}
-	public void setDuration(boolean shortOrLong){
-		toast.setDuration(shortOrLong?Toast.LENGTH_SHORT:Toast.LENGTH_LONG);
-	}
 }
