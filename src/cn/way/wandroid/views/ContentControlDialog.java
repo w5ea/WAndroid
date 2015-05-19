@@ -1,18 +1,22 @@
 package cn.way.wandroid.views;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import cn.way.wandroid.toast.Toaster;
-
-public class WDialog extends Dialog{
-	public WDialog(Context context){
+/**
+ * 一个内容由DialogContentController提供的对话框
+ * @author Wayne
+ * @2015年5月19日
+ */
+public class ContentControlDialog extends Dialog{
+	public ContentControlDialog(Context context){
 		super(context, android.R.style.Theme_Translucent_NoTitleBar);
 	}
-	public WDialog(Context context,int theme){
+	public ContentControlDialog(Context context,int theme){
 		super(context, theme);
 	}
 	/**
@@ -20,10 +24,10 @@ public class WDialog extends Dialog{
 	 * @param context
 	 * @param controller
 	 */
-	public WDialog(Context context,DialogContentController controller) {
+	public ContentControlDialog(Context context,DialogContentController controller) {
 		this(context, android.R.style.Theme_Translucent_NoTitleBar, controller);
 	}
-	public WDialog(Context context,int theme,DialogContentController controller) {
+	public ContentControlDialog(Context context,int theme,DialogContentController controller) {
 		super(context,theme);
 		setContentView(controller);
 		setCanceledOnTouchOutside(false);
@@ -47,40 +51,43 @@ public class WDialog extends Dialog{
 		cancelToast();
 	}
 
-	protected void toast(String title) {
+	public void toast(String title) {
 		Toaster.instance(getContext()).setup(title).show();
 	}
-	protected void cancelToast() {
+	public void cancelToast() {
 		Toaster.instance(getContext()).cancel();
 	}
 	public static abstract class DialogContentController{
-		private FragmentActivity activity;
+		private Activity activity;
 		private Fragment parent;
 		private ViewGroup contentView;//对话框的主界面
 		private ViewGroup holderView;//对话框可以改变VIEW的父VIEW
 		protected View view;//对话框可以改变VIEW
-		protected WDialog dialog;
-		public DialogContentController(FragmentActivity activity,WDialog dialog) {
+		protected ContentControlDialog dialog;
+		public DialogContentController(Activity activity,ContentControlDialog dialog) {
 			super();
 			this.setActivity(activity);
 			this.dialog = dialog;
 			contentView = this.inflateContentView();
 			dialog.setContentView(contentView);
-			holderView = this.inflateHolderView();
-			view = this.inflateView(holderView);
+			holderView = (ViewGroup) contentView.findViewById(android.R.id.content);
+			view = this.inflateReplaceableView(holderView);
 			if (holderView!=null&&view!=null) {
 				holderView.addView(view);
 			}
 			this.inflateSubView();//解析子视图
 		}
 		
-		public DialogContentController(Fragment parent,WDialog dialog) {
+		public DialogContentController(Fragment parent,ContentControlDialog dialog) {
 			this(parent.getActivity(),dialog);
 			this.setParent(parent);
 		}
+		/**
+		 * 返回对话框内容视图，要求视图中包含一个ID为android.R.id.content的ViewGroup
+		 * @return
+		 */
 		protected abstract ViewGroup inflateContentView ();
-		protected abstract ViewGroup inflateHolderView ();
-		protected abstract View inflateView (ViewGroup parent);
+		protected abstract View inflateReplaceableView (ViewGroup parent);
 		/**
 		 * 在这个方法中初始化子控件,直接使用类变量 view
 		 * e.g. aChildView =  view.findViewById(R.id.aResourceId);
@@ -89,10 +96,10 @@ public class WDialog extends Dialog{
 		
 		public abstract String getTitle();
 		
-		public FragmentActivity getActivity() {
+		public Activity getActivity() {
 			return activity;
 		}
-		public void setActivity(FragmentActivity activity) {
+		public void setActivity(Activity activity) {
 			this.activity = activity;
 		}
 
@@ -116,15 +123,7 @@ public class WDialog extends Dialog{
 			return view;
 		}
 		
-		
-		protected void toast(String title) {
-			Toaster.instance(getActivity()).setup(title).show();
-		}
-		protected void cancelToast() {
-			Toaster.instance(getActivity()).cancel();
-		}
-
-		public Dialog getDialog() {
+		public ContentControlDialog getDialog() {
 			return dialog;
 		}
 	}
