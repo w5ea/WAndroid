@@ -109,8 +109,8 @@ public abstract class AsyncTimer {
 						return;
 					}
 					if (mTimeLimit != null && mTotalTimeLength >= mTimeLimit) {
-						mTimer.cancel();
-						mAsyncTimertask.cancel(true);
+						if(mTimer!=null)mTimer.cancel();
+						if(mAsyncTimertask!=null)mAsyncTimertask.cancel(true);
 					} else {
 						mTotalTimeLength += mTimeInterval;
 						publishProgress(mTotalTimeLength);
