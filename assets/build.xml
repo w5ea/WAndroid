@@ -153,7 +153,7 @@
     <target name="init" >
 
         <echo>
-目录初始化....
+目录初始化....
         </echo>
         <!-- 生成R文件的相对目录 -->
 
@@ -242,7 +242,7 @@
         depends="init" >
 
         <echo>
-生成R.java文件....
+生成R.java文件....
         </echo>
 
         <exec
@@ -280,7 +280,7 @@
         depends="gen-R" >
 
         <echo>
-编译aidl文件....
+编译aidl文件....
         </echo>
 
         <apply
@@ -312,7 +312,7 @@
         depends="aidl" >
 
         <echo>
-java源文件编译成class文件....
+java源文件编译成class文件....
         </echo>
 
         <javac
@@ -341,7 +341,7 @@ java源文件编译成class文件....
         depends="compile" >
 
         <echo>
-将.class文件转化成.dex文件....
+将.class文件转化成.dex文件....
         </echo>
 
         <exec
@@ -365,7 +365,7 @@ java源文件编译成class文件....
     <target name="package-res-and-assets" >
 
         <echo>
-将资源文件放进输出目录....
+将资源文件放进输出目录....
         </echo>
 
         <exec
@@ -405,7 +405,7 @@ java源文件编译成class文件....
         depends="dex, package-res-and-assets" >
 
         <echo>
-打包成未签证的apk....
+打包成未签证的apk....
         </echo>
 
         <exec
@@ -437,7 +437,7 @@ java源文件编译成class文件....
         depends="package" >
 
         <echo>
-Packaging signed apk for release...
+Packaging signed apk for release...
         </echo>
 
         <exec
@@ -482,7 +482,7 @@ Packaging signed apk for release...
         <delete file="${out-unsigned-package-ospath}" />
 
         <echo>
-APK is released. path:${out-signed-package-ospath}
+APK is released. path:${out-signed-package-ospath}
         </echo>
     </target>
     <!-- 打包的应用程序进行优化 -->
